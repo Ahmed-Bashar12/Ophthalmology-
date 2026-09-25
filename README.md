@@ -4,7 +4,7 @@
 
 🔗 **Live demo:** https://ahmed-bashar12.github.io/Ophthalmology-/
 
-Concept and design by **Ahmed Bashar** · Version 1.2 · First published 25 September 2026
+Concept and design by **Ahmed Bashar** · Version 1.2.1 · First published 25 September 2026
 
 ---
 
@@ -39,7 +39,7 @@ Ocular Motility Lab lets you see how the extraocular muscles work, alone and tog
 
 ### Quiz mode
 - Choose the conditions to be tested on: an **Undergraduate** preset of common, high-yield conditions, a **Postgraduate** preset with every condition, or your own **Custom** selection
-- Each case is a random condition from your choice, in a random eye; examine the patient with the full set of tools, then pick the diagnosis (and, optionally, the affected eye)
+- Each case is a random condition from your choice, in a random eye; examine the patient with the full set of tools in both exams (eye movements and pupils show the same patient), then pick the diagnosis (and, optionally, the affected eye)
 - The condition name, condition card and tell-tale labels stay hidden until you answer; live measurements can be shown or hidden
 - 5, 10, 20 or endless cases, with a score and a review list at the end; your quiz settings are remembered
 
