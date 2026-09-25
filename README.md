@@ -4,7 +4,7 @@
 
 🔗 **Live demo:** https://ahmed-bashar12.github.io/Ophthalmology-/
 
-Concept and design by **Ahmed Bashar** · Version 1.0 · First published 25 September 2026
+Concept and design by **Ahmed Bashar** · Version 1.1 · First published 25 September 2026
 
 ---
 

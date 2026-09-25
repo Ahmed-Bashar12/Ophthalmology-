@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   ============================================================
-  Ocular Motility Lab  ·  version 1.0  ·  created 25 September 2026
+  Ocular Motility Lab  ·  version 1.1  ·  created 25 September 2026
   Copyright (c) 2026 Ahmed Bashar. Concept and design by Ahmed Bashar.
   Licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
   International (CC BY-NC-ND 4.0): https://creativecommons.org/licenses/by-nc-nd/4.0/
@@ -28,7 +28,7 @@
 <meta property="og:description" content="Interactive eye-movement, strabismus and pupil simulator by Ahmed Bashar.">
 <meta property="og:type" content="website">
 <link rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Ocular Motility Lab", "description": "Interactive simulator of extraocular muscle actions, the H-test, cranial nerve palsies, strabismus, pupil disorders and the red reflex, for medical education.", "author": {"@type": "Person", "name": "Ahmed Bashar"}, "creator": {"@type": "Person", "name": "Ahmed Bashar"}, "copyrightHolder": {"@type": "Person", "name": "Ahmed Bashar"}, "copyrightYear": 2026, "dateCreated": "2026-09-25", "datePublished": "2026-09-25", "version": "1.0", "license": "https://creativecommons.org/licenses/by-nc-nd/4.0/", "inLanguage": "en", "educationalUse": "Teaching and self-study", "learningResourceType": "Interactive simulation", "audience": {"@type": "EducationalAudience", "educationalRole": "Medical students, ophthalmology residents, orthoptists"}, "isBasedOn": ["AAO Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology (2020-2021)", "AAO Basic and Clinical Science Course, Section 6: Pediatric Ophthalmology and Strabismus (2020-2021)", "EUPO Course 2016: Neuro-Ophthalmology and Strabismus"]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Ocular Motility Lab", "description": "Interactive simulator of extraocular muscle actions, the H-test, cranial nerve palsies, strabismus, pupil disorders and the red reflex, for medical education.", "author": {"@type": "Person", "name": "Ahmed Bashar"}, "creator": {"@type": "Person", "name": "Ahmed Bashar"}, "copyrightHolder": {"@type": "Person", "name": "Ahmed Bashar"}, "copyrightYear": 2026, "dateCreated": "2026-09-25", "datePublished": "2026-09-25", "version": "1.1", "license": "https://creativecommons.org/licenses/by-nc-nd/4.0/", "inLanguage": "en", "educationalUse": "Teaching and self-study", "learningResourceType": "Interactive simulation", "audience": {"@type": "EducationalAudience", "educationalRole": "Medical students, ophthalmology residents, orthoptists"}, "isBasedOn": ["AAO Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology (2020-2021)", "AAO Basic and Clinical Science Course, Section 6: Pediatric Ophthalmology and Strabismus (2020-2021)", "EUPO Course 2016: Neuro-Ophthalmology and Strabismus"]}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
@@ -79,6 +79,10 @@ input[type=range]{accent-color:#1C2127}
 <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 L12.5 7 L3 12.5 Z" style="fill: #1C2127"></path></svg>
 </sc-if>
 <span>{{playLabel}}</span>
+</button>
+<button class="btn" onClick="{{resetAll}}" aria-label="Reset to normal" title="Clear the condition, tests, room light and drops, and return to normal eyes" style="height: 48px; min-width: 104px; padding: 0 16px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1.5px solid #1C2127; border-radius: 12px; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13.5px">
+<svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 6.2 A5.2 5.2 0 1 1 3.4 10.4" style="fill: none; stroke: #1C2127; stroke-width: 1.8; stroke-linecap: round"></path><path d="M1.6 2.6 L3.2 6.4 L7 5.2" style="fill: none; stroke: #1C2127; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"></path></svg>
+<span>Reset</span>
 </button>
 </div>
 </div>
@@ -778,7 +782,7 @@ input[type=range]{accent-color:#1C2127}
 <div style="flex: 1 1 420px; max-width: 760px; display: flex; flex-direction: column; gap: 6px">
 <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #8A5A2B"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 L15 14 H1 Z" style="fill: none; stroke: #8A5A2B; stroke-width: 1.6; stroke-linejoin: round"></path><path d="M8 6 V9.6 M8 11.6 V11.7" style="fill: none; stroke: #8A5A2B; stroke-width: 1.8; stroke-linecap: round"></path></svg>Educational use only</div>
 <div style="font-size: 12.5px; line-height: 1.55; color: #4A525B">This simulator is a simplified teaching model for medical education. It is not a medical device and must not be used for diagnosis, treatment or any clinical decision. Content is summarised from AAO BCSC Sections 5 and 6 (2020–2021) and the EUPO 2016 course; always follow current clinical guidance.</div>
-<div style="font-size: 12px; color: #6B7280">Version 1.0 · first published 25 September 2026</div>
+<div style="font-size: 12px; color: #6B7280">Version 1.1 · first published 25 September 2026</div>
 </div>
 <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; text-align: right">
 <svg xmlns="http://www.w3.org/2000/svg" width="190" height="106" style="display: block" viewBox="0 0 2141.000000 1199.245166" role="img" aria-label="Signature of Ahmed Bashar"><g transform="translate(-288.000000,1360.815856) scale(0.100000,-0.100000)"
@@ -1090,8 +1094,8 @@ m-6635 -1317 c19 -23 -47 -76 -204 -162 -146 -80 -517 -299 -589 -349 -58 -39
 </script>
 <script>
 
-/* Ocular Motility Lab v1.0 — (c) 2026 Ahmed Bashar. Licensed under CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/). Educational use only. */
-var OML_AUTHOR = 'Ahmed Bashar', OML_VERSION = '1.0', OML_CREATED = '2026-09-25';
+/* Ocular Motility Lab v1.1 — (c) 2026 Ahmed Bashar. Licensed under CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/). Educational use only. */
+var OML_AUTHOR = 'Ahmed Bashar', OML_VERSION = '1.1', OML_CREATED = '2026-09-25';
 var K = 0.12, CX = 380, CY = 230, RB = 60, IRR = 29, HX = 288, HY = 180, MOVE = 0.95, PXMM = 4.9, CONV = 6;
 var EYEC = { R: [248, 230], L: [512, 230] };
 var PEYE = { R: 219, L: 541 };
@@ -1645,9 +1649,8 @@ var FIELDS = { LR: [1, 0], MR: [-1, 0], SR: [1, 1], IR: [1, -1], IO: [-1, 1], SO
 var MONT = [[-1, 1], [0, 1], [1, 1], [-1, 0], [0, 0], [1, 0], [-1, -1], [0, -1], [1, -1]];
 
 class Component extends DCLogic {
-  S() {
-    if (!this._s) {
-      this._s = {
+  defaults() {
+    return {
         module: 'mot', mode: 'h', cond: 'normal', side: 'R', fix: 'auto', cover: 'none', tilt: 0, near: false, room: 'bright',
         lift: false, axes: true, arrows: true, labels: true, guide: true, marker: true, magnify: false, reflex: true,
         speed: 1, playing: true, tab: 'cond', soloM: 'SR', soloStart: 0,
@@ -1655,9 +1658,22 @@ class Component extends DCLogic {
         disp: { R: { a: 0, v: 0, tor: 0 }, L: { a: 0, v: 0, tor: 0 } }, pdM: { R: 4, L: 4 }, model: null,
         pcond: 'p_norm', plight: 'off', pnear: false, proom: 'bright', pview: 'pen', plift: true, drops: { R: null, L: null }, dropEye: 'R', ptab: 'cond',
         pd: { R: 4, L: 4 }, penX: 380, swingT: 0, hist: [], histT: 0
-      };
-    }
+    };
+  }
+  S() {
+    if (!this._s) this._s = this.defaults();
     return this._s;
+  }
+  // Reset: clear condition, cover, tilt, near target, dim room, drops, penlight etc.
+  // Stays on the current module; keeps the current eye and pupil positions so both
+  // glide back to normal instead of jumping.
+  reset() {
+    var old = this.S(), d = this.defaults();
+    d.module = old.module;
+    d.time = old.time; d.tx = old.tx; d.ty = old.ty; d.cmd = old.cmd;
+    d.disp = old.disp; d.pdM = old.pdM; d.pd = old.pd; d.model = old.model; d.pP = old.pP;
+    this._s = d;
+    this.setState({ f: d.time + 0.0001 });
   }
   componentDidMount() {
     var self = this;
@@ -2249,6 +2265,7 @@ class Component extends DCLogic {
     V.isMot = S.module === 'mot'; V.isPup = S.module === 'pup';
     V.playing = S.playing; V.paused = !S.playing; V.playLabel = S.playing ? 'Pause' : 'Play';
     V.togglePlay = function () { self.set('playing', !S.playing); };
+    V.resetAll = function () { self.reset(); };
     V.onDown = function (ev) { self.onDown(ev); };
     V.onMove = function (ev) { self.onMove(ev); };
     V.onUp = function () { self.onUp(); };
