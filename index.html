@@ -1,0 +1,2270 @@
+<!doctype html>
+<!--
+  ============================================================
+  Ocular Motility Lab  ·  version 1.0  ·  created 25 September 2026
+  Copyright (c) 2026 Ahmed Bashar. Concept and design by Ahmed Bashar.
+  Licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
+  International (CC BY-NC-ND 4.0): https://creativecommons.org/licenses/by-nc-nd/4.0/
+  You may share this work unchanged, with credit to Ahmed Bashar, for
+  non-commercial purposes only. Modified versions may not be distributed.
+  EDUCATIONAL USE ONLY — not a medical device; not for clinical decisions.
+  ============================================================
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ocular Motility Lab · Ahmed Bashar</title>
+<meta name="description" content="Interactive simulator of extraocular muscles, the H-test, cranial nerve palsies, strabismus, pupils and red reflex. Educational use only.">
+<meta name="author" content="Ahmed Bashar">
+<meta name="creator" content="Ahmed Bashar">
+<meta name="copyright" content="© 2026 Ahmed Bashar. Licensed under CC BY-NC-ND 4.0.">
+<meta name="rights" content="© 2026 Ahmed Bashar. CC BY-NC-ND 4.0.">
+<meta name="dcterms.creator" content="Ahmed Bashar">
+<meta name="dcterms.rightsHolder" content="Ahmed Bashar">
+<meta name="dcterms.created" content="2026-09-25">
+<meta name="dcterms.license" content="https://creativecommons.org/licenses/by-nc-nd/4.0/">
+<meta property="og:title" content="Ocular Motility Lab">
+<meta property="og:description" content="Interactive eye-movement, strabismus and pupil simulator by Ahmed Bashar.">
+<meta property="og:type" content="website">
+<link rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Ocular Motility Lab", "description": "Interactive simulator of extraocular muscle actions, the H-test, cranial nerve palsies, strabismus, pupil disorders and the red reflex, for medical education.", "author": {"@type": "Person", "name": "Ahmed Bashar"}, "creator": {"@type": "Person", "name": "Ahmed Bashar"}, "copyrightHolder": {"@type": "Person", "name": "Ahmed Bashar"}, "copyrightYear": 2026, "dateCreated": "2026-09-25", "datePublished": "2026-09-25", "version": "1.0", "license": "https://creativecommons.org/licenses/by-nc-nd/4.0/", "inLanguage": "en", "educationalUse": "Teaching and self-study", "learningResourceType": "Interactive simulation", "audience": {"@type": "EducationalAudience", "educationalRole": "Medical students, ophthalmology residents, orthoptists"}, "isBasedOn": ["AAO Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology (2020-2021)", "AAO Basic and Clinical Science Course, Section 6: Pediatric Ophthalmology and Strabismus (2020-2021)", "EUPO Course 2016: Neuro-Ophthalmology and Strabismus"]}</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEEAE2;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#1C2127}
+a{color:#1F5FA8}a:hover{color:#174E8C}
+.btn{cursor:pointer;transition:background-color .15s ease,color .15s ease,border-color .15s ease}
+.btn:hover{filter:brightness(0.96)}
+.btn:focus-visible{outline:2px solid #1F5FA8;outline-offset:2px}
+.scroll{scrollbar-width:thin;scrollbar-color:#CFC8BA transparent}
+.page{box-sizing:border-box;width:100%;min-height:100vh;padding:14px 18px 28px;background:#EEEAE2}
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;max-width:1560px;margin:0 auto 12px}
+.layout{display:grid;grid-template-columns:272px minmax(0,1fr) 318px;gap:14px;align-items:start;max-width:1560px;margin:0 auto}
+.leftcol{position:sticky;top:12px;height:calc(100vh - 24px);min-height:560px;box-sizing:border-box}
+.center{display:flex;flex-direction:column;gap:10px;min-width:0}
+.rightcol{display:flex;flex-direction:column;gap:10px;min-width:0}
+.montage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.twocol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pupgrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:10px}
+input[type=range]{accent-color:#1C2127}
+@media (max-width:1240px){.layout{grid-template-columns:250px minmax(0,1fr)}.rightcol{grid-column:1 / -1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}.leftcol{position:static;height:auto;min-height:0}.leftcol .scroll{max-height:320px}.rightcol{display:flex}.pupgrid{grid-template-columns:minmax(0,1fr)}.montage{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}}
+</style>
+
+</head>
+<body>
+<div id="app"></div>
+<template id="dc-template">
+<div class="page" style="font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #1C2127">
+
+<!-- ================= TOP BAR ================= -->
+<div class="top">
+<div style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 28px; line-height: 1.05; letter-spacing: -0.01em">Ocular Motility Lab</div>
+<div style="font-size: 12.5px; line-height: 1.3; color: #5E6670">Eye movements, pupils &amp; red reflex — content aligned with AAO BCSC §5 &amp; §6 and EUPO 2016</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<div role="tablist" aria-label="Module" style="display: flex; gap: 3px; padding: 4px; background: #1C2127; border-radius: 12px">
+<sc-for list="{{modules}}" as="it" hint-placeholder-count="2">
+<button class="btn" role="tab" aria-selected="{{it.on}}" onClick="{{it.pick}}" style="height: 40px; padding: 0 16px; border: none; border-radius: 9px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 14px">{{it.label}}</button>
+</sc-for>
+</div>
+<button class="btn" onClick="{{togglePlay}}" aria-label="{{playLabel}}" style="height: 48px; min-width: 104px; padding: 0 16px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1.5px solid #1C2127; border-radius: 12px; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13.5px">
+<sc-if value="{{playing}}" hint-placeholder-val="{{true}}">
+<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="1.5" width="3.4" height="11" rx="1" style="fill: #1C2127"></rect><rect x="8.6" y="1.5" width="3.4" height="11" rx="1" style="fill: #1C2127"></rect></svg>
+</sc-if>
+<sc-if value="{{paused}}" hint-placeholder-val="{{false}}">
+<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 L12.5 7 L3 12.5 Z" style="fill: #1C2127"></path></svg>
+</sc-if>
+<span>{{playLabel}}</span>
+</button>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ================= MODULE 1: EYE MOVEMENTS ================== -->
+<!-- ============================================================ -->
+<sc-if value="{{isMot}}" hint-placeholder-val="{{true}}">
+<div class="layout">
+
+<!-- LEFT -->
+<div class="leftcol" style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 14px 12px 12px 14px; display: flex; flex-direction: column; gap: 10px">
+<sc-if value="{{notSolo}}" hint-placeholder-val="{{true}}">
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258">Affected eye (one-sided conditions)</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{sides}}" as="it" hint-placeholder-count="2">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 40px; border-radius: 9px; border: 1.5px solid {{it.bd}}; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13px">{{it.label}}</button>
+</sc-for>
+</div>
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258; margin-top: 4px">Condition</div>
+<div class="scroll" style="flex-grow: 1; min-height: 0; overflow-y: auto; padding-right: 4px">
+<sc-for list="{{groups}}" as="grp" hint-placeholder-count="6">
+<div style="margin: 10px 0 6px; font-size: 11.5px; font-weight: 600; color: #8A5A2B">{{grp.name}}</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<sc-for list="{{grp.items}}" as="it" hint-placeholder-count="4">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="text-align: left; min-height: 34px; padding: 7px 10px; border-radius: 8px; border: 1px solid {{it.bd}}; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13px; line-height: 1.25">{{it.label}}</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{isSolo}}" hint-placeholder-val="{{false}}">
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258">Muscle contracting in the right eye</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{soloMus}}" as="it" hint-placeholder-count="6">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 44px; border-radius: 9px; border: 1px solid {{it.bd}}; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px">{{it.label}}</button>
+</sc-for>
+</div>
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258; margin-top: 8px">Start position of the eye</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{soloStarts}}" as="it" hint-placeholder-count="3">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="text-align: left; min-height: 40px; padding: 6px 12px; border-radius: 9px; border: 1px solid {{it.bd}}; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13px">{{it.label}}</button>
+</sc-for>
+</div>
+<div style="margin-top: 8px; padding: 12px 14px; background: #F6F3EC; border-radius: 10px; font-size: 13px; line-height: 1.5; color: #333A42">The right eye shows one muscle acting alone. The left eye shows its <b>yoke</b> (Hering's law). Change the start position to see how the action changes with gaze — vertical recti lie 23° and obliques 51° from the visual axis. Watch the iris landmark for torsion.</div>
+<div style="flex-grow: 1"></div>
+<button class="btn" onClick="{{exitSolo}}" style="height: 44px; border-radius: 10px; border: 1px solid #1C2127; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13px">Back to the H pattern</button>
+</sc-if>
+</div>
+
+<!-- CENTER -->
+<div class="center">
+<div onPointerDown="{{onDown}}" onPointerMove="{{onMove}}" onPointerUp="{{onUp}}" onPointerLeave="{{onUp}}" style="position: relative; width: 100%; aspect-ratio: 760 / 460; border-radius: 14px; overflow: hidden; background: #161B20; cursor: {{cursor}}; touch-action: {{touch}}">
+<svg width="100%" height="100%" viewBox="0 0 760 460" style="display: block">
+<rect x="0" y="0" width="760" height="460" style="fill: #161B20"></rect>
+<g style="stroke: #20262D; stroke-width: 1">
+<line x1="92" y1="0" x2="92" y2="460"></line><line x1="380" y1="0" x2="380" y2="460"></line><line x1="668" y1="0" x2="668" y2="460"></line>
+<line x1="0" y1="50" x2="760" y2="50"></line><line x1="0" y1="230" x2="760" y2="230"></line><line x1="0" y1="410" x2="760" y2="410"></line>
+</g>
+<g style="opacity: {{st.hOp}}">
+<path d="M 92 50 L 92 410 M 668 50 L 668 410 M 92 230 L 668 230" style="fill: none; stroke: #6A7580; stroke-width: 1.6; stroke-dasharray: 7 6"></path>
+<g style="fill: #A9B4BF"><polygon points="104,230 117,223 117,237"></polygon><polygon points="92,134 85,147 99,147"></polygon><polygon points="92,326 85,313 99,313"></polygon><polygon points="656,230 643,223 643,237"></polygon><polygon points="668,134 661,147 675,147"></polygon><polygon points="668,326 661,313 675,313"></polygon></g>
+</g>
+<g style="opacity: {{st.nOp}}">
+<path d="M 380 50 L 92 50 L 92 410 L 668 410 L 668 50 Z" style="fill: none; stroke: #6A7580; stroke-width: 1.6; stroke-dasharray: 7 6"></path>
+<g style="fill: #A9B4BF"><polygon points="230,50 243,43 243,57"></polygon><polygon points="518,50 531,43 531,57"></polygon><polygon points="92,146 85,133 99,133"></polygon><polygon points="92,326 85,313 99,313"></polygon><polygon points="243,410 230,403 230,417"></polygon><polygon points="531,410 518,403 518,417"></polygon><polygon points="668,314 661,327 675,327"></polygon><polygon points="668,134 661,147 675,147"></polygon></g>
+</g>
+
+<g transform="{{headT}}">
+<ellipse cx="380" cy="236" rx="262" ry="150" style="fill: #D6B196"></ellipse>
+<ellipse cx="380" cy="236" rx="262" ry="150" style="fill: none; stroke: #B8927A; stroke-width: 1.5; opacity: 0.6"></ellipse>
+<path d="M 166 158 Q 244 124 332 150" style="fill: none; stroke: #4B3527; stroke-width: 11; stroke-linecap: round"></path>
+<path d="M 594 158 Q 516 124 428 150" style="fill: none; stroke: #4B3527; stroke-width: 11; stroke-linecap: round"></path>
+<path d="M 356 214 C 362 252 360 292 348 322 M 404 214 C 398 252 400 292 412 322 M 346 334 Q 380 352 414 334" style="fill: none; stroke: #B08468; stroke-width: 2.2; stroke-linecap: round; opacity: 0.75"></path>
+
+<g transform="translate(248 230)">
+<ellipse cx="0" cy="0" rx="78" ry="46" style="fill: #F1ECE4"></ellipse>
+<ellipse cx="68" cy="2" rx="9" ry="8" style="fill: #D99A90"></ellipse>
+<g transform="{{eR.ig}}">
+<circle cx="0" cy="0" r="29" style="fill: #5B412E"></circle>
+<circle cx="0" cy="0" r="16" style="fill: #7E5D41"></circle>
+<path d="M 0 -17 L 0 -27 M 12 -12 L 19 -19 M 17 0 L 27 0 M 12 12 L 19 19 M 0 17 L 0 27 M -12 12 L -19 19 M -17 0 L -27 0 M -12 -12 L -19 -19" style="fill: none; stroke: #36271C; stroke-width: 1.2; opacity: 0.5"></path>
+<circle cx="0" cy="0" r="28.2" style="fill: none; stroke: #2B1F17; stroke-width: 2.4"></circle>
+<path d="M 0 -14.5 L 0 -26.5" style="fill: none; stroke: #F4E7C8; stroke-width: 2.8; stroke-linecap: round; opacity: {{mkOp}}"></path>
+<ellipse cx="0" cy="0" rx="{{eR.pr}}" ry="{{eR.prY}}" style="fill: #0B0908"></ellipse>
+</g>
+<circle cx="{{eR.rfx}}" cy="{{eR.rfy}}" r="3.4" style="fill: #FFFFFF; opacity: {{eR.rfOp}}"></circle>
+<path d="{{eR.up}}" style="fill: #D6B196"></path>
+<path d="{{eR.lo}}" style="fill: #D6B196"></path>
+<path d="{{eR.cr}}" style="fill: none; stroke: #A67C62; stroke-width: 1.8; stroke-linecap: round; opacity: {{eR.crOp}}"></path>
+<path d="{{eR.loL}}" style="fill: none; stroke: #B0856B; stroke-width: 1.5"></path>
+<path d="{{eR.upL}}" style="fill: none; stroke: #2E211A; stroke-width: 3.4; stroke-linecap: round"></path>
+<g style="opacity: {{eR.arrOp}}">
+<g style="opacity: {{eR.LR.op}}"><line x1="{{eR.LR.x1}}" y1="{{eR.LR.y1}}" x2="{{eR.LR.x2}}" y2="{{eR.LR.y2}}" style="stroke: {{eR.LR.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eR.LR.dash}}"></line><polygon points="{{eR.LR.hd}}" style="fill: {{eR.LR.col}}"></polygon><text x="{{eR.LR.lx}}" y="{{eR.LR.ly}}" style="fill: {{eR.LR.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">LR</text></g>
+<g style="opacity: {{eR.MR.op}}"><line x1="{{eR.MR.x1}}" y1="{{eR.MR.y1}}" x2="{{eR.MR.x2}}" y2="{{eR.MR.y2}}" style="stroke: {{eR.MR.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eR.MR.dash}}"></line><polygon points="{{eR.MR.hd}}" style="fill: {{eR.MR.col}}"></polygon><text x="{{eR.MR.lx}}" y="{{eR.MR.ly}}" style="fill: {{eR.MR.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">MR</text></g>
+<g style="opacity: {{eR.SR.op}}"><line x1="{{eR.SR.x1}}" y1="{{eR.SR.y1}}" x2="{{eR.SR.x2}}" y2="{{eR.SR.y2}}" style="stroke: {{eR.SR.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eR.SR.dash}}"></line><polygon points="{{eR.SR.hd}}" style="fill: {{eR.SR.col}}"></polygon><text x="{{eR.SR.lx}}" y="{{eR.SR.ly}}" style="fill: {{eR.SR.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">SR</text></g>
+<g style="opacity: {{eR.IR.op}}"><line x1="{{eR.IR.x1}}" y1="{{eR.IR.y1}}" x2="{{eR.IR.x2}}" y2="{{eR.IR.y2}}" style="stroke: {{eR.IR.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eR.IR.dash}}"></line><polygon points="{{eR.IR.hd}}" style="fill: {{eR.IR.col}}"></polygon><text x="{{eR.IR.lx}}" y="{{eR.IR.ly}}" style="fill: {{eR.IR.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">IR</text></g>
+<g style="opacity: {{eR.SO.op}}"><line x1="{{eR.SO.x1}}" y1="{{eR.SO.y1}}" x2="{{eR.SO.x2}}" y2="{{eR.SO.y2}}" style="stroke: {{eR.SO.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eR.SO.dash}}"></line><polygon points="{{eR.SO.hd}}" style="fill: {{eR.SO.col}}"></polygon><text x="{{eR.SO.lx}}" y="{{eR.SO.ly}}" style="fill: {{eR.SO.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">SO</text></g>
+<g style="opacity: {{eR.IO.op}}"><line x1="{{eR.IO.x1}}" y1="{{eR.IO.y1}}" x2="{{eR.IO.x2}}" y2="{{eR.IO.y2}}" style="stroke: {{eR.IO.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eR.IO.dash}}"></line><polygon points="{{eR.IO.hd}}" style="fill: {{eR.IO.col}}"></polygon><text x="{{eR.IO.lx}}" y="{{eR.IO.ly}}" style="fill: {{eR.IO.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">IO</text></g>
+</g>
+<g style="opacity: {{eR.occ}}"><rect x="-98" y="-76" width="196" height="152" rx="22" style="fill: #232A31"></rect><text x="0" y="5" style="fill: #C9D1D9; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px; letter-spacing: 0.14em; text-anchor: middle">OCCLUDER</text></g>
+</g>
+
+<g transform="translate(512 230)">
+<ellipse cx="0" cy="0" rx="78" ry="46" style="fill: #F1ECE4"></ellipse>
+<ellipse cx="-68" cy="2" rx="9" ry="8" style="fill: #D99A90"></ellipse>
+<g transform="{{eL.ig}}">
+<circle cx="0" cy="0" r="29" style="fill: #5B412E"></circle>
+<circle cx="0" cy="0" r="16" style="fill: #7E5D41"></circle>
+<path d="M 0 -17 L 0 -27 M 12 -12 L 19 -19 M 17 0 L 27 0 M 12 12 L 19 19 M 0 17 L 0 27 M -12 12 L -19 19 M -17 0 L -27 0 M -12 -12 L -19 -19" style="fill: none; stroke: #36271C; stroke-width: 1.2; opacity: 0.5"></path>
+<circle cx="0" cy="0" r="28.2" style="fill: none; stroke: #2B1F17; stroke-width: 2.4"></circle>
+<path d="M 0 -14.5 L 0 -26.5" style="fill: none; stroke: #F4E7C8; stroke-width: 2.8; stroke-linecap: round; opacity: {{mkOp}}"></path>
+<ellipse cx="0" cy="0" rx="{{eL.pr}}" ry="{{eL.prY}}" style="fill: #0B0908"></ellipse>
+</g>
+<circle cx="{{eL.rfx}}" cy="{{eL.rfy}}" r="3.4" style="fill: #FFFFFF; opacity: {{eL.rfOp}}"></circle>
+<path d="{{eL.up}}" style="fill: #D6B196"></path>
+<path d="{{eL.lo}}" style="fill: #D6B196"></path>
+<path d="{{eL.cr}}" style="fill: none; stroke: #A67C62; stroke-width: 1.8; stroke-linecap: round; opacity: {{eL.crOp}}"></path>
+<path d="{{eL.loL}}" style="fill: none; stroke: #B0856B; stroke-width: 1.5"></path>
+<path d="{{eL.upL}}" style="fill: none; stroke: #2E211A; stroke-width: 3.4; stroke-linecap: round"></path>
+<g style="opacity: {{eL.arrOp}}">
+<g style="opacity: {{eL.LR.op}}"><line x1="{{eL.LR.x1}}" y1="{{eL.LR.y1}}" x2="{{eL.LR.x2}}" y2="{{eL.LR.y2}}" style="stroke: {{eL.LR.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eL.LR.dash}}"></line><polygon points="{{eL.LR.hd}}" style="fill: {{eL.LR.col}}"></polygon><text x="{{eL.LR.lx}}" y="{{eL.LR.ly}}" style="fill: {{eL.LR.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">LR</text></g>
+<g style="opacity: {{eL.MR.op}}"><line x1="{{eL.MR.x1}}" y1="{{eL.MR.y1}}" x2="{{eL.MR.x2}}" y2="{{eL.MR.y2}}" style="stroke: {{eL.MR.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eL.MR.dash}}"></line><polygon points="{{eL.MR.hd}}" style="fill: {{eL.MR.col}}"></polygon><text x="{{eL.MR.lx}}" y="{{eL.MR.ly}}" style="fill: {{eL.MR.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">MR</text></g>
+<g style="opacity: {{eL.SR.op}}"><line x1="{{eL.SR.x1}}" y1="{{eL.SR.y1}}" x2="{{eL.SR.x2}}" y2="{{eL.SR.y2}}" style="stroke: {{eL.SR.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eL.SR.dash}}"></line><polygon points="{{eL.SR.hd}}" style="fill: {{eL.SR.col}}"></polygon><text x="{{eL.SR.lx}}" y="{{eL.SR.ly}}" style="fill: {{eL.SR.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">SR</text></g>
+<g style="opacity: {{eL.IR.op}}"><line x1="{{eL.IR.x1}}" y1="{{eL.IR.y1}}" x2="{{eL.IR.x2}}" y2="{{eL.IR.y2}}" style="stroke: {{eL.IR.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eL.IR.dash}}"></line><polygon points="{{eL.IR.hd}}" style="fill: {{eL.IR.col}}"></polygon><text x="{{eL.IR.lx}}" y="{{eL.IR.ly}}" style="fill: {{eL.IR.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">IR</text></g>
+<g style="opacity: {{eL.SO.op}}"><line x1="{{eL.SO.x1}}" y1="{{eL.SO.y1}}" x2="{{eL.SO.x2}}" y2="{{eL.SO.y2}}" style="stroke: {{eL.SO.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eL.SO.dash}}"></line><polygon points="{{eL.SO.hd}}" style="fill: {{eL.SO.col}}"></polygon><text x="{{eL.SO.lx}}" y="{{eL.SO.ly}}" style="fill: {{eL.SO.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">SO</text></g>
+<g style="opacity: {{eL.IO.op}}"><line x1="{{eL.IO.x1}}" y1="{{eL.IO.y1}}" x2="{{eL.IO.x2}}" y2="{{eL.IO.y2}}" style="stroke: {{eL.IO.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eL.IO.dash}}"></line><polygon points="{{eL.IO.hd}}" style="fill: {{eL.IO.col}}"></polygon><text x="{{eL.IO.lx}}" y="{{eL.IO.ly}}" style="fill: {{eL.IO.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">IO</text></g>
+</g>
+<g style="opacity: {{eL.occ}}"><rect x="-98" y="-76" width="196" height="152" rx="22" style="fill: #232A31"></rect><text x="0" y="5" style="fill: #C9D1D9; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px; letter-spacing: 0.14em; text-anchor: middle">OCCLUDER</text></g>
+</g>
+</g>
+
+<text x="248" y="412" style="fill: #F08A78; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px; letter-spacing: 0.1em; text-anchor: middle">RIGHT EYE · OD</text>
+<text x="512" y="412" style="fill: #86B6F0; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px; letter-spacing: 0.1em; text-anchor: middle">LEFT EYE · OS</text>
+
+<g style="opacity: {{st.dotOp}}; fill: #D5DCE3">
+<circle cx="92" cy="230" r="4"></circle><circle cx="92" cy="50" r="4"></circle><circle cx="92" cy="410" r="4"></circle>
+<circle cx="668" cy="230" r="4"></circle><circle cx="668" cy="50" r="4"></circle><circle cx="668" cy="410" r="4"></circle>
+</g>
+<g style="opacity: {{st.dot9Op}}; fill: #D5DCE3"><circle cx="380" cy="50" r="4"></circle><circle cx="380" cy="410" r="4"></circle></g>
+<g style="opacity: {{st.labOp}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px">
+<text x="78" y="234" style="text-anchor: end; opacity: {{lab.LM}}"><tspan style="fill: #F08A78">RLR</tspan><tspan style="fill: #7D8792"> · </tspan><tspan style="fill: #86B6F0">LMR</tspan></text>
+<text x="78" y="54" style="text-anchor: end; opacity: {{lab.LU}}"><tspan style="fill: #F08A78">RSR</tspan><tspan style="fill: #7D8792"> · </tspan><tspan style="fill: #86B6F0">LIO</tspan></text>
+<text x="78" y="414" style="text-anchor: end; opacity: {{lab.LD}}"><tspan style="fill: #F08A78">RIR</tspan><tspan style="fill: #7D8792"> · </tspan><tspan style="fill: #86B6F0">LSO</tspan></text>
+<text x="682" y="234" style="text-anchor: start; opacity: {{lab.RM}}"><tspan style="fill: #86B6F0">LLR</tspan><tspan style="fill: #7D8792"> · </tspan><tspan style="fill: #F08A78">RMR</tspan></text>
+<text x="682" y="54" style="text-anchor: start; opacity: {{lab.RU}}"><tspan style="fill: #86B6F0">LSR</tspan><tspan style="fill: #7D8792"> · </tspan><tspan style="fill: #F08A78">RIO</tspan></text>
+<text x="682" y="414" style="text-anchor: start; opacity: {{lab.RD}}"><tspan style="fill: #86B6F0">LIR</tspan><tspan style="fill: #7D8792"> · </tspan><tspan style="fill: #F08A78">RSO</tspan></text>
+</g>
+<g style="opacity: {{st.lab9Op}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px; fill: #C6CED6">
+<text x="380" y="32" style="text-anchor: middle; opacity: {{lab.UC}}">Elevators: SR + IO (both eyes)</text>
+<text x="380" y="440" style="text-anchor: middle; opacity: {{lab.DC}}">Depressors: IR + SO (both eyes)</text>
+</g>
+
+<g style="opacity: {{axR.op}}"><line x1="{{axR.x1}}" y1="{{axR.y1}}" x2="{{axR.x2}}" y2="{{axR.y2}}" style="stroke: #F08A78; stroke-width: 1.6; stroke-dasharray: 5 5"></line><circle cx="{{axR.x2}}" cy="{{axR.y2}}" r="5" style="fill: none; stroke: #F08A78; stroke-width: 2"></circle></g>
+<g style="opacity: {{axL.op}}"><line x1="{{axL.x1}}" y1="{{axL.y1}}" x2="{{axL.x2}}" y2="{{axL.y2}}" style="stroke: #86B6F0; stroke-width: 1.6; stroke-dasharray: 5 5"></line><circle cx="{{axL.x2}}" cy="{{axL.y2}}" r="5" style="fill: none; stroke: #86B6F0; stroke-width: 2"></circle></g>
+
+<g style="opacity: {{tg.nextOp}}"><line x1="{{tg.ax1}}" y1="{{tg.ay1}}" x2="{{tg.ax2}}" y2="{{tg.ay2}}" style="stroke: #FFD66B; stroke-width: 3; stroke-linecap: round"></line><polygon points="{{tg.ahd}}" style="fill: #FFD66B"></polygon></g>
+<g style="opacity: {{tg.op}}">
+<circle cx="{{tg.x}}" cy="{{tg.y}}" r="{{tg.ringR}}" style="fill: none; stroke: #FFE7A0; stroke-width: 2; opacity: {{tg.ringOp}}"></circle>
+<circle cx="{{tg.x}}" cy="{{tg.y}}" r="22" style="fill: #FFE39A; opacity: 0.18"></circle>
+<circle cx="{{tg.x}}" cy="{{tg.y}}" r="{{tg.r}}" style="fill: #FFF7DD; stroke: #FFD66B; stroke-width: 2"></circle>
+<text x="{{tg.x}}" y="{{tg.ly}}" style="fill: #FFD66B; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle; opacity: {{tg.nearOp}}">NEAR 33 cm</text>
+</g>
+
+<text x="16" y="24" style="fill: #93A0AC; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 12px">Examiner's view — you face the patient</text>
+<text x="744" y="24" style="fill: #FFD66B; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 12px; text-anchor: end">{{stageNote}}</text>
+<text x="16" y="450" style="fill: #7D8792; font-family: 'IBM Plex Sans', sans-serif; font-size: 11.5px">← patient's right</text>
+<text x="744" y="450" style="fill: #7D8792; font-family: 'IBM Plex Sans', sans-serif; font-size: 11.5px; text-anchor: end">patient's left →</text>
+</svg>
+</div>
+
+<!-- SETTINGS -->
+<div style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Test</span>
+<div role="group" aria-label="Test" style="display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{modes}}" as="it" hint-placeholder-count="4">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; flex-grow: 1; min-width: 160px">
+<label for="speedR" style="font-size: 12.5px; color: #5E6670">Speed · <span style="font-family: 'IBM Plex Mono', monospace">{{speedTxt}}</span></label>
+<input id="speedR" type="range" min="0.3" max="2" step="0.1" value="{{speed}}" onChange="{{onSpeed}}" style="width: 100%; height: 36px; margin: 0">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Fixing eye (Hering's law)</span>
+<div role="group" aria-label="Fixing eye" style="display: flex; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{fixes}}" as="it" hint-placeholder-count="3">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Cover test</span>
+<div role="group" aria-label="Cover test" style="display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{covers}}" as="it" hint-placeholder-count="4">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Target</span>
+<div role="group" aria-label="Target distance" style="display: flex; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{targets}}" as="it" hint-placeholder-count="2">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Room light</span>
+<div role="group" aria-label="Room light" style="display: flex; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{rooms}}" as="it" hint-placeholder-count="2">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Head tilt (Bielschowsky)</span>
+<div role="group" aria-label="Head tilt" style="display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{tilts}}" as="it" hint-placeholder-count="3">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Display</span>
+<div style="display: flex; flex-wrap: wrap; gap: 4px 18px">
+<sc-for list="{{displays}}" as="it" hint-placeholder-count="8">
+<button class="btn" role="checkbox" aria-checked="{{it.on}}" onClick="{{it.pick}}" style="height: 36px; padding: 0 2px; display: flex; align-items: center; gap: 9px; border: none; background: transparent; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-size: 13.5px">
+<span style="width: 18px; height: 18px; box-sizing: border-box; border-radius: 4px; border: 1.5px solid #1C2127; background: {{it.box}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; line-height: 1">{{it.check}}</span>{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="font-size: 12px; color: #6B7280">{{hint}}</div>
+</div>
+
+<!-- 9 GAZE MONTAGE -->
+<div style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 12px 12px 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin: 0 2px 10px">
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 19px">Nine diagnostic positions of gaze</div>
+<div style="font-size: 12px; color: #5E6670">{{montNote}}</div>
+</div>
+<div class="montage">
+<sc-for list="{{mont}}" as="cell" hint-placeholder-count="9">
+<button class="btn" onClick="{{cell.pick}}" aria-label="{{cell.name}}" style="padding: 0; border: 2px solid {{cell.bd}}; border-radius: 10px; background: #FFFFFF; overflow: hidden; display: flex; flex-direction: column; align-items: stretch; text-align: left; font-family: 'IBM Plex Sans', sans-serif; color: #1C2127">
+<svg viewBox="0 0 260 84" style="display: block; width: 100%; height: auto">
+<rect x="0" y="0" width="260" height="84" style="fill: #D6B196"></rect>
+<g transform="translate(76 46) scale(0.42)">
+<ellipse cx="0" cy="0" rx="78" ry="46" style="fill: #F1ECE4"></ellipse>
+<g transform="{{cell.R.ig}}"><circle cx="0" cy="0" r="29" style="fill: #5B412E"></circle><circle cx="0" cy="0" r="16" style="fill: #7E5D41"></circle><circle cx="0" cy="0" r="28.2" style="fill: none; stroke: #2B1F17; stroke-width: 2.4"></circle><path d="M 0 -14.5 L 0 -26.5" style="fill: none; stroke: #F4E7C8; stroke-width: 3; opacity: {{mkOp}}"></path><ellipse cx="0" cy="0" rx="{{cell.R.pr}}" ry="{{cell.R.prY}}" style="fill: #0B0908"></ellipse></g>
+<circle cx="{{cell.R.rfx}}" cy="{{cell.R.rfy}}" r="4.5" style="fill: #FFFFFF; opacity: {{cell.R.rfOp}}"></circle>
+<path d="{{cell.R.up}}" style="fill: #D6B196"></path><path d="{{cell.R.lo}}" style="fill: #D6B196"></path>
+<path d="{{cell.R.cr}}" style="fill: none; stroke: #A67C62; stroke-width: 3; opacity: {{cell.R.crOp}}"></path>
+<path d="{{cell.R.upL}}" style="fill: none; stroke: #2E211A; stroke-width: 5; stroke-linecap: round"></path>
+</g>
+<g transform="translate(184 46) scale(0.42)">
+<ellipse cx="0" cy="0" rx="78" ry="46" style="fill: #F1ECE4"></ellipse>
+<g transform="{{cell.L.ig}}"><circle cx="0" cy="0" r="29" style="fill: #5B412E"></circle><circle cx="0" cy="0" r="16" style="fill: #7E5D41"></circle><circle cx="0" cy="0" r="28.2" style="fill: none; stroke: #2B1F17; stroke-width: 2.4"></circle><path d="M 0 -14.5 L 0 -26.5" style="fill: none; stroke: #F4E7C8; stroke-width: 3; opacity: {{mkOp}}"></path><ellipse cx="0" cy="0" rx="{{cell.L.pr}}" ry="{{cell.L.prY}}" style="fill: #0B0908"></ellipse></g>
+<circle cx="{{cell.L.rfx}}" cy="{{cell.L.rfy}}" r="4.5" style="fill: #FFFFFF; opacity: {{cell.L.rfOp}}"></circle>
+<path d="{{cell.L.up}}" style="fill: #D6B196"></path><path d="{{cell.L.lo}}" style="fill: #D6B196"></path>
+<path d="{{cell.L.cr}}" style="fill: none; stroke: #A67C62; stroke-width: 3; opacity: {{cell.L.crOp}}"></path>
+<path d="{{cell.L.upL}}" style="fill: none; stroke: #2E211A; stroke-width: 5; stroke-linecap: round"></path>
+</g>
+<path d="M 36 14 Q 76 3 118 11 M 224 14 Q 184 3 142 11" style="fill: none; stroke: #4B3527; stroke-width: 5; stroke-linecap: round"></path>
+</svg>
+<div style="padding: 5px 8px 7px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 6px; font-size: 11.5px; line-height: 1.25">
+<span style="font-weight: 600">{{cell.name}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; color: #5E6670">{{cell.yoke}}</span>
+<span style="width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: {{cell.devCol}}">{{cell.dev}}</span>
+</div>
+</button>
+</sc-for>
+</div>
+</div>
+</div>
+
+<!-- RIGHT -->
+<div class="rightcol">
+<sc-if value="{{notSolo}}" hint-placeholder-val="{{true}}">
+<div style="box-sizing: border-box; background: #1C2127; color: #F3F0E9; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #FFD66B">Current gaze</div>
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.1">{{now.name}}</div>
+<div style="font-size: 12.5px; line-height: 1.4; color: #BFC7CF">{{now.desc}}</div>
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #93A0AC; margin-top: 4px">{{now.moversTitle}}</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{now.movers}}" as="mv" hint-placeholder-count="2">
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="flex-shrink: 0; width: 46px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; background: {{mv.bg}}; color: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12.5px">{{mv.code}}</span>
+<div style="flex-grow: 1; min-width: 0"><div style="font-size: 12.5px; font-weight: 600; line-height: 1.25">{{mv.name}}</div><div style="font-size: 11.5px; line-height: 1.3; color: #AEB7C1">{{mv.detail}}</div></div>
+<span style="flex-shrink: 0; font-size: 10.5px; font-weight: 600; padding: 3px 7px; border-radius: 6px; background: {{mv.sBg}}; color: {{mv.sFg}}">{{mv.status}}</span>
+</div>
+</sc-for>
+</div>
+<div style="font-size: 12px; line-height: 1.45; color: #BFC7CF">{{now.relax}}</div>
+</div>
+</sc-if>
+<sc-if value="{{isSolo}}" hint-placeholder-val="{{false}}">
+<div style="box-sizing: border-box; background: #1C2127; color: #F3F0E9; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #FFD66B">Single muscle · right eye</div>
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 23px; line-height: 1.1">{{solo.title}}</div>
+<div style="font-size: 12px; color: #AEB7C1">{{solo.nerve}}</div>
+<sc-for list="{{solo.bars}}" as="b" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 3px">
+<div style="display: flex; justify-content: space-between; font-size: 12px"><span><span style="color: #93A0AC">{{b.rank}}</span> · <b>{{b.label}}</b></span><span style="font-family: 'IBM Plex Mono', monospace">{{b.pct}}</span></div>
+<div style="height: 7px; border-radius: 4px; background: #2D353D; overflow: hidden"><div style="height: 7px; width: {{b.w}}; background: #F08A78; border-radius: 4px"></div></div>
+</div>
+</sc-for>
+<svg viewBox="0 0 252 176" style="display: block; width: 100%; height: auto; margin-top: 4px">
+<rect x="0" y="0" width="252" height="176" rx="10" style="fill: #232A31"></rect>
+<text x="126" y="16" style="fill: #7D8792; font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-anchor: middle">ANTERIOR ↑ · right eye from above</text>
+<text x="10" y="112" style="fill: #7D8792; font-family: 'IBM Plex Mono', monospace; font-size: 10px">NASAL</text>
+<text x="242" y="112" style="fill: #7D8792; font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-anchor: end">TEMPORAL</text>
+<g transform="{{solo.planeT}}"><line x1="126" y1="170" x2="126" y2="36" style="stroke: #FFD66B; stroke-width: 2.2; stroke-dasharray: 6 5"></line></g>
+<circle cx="126" cy="104" r="42" style="fill: #F1ECE4"></circle>
+<g transform="{{solo.axisT}}"><ellipse cx="126" cy="63" rx="15" ry="4.5" style="fill: #5B412E"></ellipse><line x1="126" y1="104" x2="126" y2="28" style="stroke: #F08A78; stroke-width: 2.4"></line><polygon points="126,22 120,33 132,33" style="fill: #F08A78"></polygon></g>
+<circle cx="126" cy="104" r="3" style="fill: #1C2127"></circle>
+<text x="12" y="166" style="fill: #F08A78; font-family: 'IBM Plex Mono', monospace; font-size: 10px">— visual axis</text>
+<text x="240" y="166" style="fill: #FFD66B; font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-anchor: end">- - muscle plane</text>
+</svg>
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #FFD66B">{{solo.angle}}</div>
+<div style="font-size: 12.5px; line-height: 1.45; color: #D5DCE3">{{solo.note}}</div>
+<div style="font-size: 12px; line-height: 1.45; color: #AEB7C1">{{solo.yoke}}</div>
+</div>
+</sc-if>
+
+<div style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 5px">
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258">Alignment in this gaze</div>
+<div style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 13.5px; line-height: 1.35; color: {{dev.hCol}}">{{dev.h}}</div>
+<div style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 13.5px; line-height: 1.35; color: {{dev.vCol}}">{{dev.v}}</div>
+<div style="font-size: 12px; line-height: 1.4; color: #333A42">{{dev.fix}}</div>
+<div style="font-size: 12px; line-height: 1.4; color: #333A42">{{dev.hir}}</div>
+<div style="font-size: 12px; line-height: 1.4; color: #333A42">{{dev.tor}}</div>
+<div style="font-size: 12px; line-height: 1.4; font-weight: 600; color: #8A5A2B">{{dev.note}}</div>
+<div style="display: flex; gap: 10px; align-items: center; margin-top: 6px; padding-top: 10px; border-top: 1px solid #ECE7DD">
+<div style="flex-shrink: 0; position: relative; width: 104px; height: 84px; border-radius: 10px; background: #161B20; overflow: hidden">
+<div style="position: absolute; left: 51px; top: 0; width: 1px; height: 84px; background: #2A323A"></div>
+<div style="position: absolute; left: 0; top: 41px; width: 104px; height: 1px; background: #2A323A"></div>
+<div style="position: absolute; left: {{pv.fx}}px; top: {{pv.fy}}px; width: 16px; height: 16px; box-sizing: border-box; border-radius: 50%; border: 2.5px solid {{pv.fCol}}; opacity: {{pv.fOp}}"></div>
+<div style="position: absolute; left: 44px; top: 34px; width: 16px; height: 16px; border-radius: 50%; background: {{pv.tCol}}"></div>
+<div style="position: absolute; left: 5px; top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #7D8792">R</div>
+<div style="position: absolute; right: 5px; top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #7D8792">L</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258">Patient's view</div>
+<div style="font-size: 12.5px; line-height: 1.3; font-weight: 600">{{pv.title}}</div>
+<div style="font-size: 11.5px; line-height: 1.35; color: #4A525B">{{pv.sub}}</div>
+</div>
+</div>
+</div>
+
+<div class="twocol">
+<div style="position: relative; height: 212px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px">
+<div style="position: absolute; left: 12px; top: 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #B8321F">RE versions</div>
+<svg width="150" height="152" viewBox="0 0 150 152" style="position: absolute; left: 3px; top: 34px"><path d="M 22 22 L 22 130 M 128 22 L 128 130 M 22 76 L 128 76" style="fill: none; stroke: #D9D3C7; stroke-width: 2"></path></svg>
+<sc-for list="{{chR}}" as="c" hint-placeholder-count="6">
+<div style="position: absolute; left: {{c.left}}px; top: {{c.top}}px; width: 40px; height: 40px; box-sizing: border-box; border-radius: 50%; border: 1.5px solid {{c.bd}}; background: {{c.bg}}; color: {{c.fg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; opacity: 0.8">{{c.mu}}</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; margin-top: 2px">{{c.g}}</span></div>
+</sc-for>
+<div style="position: absolute; left: 12px; bottom: 8px; font-size: 10.5px; color: #6B7280">−4 … +4</div>
+</div>
+<div style="position: relative; height: 212px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px">
+<div style="position: absolute; left: 12px; top: 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #1F5FA8">LE versions</div>
+<svg width="150" height="152" viewBox="0 0 150 152" style="position: absolute; left: 3px; top: 34px"><path d="M 22 22 L 22 130 M 128 22 L 128 130 M 22 76 L 128 76" style="fill: none; stroke: #D9D3C7; stroke-width: 2"></path></svg>
+<sc-for list="{{chL}}" as="c" hint-placeholder-count="6">
+<div style="position: absolute; left: {{c.left}}px; top: {{c.top}}px; width: 40px; height: 40px; box-sizing: border-box; border-radius: 50%; border: 1.5px solid {{c.bd}}; background: {{c.bg}}; color: {{c.fg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 600; opacity: 0.8">{{c.mu}}</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; margin-top: 2px">{{c.g}}</span></div>
+</sc-for>
+<div style="position: absolute; left: 12px; bottom: 8px; font-size: 10.5px; color: #6B7280">your view</div>
+</div>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; display: flex; flex-direction: column; overflow: hidden">
+<div role="tablist" style="display: flex; gap: 4px; padding: 8px 8px 0; border-bottom: 1px solid #ECE7DD">
+<sc-for list="{{tabs}}" as="it" hint-placeholder-count="2">
+<button class="btn" role="tab" aria-selected="{{it.on}}" onClick="{{it.pick}}" style="height: 36px; padding: 0 12px; border: none; border-bottom: 2.5px solid {{it.bd}}; background: transparent; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13px">{{it.label}}</button>
+</sc-for>
+</div>
+<div style="padding: 14px 16px 16px">
+<sc-if value="{{tabCond}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div>
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 20px; line-height: 1.15">{{info.name}}</div>
+<div style="font-size: 12px; line-height: 1.4; color: #5E6670; margin-top: 3px">{{info.sub}}</div>
+<div style="font-size: 11.5px; font-weight: 600; margin-top: 5px; color: {{info.affCol}}">{{info.aff}}</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{info.rows}}" as="r" hint-placeholder-count="3">
+<div style="display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 10px; font-size: 12.5px; line-height: 1.35"><span style="color: #6B6258; font-weight: 600">{{r.k}}</span><span>{{r.v}}</span></div>
+</sc-for>
+</div>
+<sc-if value="{{isMG}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 5px; padding: 10px 12px; background: #F6F3EC; border-radius: 10px">
+<div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600"><span>Levator fatigue</span><span style="font-family: 'IBM Plex Mono', monospace">{{fatTxt}}</span></div>
+<div style="height: 8px; border-radius: 4px; background: #E3DDD0; overflow: hidden"><div style="height: 8px; width: {{fatTxt}}; background: #B8321F"></div></div>
+<button class="btn" onClick="{{rest}}" style="align-self: flex-start; height: 32px; padding: 0 10px; margin-top: 2px; border-radius: 7px; border: 1px solid #CFC8BA; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 500">Ice pack / rest (reset)</button>
+</div>
+</sc-if>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{info.signs}}" as="s" hint-placeholder-count="4">
+<div style="display: flex; gap: 8px; font-size: 12.5px; line-height: 1.42; color: #262C33"><span style="flex-shrink: 0; width: 5px; height: 5px; border-radius: 50%; background: #8A5A2B; margin-top: 7px"></span><span>{{s.t}}</span></div>
+</sc-for>
+</div>
+<div style="padding: 10px 12px; border-radius: 10px; background: #FBF3E4; border: 1px solid #EBD9B8; font-size: 12.5px; line-height: 1.45; color: #4A3A22"><b>Pearl · </b>{{info.pearl}}</div>
+</div>
+</sc-if>
+<sc-if value="{{tabMus}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 12px; line-height: 1.4; color: #5E6670">Actions referenced to primary position (BCSC §6, Table 4-1): primary · secondary · tertiary.</div>
+<sc-for list="{{musTable}}" as="r" hint-placeholder-count="7">
+<div style="padding: 9px 10px; border-radius: 9px; background: #F8F6F1; display: flex; flex-direction: column; gap: 3px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px"><span style="font-weight: 600; font-size: 13px">{{r.name}}</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8A5A2B; text-align: right">{{r.nerve}}</span></div>
+<div style="font-size: 12.5px; color: #262C33">{{r.acts}}</div>
+<div style="font-size: 11.5px; color: #6B7280">{{r.test}}</div>
+</div>
+</sc-for>
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258; margin-top: 6px">Rules to remember</div>
+<sc-for list="{{rules}}" as="s" hint-placeholder-count="6">
+<div style="display: flex; gap: 8px; font-size: 12.5px; line-height: 1.42; color: #262C33"><span style="flex-shrink: 0; width: 5px; height: 5px; border-radius: 50%; background: #1F5FA8; margin-top: 7px"></span><span>{{s.t}}</span></div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ============================================================ -->
+<!-- ================= MODULE 2: PUPILS & RED REFLEX ============ -->
+<!-- ============================================================ -->
+<sc-if value="{{isPup}}" hint-placeholder-val="{{false}}">
+<div class="layout">
+
+<div class="leftcol" style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 14px 12px 12px 14px; display: flex; flex-direction: column; gap: 10px">
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258">Affected eye (one-sided conditions)</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{sides}}" as="it" hint-placeholder-count="2">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 40px; border-radius: 9px; border: 1.5px solid {{it.bd}}; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13px">{{it.label}}</button>
+</sc-for>
+</div>
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258; margin-top: 4px">Condition</div>
+<div class="scroll" style="flex-grow: 1; min-height: 0; overflow-y: auto; padding-right: 4px">
+<sc-for list="{{pgroups}}" as="grp" hint-placeholder-count="6">
+<div style="margin: 10px 0 6px; font-size: 11.5px; font-weight: 600; color: #8A5A2B">{{grp.name}}</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<sc-for list="{{grp.items}}" as="it" hint-placeholder-count="3">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="text-align: left; min-height: 34px; padding: 7px 10px; border-radius: 8px; border: 1px solid {{it.bd}}; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13px; line-height: 1.25">{{it.label}}</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div class="center">
+<div style="position: relative; width: 100%; aspect-ratio: 760 / 460; border-radius: 14px; overflow: hidden; background: #161B20">
+<svg width="100%" height="100%" viewBox="0 0 760 460" style="display: block">
+<rect x="0" y="0" width="760" height="460" style="fill: #161B20"></rect>
+<g transform="translate(380 236) scale(1.22) translate(-380 -236)">
+<ellipse cx="380" cy="236" rx="262" ry="150" style="fill: #D6B196"></ellipse>
+<path d="M 166 158 Q 244 124 332 150" style="fill: none; stroke: #4B3527; stroke-width: 11; stroke-linecap: round"></path>
+<path d="M 594 158 Q 516 124 428 150" style="fill: none; stroke: #4B3527; stroke-width: 11; stroke-linecap: round"></path>
+<path d="M 356 214 C 362 252 360 292 348 322 M 404 214 C 398 252 400 292 412 322 M 346 334 Q 380 352 414 334" style="fill: none; stroke: #B08468; stroke-width: 2.2; stroke-linecap: round; opacity: 0.75"></path>
+<g transform="translate(248 230)">
+<ellipse cx="0" cy="0" rx="78" ry="46" style="fill: {{pR.scl}}"></ellipse>
+<ellipse cx="68" cy="2" rx="9" ry="8" style="fill: #D99A90"></ellipse>
+<g transform="{{pR.ig}}">
+<circle cx="0" cy="0" r="29" style="fill: #5B412E"></circle>
+<circle cx="0" cy="0" r="16" style="fill: #7E5D41"></circle>
+<path d="M 0 -17 L 0 -27 M 12 -12 L 19 -19 M 17 0 L 27 0 M 12 12 L 19 19 M 0 17 L 0 27 M -12 12 L -19 19 M -17 0 L -27 0 M -12 -12 L -19 -19" style="fill: none; stroke: #36271C; stroke-width: 1.2; opacity: 0.5"></path>
+<circle cx="0" cy="0" r="28.2" style="fill: none; stroke: #2B1F17; stroke-width: 2.4"></circle>
+<ellipse cx="0" cy="0" rx="{{pR.pr}}" ry="{{pR.prY}}" transform="rotate(24)" style="fill: {{pR.pfill}}"></ellipse>
+</g>
+<circle cx="{{pR.rfx}}" cy="{{pR.rfy}}" r="{{pR.rfR}}" style="fill: #FFFFFF; opacity: {{pR.rfOp}}"></circle>
+<path d="{{pR.up}}" style="fill: #D6B196"></path>
+<path d="{{pR.lo}}" style="fill: #D6B196"></path>
+<path d="{{pR.cr}}" style="fill: none; stroke: #A67C62; stroke-width: 1.8; stroke-linecap: round; opacity: {{pR.crOp}}"></path>
+<path d="{{pR.loL}}" style="fill: none; stroke: #B0856B; stroke-width: 1.5"></path>
+<path d="{{pR.upL}}" style="fill: none; stroke: #2E211A; stroke-width: 3.4; stroke-linecap: round"></path>
+</g>
+<g transform="translate(512 230)">
+<ellipse cx="0" cy="0" rx="78" ry="46" style="fill: {{pL.scl}}"></ellipse>
+<ellipse cx="-68" cy="2" rx="9" ry="8" style="fill: #D99A90"></ellipse>
+<g transform="{{pL.ig}}">
+<circle cx="0" cy="0" r="29" style="fill: #5B412E"></circle>
+<circle cx="0" cy="0" r="16" style="fill: #7E5D41"></circle>
+<path d="M 0 -17 L 0 -27 M 12 -12 L 19 -19 M 17 0 L 27 0 M 12 12 L 19 19 M 0 17 L 0 27 M -12 12 L -19 19 M -17 0 L -27 0 M -12 -12 L -19 -19" style="fill: none; stroke: #36271C; stroke-width: 1.2; opacity: 0.5"></path>
+<circle cx="0" cy="0" r="28.2" style="fill: none; stroke: #2B1F17; stroke-width: 2.4"></circle>
+<ellipse cx="0" cy="0" rx="{{pL.pr}}" ry="{{pL.prY}}" transform="rotate(-24)" style="fill: {{pL.pfill}}"></ellipse>
+</g>
+<circle cx="{{pL.rfx}}" cy="{{pL.rfy}}" r="{{pL.rfR}}" style="fill: #FFFFFF; opacity: {{pL.rfOp}}"></circle>
+<path d="{{pL.up}}" style="fill: #D6B196"></path>
+<path d="{{pL.lo}}" style="fill: #D6B196"></path>
+<path d="{{pL.cr}}" style="fill: none; stroke: #A67C62; stroke-width: 1.8; stroke-linecap: round; opacity: {{pL.crOp}}"></path>
+<path d="{{pL.loL}}" style="fill: none; stroke: #B0856B; stroke-width: 1.5"></path>
+<path d="{{pL.upL}}" style="fill: none; stroke: #2E211A; stroke-width: 3.4; stroke-linecap: round"></path>
+</g>
+</g>
+<rect x="0" y="0" width="760" height="460" style="fill: #07090B; opacity: {{pst.dark}}"></rect>
+<g style="opacity: {{pst.redOp}}">
+<g transform="translate(380 236) scale(1.22) translate(-380 -236)">
+<g transform="translate(248 230)"><g transform="{{pR.ig}}">
+<ellipse cx="0" cy="0" rx="{{pR.pr}}" ry="{{pR.prY}}" style="fill: {{pR.rr.base}}"></ellipse>
+<circle cx="0" cy="0" r="{{pR.rr.innerR}}" style="fill: {{pR.rr.inner}}; opacity: {{pR.rr.innerOp}}"></circle>
+<circle cx="0" cy="{{pR.rr.cy}}" r="{{pR.rr.cresR}}" style="fill: #F7A860; opacity: {{pR.rr.cres}}"></circle>
+<circle cx="0" cy="0" r="{{pR.rr.opR}}" style="fill: {{pR.rr.opCol}}; opacity: {{pR.rr.opOp}}"></circle>
+</g><circle cx="{{pR.rfx}}" cy="{{pR.rfy}}" r="3.2" style="fill: #FFFFFF"></circle></g>
+<g transform="translate(512 230)"><g transform="{{pL.ig}}">
+<ellipse cx="0" cy="0" rx="{{pL.pr}}" ry="{{pL.prY}}" style="fill: {{pL.rr.base}}"></ellipse>
+<circle cx="0" cy="0" r="{{pL.rr.innerR}}" style="fill: {{pL.rr.inner}}; opacity: {{pL.rr.innerOp}}"></circle>
+<circle cx="0" cy="{{pL.rr.cy}}" r="{{pL.rr.cresR}}" style="fill: #F7A860; opacity: {{pL.rr.cres}}"></circle>
+<circle cx="0" cy="0" r="{{pL.rr.opR}}" style="fill: {{pL.rr.opCol}}; opacity: {{pL.rr.opOp}}"></circle>
+</g><circle cx="{{pL.rfx}}" cy="{{pL.rfy}}" r="3.2" style="fill: #FFFFFF"></circle></g>
+</g>
+</g>
+<g style="opacity: {{pen.op}}">
+<polygon points="{{pen.beam}}" style="fill: #FFF3C4; opacity: 0.2"></polygon>
+<rect x="{{pen.bx}}" y="372" width="20" height="100" rx="7" style="fill: #C9CED4"></rect>
+<rect x="{{pen.bx}}" y="372" width="20" height="14" rx="4" style="fill: #FFE9A6"></rect>
+</g>
+<g style="opacity: {{pst.nearOp}}">
+<rect x="350" y="392" width="60" height="40" rx="6" style="fill: #FAF7EF; stroke: #FFD66B; stroke-width: 2"></rect>
+<text x="380" y="418" style="fill: #1C2127; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 16px; text-anchor: middle">E  m</text>
+</g>
+<text x="16" y="24" style="fill: #93A0AC; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 12px">Examiner's view — close-up</text>
+<text x="744" y="24" style="fill: #FFD66B; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 12px; text-anchor: end">{{pst.note}}</text>
+<text x="219" y="46" style="fill: #F08A78; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px; letter-spacing: 0.1em; text-anchor: middle">OD · {{pst.dR}}</text>
+<text x="541" y="46" style="fill: #86B6F0; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px; letter-spacing: 0.1em; text-anchor: middle">OS · {{pst.dL}}</text>
+</svg>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">View</span>
+<div role="group" aria-label="View" style="display: flex; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{pviews}}" as="it" hint-placeholder-count="2">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Penlight</span>
+<div role="group" aria-label="Penlight" style="display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{plights}}" as="it" hint-placeholder-count="4">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Fixation</span>
+<div role="group" aria-label="Fixation" style="display: flex; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{pnears}}" as="it" hint-placeholder-count="2">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Room light</span>
+<div role="group" aria-label="Room light" style="display: flex; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{prooms}}" as="it" hint-placeholder-count="2">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px">
+<span style="font-size: 12.5px; color: #5E6670">Diagnostic &amp; dilating drops — instil into</span>
+<div role="group" aria-label="Drop target" style="display: flex; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{dropEyes}}" as="it" hint-placeholder-count="3">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 32px; padding: 0 11px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13px">{{it.label}}</button>
+</sc-for>
+</div>
+<button class="btn" onClick="{{clearDrops}}" style="height: 38px; padding: 0 12px; border-radius: 9px; border: 1px solid #CFC8BA; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; font-weight: 500">Wash out drops</button>
+<span style="font-size: 12px; font-family: 'IBM Plex Mono', monospace; color: #8A5A2B">{{dropState}}</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{drugBtns}}" as="it" hint-placeholder-count="9">
+<button class="btn" onClick="{{it.pick}}" title="{{it.use}}" style="min-height: 36px; padding: 4px 11px; border-radius: 9px; border: 1px solid {{it.bd}}; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; font-weight: 500; text-align: left">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 4px 18px">
+<sc-for list="{{pdisplays}}" as="it" hint-placeholder-count="1">
+<button class="btn" role="checkbox" aria-checked="{{it.on}}" onClick="{{it.pick}}" style="height: 36px; padding: 0 2px; display: flex; align-items: center; gap: 9px; border: none; background: transparent; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-size: 13.5px"><span style="width: 18px; height: 18px; box-sizing: border-box; border-radius: 4px; border: 1.5px solid #1C2127; background: {{it.box}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; line-height: 1">{{it.check}}</span>{{it.label}}</button>
+</sc-for>
+<span style="font-size: 12px; color: #6B7280; align-self: center">{{phint}}</span>
+</div>
+</div>
+
+<div class="pupgrid">
+<div style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 12px 14px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 6px 8px">
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258">Pupillogram — last 10 s</div>
+<div style="display: flex; gap: 12px; font-size: 11.5px"><span style="display: flex; align-items: center; gap: 5px"><span style="width: 16px; height: 2px; background: #B8321F"></span>OD</span><span style="display: flex; align-items: center; gap: 5px"><span style="width: 16px; height: 0; border-top: 2px dashed #1F5FA8"></span>OS</span><span style="display: flex; align-items: center; gap: 5px"><span style="width: 12px; height: 8px; background: #FFE39A"></span>light on an eye</span></div>
+</div>
+<svg viewBox="0 0 560 172" style="display: block; width: 100%; height: auto; margin-top: 6px">
+<g style="stroke: #ECE7DD; stroke-width: 1">
+<line x1="40" y1="30.5" x2="500" y2="30.5"></line><line x1="40" y1="64.5" x2="500" y2="64.5"></line><line x1="40" y1="98.5" x2="500" y2="98.5"></line><line x1="40" y1="132.5" x2="500" y2="132.5"></line>
+</g>
+<line x1="40" y1="150.5" x2="500" y2="150.5" style="stroke: #BDB6A8; stroke-width: 1"></line>
+<g style="fill: #6B7280; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; text-anchor: end">
+<text x="34" y="34">8</text><text x="34" y="68">6</text><text x="34" y="102">4</text><text x="34" y="136">2</text><text x="34" y="14">mm</text>
+</g>
+<path d="{{pg.band}}" style="fill: #FFE39A; opacity: 0.55"></path>
+<text x="40" y="167" style="fill: #6B7280; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px">−10 s</text>
+<text x="500" y="167" style="fill: #6B7280; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; text-anchor: end">now</text>
+<polyline points="{{pg.R}}" style="fill: none; stroke: #B8321F; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round"></polyline>
+<polyline points="{{pg.L}}" style="fill: none; stroke: #1F5FA8; stroke-width: 2; stroke-dasharray: 6 4; stroke-linejoin: round"></polyline>
+<text x="506" y="{{pg.ry}}" style="fill: #1C2127; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600">OD {{pg.rv}}</text>
+<text x="506" y="{{pg.ly}}" style="fill: #1C2127; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600">OS {{pg.lv}}</text>
+</svg>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258">Reactions (steady state, with current drops)</div>
+<div style="display: grid; grid-template-columns: 84px repeat(2, minmax(0, 1fr)); gap: 5px 8px; font-size: 12px; line-height: 1.3">
+<span></span><span style="font-weight: 600; color: #B8321F">OD</span><span style="font-weight: 600; color: #1F5FA8">OS</span>
+<sc-for list="{{rx.rows}}" as="r" hint-placeholder-count="5">
+<span style="color: #6B6258; font-weight: 600">{{r.k}}</span><span style="color: {{r.rc}}">{{r.r}}</span><span style="color: {{r.lc}}">{{r.l}}</span>
+</sc-for>
+</div>
+<div style="font-size: 12.5px; line-height: 1.4; font-weight: 600; color: #1C2127; padding-top: 6px; border-top: 1px solid #ECE7DD">{{rx.aniso}}</div>
+<div style="font-size: 12.5px; line-height: 1.4; font-weight: 600; color: #8A5A2B">{{rx.rapd}}</div>
+</div>
+</div>
+</div>
+
+<div class="rightcol">
+<div style="box-sizing: border-box; background: #1C2127; color: #F3F0E9; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #FFD66B">Live pupil sizes</div>
+<div style="display: flex; gap: 18px; align-items: baseline">
+<div><div style="font-size: 11px; color: #F08A78; font-weight: 600">OD</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 600">{{live.r}}</div></div>
+<div><div style="font-size: 11px; color: #86B6F0; font-weight: 600">OS</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 600">{{live.l}}</div></div>
+<div><div style="font-size: 11px; color: #AEB7C1; font-weight: 600">Anisocoria</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 600">{{live.a}}</div></div>
+</div>
+<div style="font-size: 12.5px; line-height: 1.45; color: #BFC7CF">{{live.note}}</div>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; display: flex; flex-direction: column; overflow: hidden">
+<div role="tablist" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 8px 0; border-bottom: 1px solid #ECE7DD">
+<sc-for list="{{ptabs}}" as="it" hint-placeholder-count="3">
+<button class="btn" role="tab" aria-selected="{{it.on}}" onClick="{{it.pick}}" style="height: 36px; padding: 0 10px; border: none; border-bottom: 2.5px solid {{it.bd}}; background: transparent; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13px">{{it.label}}</button>
+</sc-for>
+</div>
+<div style="padding: 14px 16px 16px">
+<sc-if value="{{ptabCond}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div>
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 20px; line-height: 1.15">{{pinfo.name}}</div>
+<div style="font-size: 12px; line-height: 1.4; color: #5E6670; margin-top: 3px">{{pinfo.sub}}</div>
+<div style="font-size: 11.5px; font-weight: 600; margin-top: 5px; color: {{pinfo.affCol}}">{{pinfo.aff}}</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{pinfo.rows}}" as="r" hint-placeholder-count="4">
+<div style="display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 10px; font-size: 12.5px; line-height: 1.35"><span style="color: #6B6258; font-weight: 600">{{r.k}}</span><span>{{r.v}}</span></div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{pinfo.signs}}" as="s" hint-placeholder-count="4">
+<div style="display: flex; gap: 8px; font-size: 12.5px; line-height: 1.42; color: #262C33"><span style="flex-shrink: 0; width: 5px; height: 5px; border-radius: 50%; background: #8A5A2B; margin-top: 7px"></span><span>{{s.t}}</span></div>
+</sc-for>
+</div>
+<div style="padding: 10px 12px; border-radius: 10px; background: #FBF3E4; border: 1px solid #EBD9B8; font-size: 12.5px; line-height: 1.45; color: #4A3A22"><b>Pearl · </b>{{pinfo.pearl}}</div>
+</div>
+</sc-if>
+<sc-if value="{{ptabWork}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 12px; line-height: 1.4; color: #5E6670">Evaluation of anisocoria (after BCSC §5, Fig 10-1). Try each step with the controls.</div>
+<sc-for list="{{workup}}" as="w" hint-placeholder-count="7">
+<div style="display: flex; gap: 10px; padding: 9px 10px; border-radius: 9px; background: #F8F6F1">
+<span style="flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: #1C2127; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600">{{w.n}}</span>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12.5px; font-weight: 600; line-height: 1.3">{{w.q}}</span><span style="font-size: 12px; line-height: 1.4; color: #333A42">{{w.a}}</span></div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ptabDrops}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{drugTable}}" as="d" hint-placeholder-count="9">
+<div style="padding: 9px 10px; border-radius: 9px; background: #F8F6F1; display: flex; flex-direction: column; gap: 3px">
+<div style="display: flex; justify-content: space-between; gap: 8px; align-items: baseline"><span style="font-weight: 600; font-size: 13px">{{d.name}}</span><span style="font-size: 11px; color: #8A5A2B; text-align: right">{{d.cls}}</span></div>
+<div style="font-size: 12px; line-height: 1.4; color: #262C33">{{d.use}}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ================= FOOTER: disclaimer + copyright ================= -->
+<div style="max-width: 1560px; margin: 16px auto 0; box-sizing: border-box; padding: 18px 22px; background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px 36px">
+<div style="flex: 1 1 420px; max-width: 760px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #8A5A2B"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 L15 14 H1 Z" style="fill: none; stroke: #8A5A2B; stroke-width: 1.6; stroke-linejoin: round"></path><path d="M8 6 V9.6 M8 11.6 V11.7" style="fill: none; stroke: #8A5A2B; stroke-width: 1.8; stroke-linecap: round"></path></svg>Educational use only</div>
+<div style="font-size: 12.5px; line-height: 1.55; color: #4A525B">This simulator is a simplified teaching model for medical education. It is not a medical device and must not be used for diagnosis, treatment or any clinical decision. Content is summarised from AAO BCSC Sections 5 and 6 (2020–2021) and the EUPO 2016 course; always follow current clinical guidance.</div>
+<div style="font-size: 12px; color: #6B7280">Version 1.0 · first published 25 September 2026</div>
+</div>
+<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; text-align: right">
+<svg xmlns="http://www.w3.org/2000/svg" width="190" height="106" style="display: block" viewBox="0 0 2141.000000 1199.245166" role="img" aria-label="Signature of Ahmed Bashar"><g transform="translate(-288.000000,1360.815856) scale(0.100000,-0.100000)"
+fill="#213751" stroke="none">
+<path d="M19140 13590 c-127 -32 -325 -128 -453 -219 -43 -31 -124 -87 -180
+-126 -556 -381 -573 -394 -802 -591 -135 -115 -339 -282 -457 -372 -31 -24
+-114 -94 -184 -155 -70 -62 -173 -150 -228 -196 -143 -119 -274 -242 -476
+-446 -96 -97 -224 -222 -285 -277 -60 -55 -256 -245 -435 -422 -179 -177 -345
+-336 -370 -354 -25 -19 -112 -79 -193 -135 -82 -56 -199 -137 -260 -179 -62
+-43 -236 -160 -387 -261 -151 -100 -286 -190 -300 -200 -14 -10 -54 -37 -90
+-62 -36 -24 -88 -61 -117 -82 -154 -113 -384 -271 -503 -345 -141 -89 -293
+-192 -420 -288 -89 -66 -390 -264 -743 -488 -74 -47 -156 -101 -223 -148 -130
+-90 -368 -246 -524 -344 -91 -56 -232 -149 -315 -205 -285 -194 -362 -244
+-768 -504 -119 -76 -399 -261 -521 -345 -55 -38 -196 -129 -315 -204 -119 -74
+-272 -173 -341 -221 -279 -193 -603 -401 -660 -425 -40 -16 -302 -71 -417 -87
+-43 -6 -121 -21 -173 -34 -52 -13 -141 -31 -197 -39 -56 -8 -146 -27 -200 -41
+-54 -14 -132 -29 -173 -34 -91 -12 -150 -25 -210 -46 -25 -9 -94 -23 -155 -31
+-60 -8 -157 -28 -215 -44 -58 -15 -143 -33 -190 -40 -47 -6 -125 -22 -175 -35
+-49 -13 -139 -31 -200 -40 -60 -9 -144 -25 -187 -36 -42 -10 -141 -30 -220
+-43 -136 -24 -465 -103 -593 -144 -33 -11 -87 -25 -120 -31 -33 -7 -94 -23
+-135 -36 -41 -14 -107 -31 -146 -39 -39 -8 -95 -24 -124 -36 -29 -11 -91 -30
+-138 -41 -47 -11 -106 -29 -131 -40 -25 -11 -85 -28 -132 -39 -48 -10 -101
+-26 -118 -35 -17 -8 -70 -24 -118 -36 -49 -11 -117 -31 -151 -45 -35 -13 -95
+-31 -134 -39 -38 -8 -78 -19 -88 -25 -10 -5 -73 -25 -141 -44 -685 -189 -729
+-205 -729 -275 0 -47 39 -71 114 -71 107 0 276 19 436 49 85 17 191 36 235 44
+44 8 127 26 185 40 268 65 799 179 945 203 50 8 142 24 205 35 63 12 165 27
+225 35 61 8 157 24 215 35 444 84 788 107 1120 74 198 -20 249 -30 257 -51 8
+-21 -24 -52 -82 -81 -27 -14 -88 -48 -135 -75 -47 -28 -128 -75 -180 -106
+-205 -120 -403 -242 -491 -302 -25 -17 -190 -112 -374 -213 -403 -224 -393
+-218 -505 -270 -41 -19 -149 -71 -240 -115 -91 -45 -188 -88 -217 -96 -28 -8
+-62 -20 -75 -27 -41 -22 -538 -172 -643 -194 -125 -25 -297 -31 -350 -11 -109
+42 -89 117 86 319 77 89 88 124 45 152 -30 20 -45 14 -131 -50 -70 -52 -201
+-138 -285 -187 -25 -15 -61 -44 -81 -65 -173 -185 -138 -384 93 -520 83 -48
+83 -48 273 -48 190 0 190 0 260 32 39 17 89 36 112 42 24 7 75 27 115 46 40
+19 78 35 84 35 18 0 252 110 556 260 128 64 176 90 323 180 33 20 105 64 160
+97 55 33 138 84 185 113 177 111 310 190 430 255 151 82 342 193 430 250 36
+23 79 51 97 61 215 129 645 387 703 423 124 76 164 70 435 -70 224 -116 349
+-248 431 -456 34 -88 40 -116 69 -333 8 -63 28 -200 45 -305 16 -104 30 -193
+30 -197 0 -22 55 -68 81 -68 70 0 87 53 60 186 -11 54 -29 183 -41 286 -46
+415 -92 568 -225 743 -92 121 -253 239 -480 350 -49 25 -58 60 -22 93 30 29
+144 98 497 302 174 101 446 268 565 346 96 63 195 102 291 114 49 6 148 24
+219 39 72 16 150 32 175 35 25 4 99 18 165 31 66 13 199 38 295 56 96 17 229
+42 295 56 66 13 175 33 243 44 67 10 158 28 202 39 45 11 127 27 183 35 56 8
+134 24 172 35 39 11 128 29 199 40 71 11 159 29 195 41 36 11 111 27 166 35
+55 8 150 28 210 44 61 15 148 33 195 39 47 6 126 23 177 36 51 14 136 32 190
+40 54 7 124 20 155 26 102 23 116 -27 46 -164 -24 -46 -48 -94 -54 -107 -7
+-14 -52 -106 -102 -205 -49 -99 -140 -290 -201 -425 -61 -135 -122 -267 -135
+-295 -13 -27 -29 -68 -36 -90 -7 -22 -23 -61 -36 -86 -13 -26 -28 -68 -35 -95
+-7 -27 -22 -70 -35 -96 -13 -26 -33 -82 -45 -125 -12 -43 -30 -95 -41 -116
+-11 -21 -26 -71 -33 -110 -8 -40 -25 -105 -39 -145 -14 -41 -30 -102 -36 -135
+-7 -34 -22 -100 -36 -147 -13 -47 -30 -128 -38 -180 -8 -52 -26 -160 -40 -240
+-14 -80 -30 -210 -36 -290 -5 -80 -15 -190 -20 -245 -45 -474 -32 -655 74
+-986 133 -421 545 -640 1126 -598 159 11 562 123 670 186 19 12 59 29 89 38
+30 10 68 26 85 36 17 9 60 27 95 39 35 11 73 27 85 35 11 8 57 27 101 43 44
+16 118 46 165 67 47 20 146 62 220 93 74 31 198 88 275 128 132 67 182 95 358
+196 39 23 96 54 125 69 30 16 68 37 85 48 18 10 115 62 217 116 258 135 365
+204 789 505 104 74 269 187 367 250 98 63 206 135 240 160 214 153 299 212
+774 531 162 109 333 226 380 260 47 34 171 121 275 192 239 164 386 273 545
+402 69 55 181 141 250 190 116 83 430 318 595 445 227 175 536 407 586 441 55
+36 217 159 379 287 80 63 221 169 314 236 93 67 230 169 305 227 149 116 243
+166 375 200 44 11 92 27 107 35 15 7 66 23 114 34 47 11 102 27 123 36 20 8
+75 26 122 39 171 47 447 126 520 150 41 13 105 31 142 40 37 8 86 23 110 34
+24 10 78 26 121 35 43 10 98 26 122 37 24 11 79 28 123 39 43 11 104 31 134
+44 30 13 80 29 111 35 30 5 83 22 116 36 34 14 91 32 127 41 36 8 89 24 119
+35 29 11 86 29 125 40 168 46 225 102 185 179 -25 49 -103 79 -233 92 -135 13
+-673 -9 -1162 -48 -92 -8 -113 6 -89 56 8 16 239 255 514 531 586 589 578 581
+776 842 162 213 212 278 289 367 60 69 181 256 247 380 45 84 71 143 178 400
+59 141 105 328 105 426 0 110 -46 300 -97 399 -137 267 -341 376 -778 415
+-135 12 -412 1 -630 -25 -71 -9 -195 -22 -275 -30 -129 -12 -318 -47 -495 -91
+-201 -50 -285 -73 -313 -88 -18 -9 -69 -26 -114 -37 -45 -11 -98 -29 -119 -39
+-20 -11 -72 -29 -115 -40 -44 -12 -93 -29 -110 -39 -17 -10 -55 -26 -85 -36
+-30 -10 -79 -30 -109 -45 -30 -15 -66 -31 -80 -35 -14 -4 -54 -20 -90 -36 -36
+-15 -184 -74 -330 -129 -146 -55 -294 -114 -330 -130 -36 -16 -112 -50 -170
+-75 -106 -48 -247 -116 -815 -395 -278 -137 -427 -218 -580 -315 -46 -30 -108
+-68 -275 -172 -103 -64 -264 -160 -405 -241 -71 -41 -155 -89 -185 -107 -63
+-36 -136 -87 -230 -160 -75 -59 -131 -99 -284 -203 -164 -112 -250 -178 -471
+-364 -303 -255 -335 -282 -538 -448 -667 -550 -801 -675 -1163 -1090 -157
+-180 -193 -199 -429 -231 -44 -6 -123 -21 -176 -34 -52 -14 -142 -31 -200 -40
+-57 -9 -144 -26 -194 -40 -49 -13 -129 -29 -177 -35 -48 -6 -127 -22 -175 -36
+-49 -14 -144 -34 -212 -45 -68 -10 -153 -28 -190 -39 -36 -12 -113 -28 -171
+-36 -58 -8 -145 -26 -195 -39 -109 -29 -291 -58 -316 -50 -32 11 -41 40 -24
+81 29 71 124 215 260 394 56 74 150 207 210 295 129 190 195 282 341 474 60
+79 143 194 184 255 267 394 308 444 720 895 64 69 149 167 190 216 41 50 109
+126 150 170 138 146 374 409 454 505 163 195 204 231 481 416 344 231 378 254
+600 408 105 73 278 190 385 261 107 70 256 174 330 230 74 56 264 190 422 298
+158 107 320 220 360 249 148 110 760 541 933 658 83 56 206 156 325 265 38 35
+104 92 147 126 198 158 255 222 310 352 50 119 40 182 -40 241 -40 29 -165 32
+-267 6z m148 -152 c37 -37 -1 -109 -120 -224 -151 -147 -480 -418 -638 -525
+-52 -36 -158 -112 -235 -169 -77 -57 -189 -137 -250 -177 -185 -122 -254 -171
+-415 -291 -85 -64 -245 -177 -355 -251 -180 -121 -368 -253 -524 -368 -84 -63
+-421 -288 -458 -307 -35 -17 -63 -21 -63 -8 0 56 530 567 899 867 20 16 68 57
+107 92 40 35 110 93 156 131 182 145 288 232 503 412 42 36 101 83 131 105
+298 220 332 244 802 558 67 44 247 134 306 153 53 16 138 18 154 2z m4323
+-1836 c122 -24 159 -36 220 -70 229 -127 330 -390 274 -712 -43 -247 -294
+-743 -499 -986 -63 -75 -117 -144 -267 -345 -174 -233 -195 -256 -704 -765
+-258 -258 -531 -534 -606 -611 -144 -149 -173 -170 -241 -178 -72 -8 -387 -34
+-498 -40 -58 -4 -220 -18 -360 -31 -140 -13 -331 -29 -425 -34 -93 -6 -267
+-22 -385 -35 -118 -14 -294 -30 -390 -35 -199 -12 -311 -22 -525 -50 -82 -11
+-235 -24 -340 -30 -182 -11 -276 -20 -540 -54 -66 -8 -199 -20 -296 -26 -162
+-10 -300 -27 -404 -50 -24 -5 -139 -19 -257 -30 -117 -11 -262 -29 -322 -40
+-59 -11 -167 -24 -240 -30 -144 -12 -231 -22 -381 -45 -55 -8 -172 -22 -260
+-30 -88 -9 -191 -20 -230 -25 -149 -21 -590 -70 -631 -70 -89 0 -74 36 94 222
+174 193 397 409 531 513 56 44 180 148 275 230 190 165 294 251 526 436 85 68
+187 153 225 189 128 119 238 206 395 310 85 57 217 149 293 204 155 114 230
+164 302 202 28 15 68 39 90 54 22 15 110 68 195 118 85 50 184 108 220 129 36
+22 99 59 140 83 41 23 98 57 125 75 28 17 101 64 163 104 112 71 518 279 742
+380 63 29 149 68 190 88 88 42 200 94 325 153 50 24 121 58 159 76 37 19 74
+34 82 34 8 0 37 11 65 25 28 14 85 39 127 54 42 16 129 49 192 74 63 25 169
+66 235 92 66 26 162 63 214 82 52 18 100 38 106 43 6 5 52 20 101 33 49 14
+108 33 129 44 22 12 64 26 94 32 29 6 83 24 120 40 36 16 93 34 126 41 33 6
+101 24 150 40 50 16 113 32 140 35 28 4 104 20 170 35 80 19 173 33 280 40 88
+6 207 18 265 27 252 37 482 32 721 -15z m-8926 -1783 c9 -13 -28 -67 -102
+-150 -33 -36 -93 -106 -133 -155 -84 -101 -217 -249 -396 -439 -141 -150 -212
+-237 -343 -425 -84 -121 -173 -243 -308 -425 -70 -94 -162 -224 -301 -424
+-134 -193 -268 -379 -359 -496 -91 -117 -130 -179 -224 -348 -138 -248 -100
+-225 -519 -302 -107 -19 -263 -49 -347 -66 -83 -16 -196 -36 -250 -44 -54 -9
+-131 -24 -171 -35 -40 -11 -121 -27 -180 -35 -59 -8 -147 -26 -197 -39 -49
+-14 -128 -30 -175 -36 -47 -6 -132 -24 -190 -40 -58 -15 -130 -31 -160 -35
+-81 -9 -155 -24 -250 -50 -47 -13 -123 -29 -170 -35 -47 -6 -125 -22 -175 -35
+-49 -13 -139 -31 -200 -40 -60 -9 -164 -30 -230 -46 -162 -39 -194 -37 -182
+13 8 31 251 205 500 360 51 32 143 90 205 130 272 176 430 279 472 308 25 17
+61 42 80 55 43 29 394 257 625 406 94 60 217 143 275 184 58 40 210 140 338
+222 295 188 565 363 620 403 86 62 360 244 487 323 176 109 284 182 448 301
+76 56 155 112 175 125 488 325 812 543 870 584 240 172 331 234 386 264 68 36
+72 37 81 22z m8286 -1989 c21 -12 25 -35 7 -46 -13 -8 -178 -67 -253 -90 -27
+-9 -84 -27 -125 -41 -41 -13 -113 -35 -160 -47 -47 -13 -107 -33 -135 -44 -27
+-12 -70 -26 -95 -32 -25 -6 -92 -26 -150 -45 -58 -19 -168 -53 -245 -76 -77
+-23 -175 -52 -218 -65 -129 -40 -177 -31 -147 26 15 27 362 336 421 374 18 11
+64 20 140 26 63 5 166 17 229 25 63 8 209 20 325 26 115 6 212 12 214 15 9 9
+173 4 192 -6z m-1437 -116 c4 -9 0 -27 -8 -39 -24 -37 -224 -214 -344 -305
+-62 -47 -157 -119 -212 -162 -63 -48 -119 -82 -152 -93 -29 -10 -69 -26 -89
+-36 -20 -10 -73 -27 -119 -39 -46 -12 -104 -32 -129 -44 -25 -13 -71 -29 -101
+-35 -30 -7 -79 -23 -109 -38 -30 -14 -86 -34 -124 -44 -38 -11 -84 -27 -101
+-36 -17 -9 -65 -27 -106 -39 -41 -13 -253 -83 -470 -157 -217 -74 -424 -145
+-460 -157 -36 -12 -87 -31 -115 -42 -27 -11 -85 -31 -127 -44 -42 -12 -98 -34
+-125 -47 -26 -13 -73 -30 -103 -37 -30 -7 -80 -25 -110 -40 -30 -15 -77 -32
+-104 -39 -27 -7 -66 -21 -88 -32 -21 -11 -73 -33 -116 -48 -104 -39 -258 -98
+-422 -161 -74 -28 -170 -65 -213 -81 -43 -16 -95 -38 -115 -48 -20 -10 -62
+-26 -92 -36 -30 -9 -73 -27 -95 -40 -22 -12 -58 -28 -80 -35 -22 -7 -62 -25
+-90 -40 -27 -15 -68 -33 -90 -40 -22 -7 -60 -23 -85 -36 -25 -13 -72 -34 -105
+-48 -33 -13 -109 -45 -170 -70 -173 -74 -553 -226 -635 -256 -41 -15 -93 -36
+-115 -47 -22 -11 -51 -24 -65 -27 -14 -4 -90 -39 -170 -78 -316 -154 -328
+-159 -469 -204 -88 -28 -172 -9 -171 38 1 66 204 290 400 441 144 111 320 289
+355 358 46 90 36 166 -31 255 -30 38 -30 68 -1 116 40 68 210 300 312 428 145
+181 170 217 209 307 42 96 45 125 11 158 -65 66 -143 25 -375 -199 -74 -72
+-213 -196 -309 -276 -96 -80 -217 -185 -270 -235 -53 -49 -128 -117 -166 -150
+-39 -33 -110 -96 -160 -140 -49 -44 -130 -114 -180 -155 -49 -41 -145 -127
+-212 -191 -188 -179 -490 -399 -547 -399 -89 0 -87 97 7 280 24 47 55 103 69
+125 14 22 44 74 68 115 24 41 62 107 86 145 68 114 159 276 194 345 60 120
+230 353 405 555 33 39 82 96 109 128 26 32 65 66 85 76 45 23 233 56 406 71
+72 6 227 24 345 40 118 16 269 34 335 40 66 6 188 20 270 30 83 11 296 35 475
+55 179 19 431 49 560 64 129 16 287 34 350 40 63 6 187 20 275 31 88 11 241
+24 340 30 185 11 366 29 560 54 61 8 193 20 295 26 179 10 306 23 550 54 63 8
+197 20 297 26 100 6 235 17 300 25 65 8 172 21 238 29 66 8 203 20 305 26 198
+11 481 38 489 45 14 14 139 4 145 -11z m-6900 -740 c38 -15 18 -68 -58 -158
+-65 -77 -239 -327 -296 -426 -24 -41 -61 -106 -83 -145 -38 -66 -61 -104 -154
+-255 -36 -59 -64 -107 -149 -255 -43 -75 -92 -189 -126 -290 -36 -109 -36
+-196 2 -262 29 -53 120 -113 169 -113 60 0 210 60 293 117 147 100 475 377
+638 538 131 129 200 173 200 126 0 -10 -26 -69 -57 -132 -32 -63 -66 -136 -77
+-162 -10 -27 -57 -96 -103 -155 -92 -115 -94 -120 -149 -262 -56 -147 -52
+-205 23 -298 45 -55 95 -80 190 -93 200 -28 337 11 759 217 83 41 155 74 160
+74 5 0 41 15 79 34 39 20 97 46 130 59 33 14 85 35 115 47 30 13 87 35 125 51
+39 15 131 53 205 83 74 30 189 75 255 101 66 25 154 61 195 80 41 18 86 36
+100 40 14 4 39 16 56 26 18 11 58 28 89 39 31 11 71 28 89 39 17 10 52 26 77
+34 25 9 75 29 110 46 35 17 93 42 129 57 36 14 97 39 135 54 76 31 387 151
+530 205 118 45 248 89 360 124 50 15 105 36 124 45 19 10 66 27 105 38 39 10
+82 26 96 35 13 9 63 29 110 44 47 15 108 36 135 47 28 11 77 30 110 40 33 11
+119 41 190 66 246 88 730 246 765 252 19 2 42 0 50 -5 32 -22 -22 -70 -325
+-289 -60 -43 -105 -77 -156 -117 -55 -43 -438 -332 -619 -467 -85 -63 -217
+-164 -293 -225 -75 -60 -226 -173 -335 -252 -109 -78 -261 -191 -337 -252
+-246 -195 -363 -280 -700 -507 -169 -114 -231 -157 -325 -225 -36 -26 -218
+-149 -405 -274 -187 -125 -356 -239 -375 -254 -136 -102 -266 -192 -550 -382
+-179 -120 -356 -240 -395 -267 -38 -28 -99 -70 -135 -94 -36 -25 -99 -68 -140
+-97 -76 -53 -176 -109 -460 -257 -166 -86 -276 -146 -380 -207 -155 -91 -211
+-122 -315 -173 -177 -87 -507 -227 -735 -312 -99 -37 -188 -73 -280 -115 -41
+-19 -88 -37 -105 -41 -16 -4 -52 -18 -78 -31 -27 -13 -88 -33 -135 -43 -48
+-11 -114 -29 -147 -40 -87 -30 -235 -41 -400 -31 -369 24 -619 189 -734 486
+-85 217 -118 508 -87 770 9 77 23 239 31 360 9 142 23 261 39 335 13 63 31
+165 40 226 9 61 28 144 41 185 14 40 30 102 36 138 6 36 22 95 36 131 13 36
+31 99 40 140 8 41 24 98 36 125 11 28 30 84 43 125 22 74 73 219 131 375 17
+44 78 181 136 305 58 124 111 238 118 254 8 16 43 86 78 155 128 252 190 378
+231 466 109 238 80 219 421 280 140 25 306 57 369 70 63 14 163 31 221 40 58
+8 138 24 177 35 39 11 119 27 177 35 58 8 147 26 198 39 51 14 130 30 177 36
+47 6 132 24 190 40 58 15 145 34 195 40 49 6 92 13 94 16 6 6 27 5 45 -2z
+m-6635 -1317 c19 -23 -47 -76 -204 -162 -146 -80 -517 -299 -589 -349 -58 -39
+-109 -50 -175 -37 -31 6 -105 15 -165 21 -61 6 -142 18 -180 26 -194 41 -691
+37 -899 -6 -114 -24 -268 -40 -314 -33 -60 9 -30 54 47 72 25 6 99 24 165 40
+116 29 312 66 695 131 102 18 233 43 292 56 59 13 142 29 185 35 43 5 134 23
+203 39 69 16 152 32 185 35 33 4 110 20 170 35 61 16 148 34 195 40 47 5 132
+23 190 39 116 32 182 38 199 18z"/>
+</g>
+</svg>
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 17px; color: #1C2127">© 2026 Ahmed Bashar</div>
+<div style="font-size: 12px; line-height: 1.5; color: #4A525B">Concept and design by Ahmed Bashar · Licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="license noopener">CC BY-NC-ND 4.0</a></div>
+<div style="font-size: 11.5px; line-height: 1.5; color: #6B7280">Share freely with credit · no commercial use · no modified versions</div>
+</div>
+</div>
+
+</div>
+</template>
+<script>
+(function () {
+  var HOLE = /\{\{\s*([^}]+?)\s*\}\}/g, WHOLE = /^\s*\{\{\s*([^}]+?)\s*\}\}\s*$/;
+  function lookup(s, p) {
+    if (p === 'true') return true; if (p === 'false') return false;
+    var k = p.split('.'), v = s;
+    for (var i = 0; i < k.length; i++) { if (v == null) return undefined; v = v[k[i]]; }
+    return v;
+  }
+  function parts(str) {
+    var out = [], last = 0, m; HOLE.lastIndex = 0;
+    while ((m = HOLE.exec(str))) { if (m.index > last) out.push(str.slice(last, m.index)); out.push({ p: m[1] }); last = HOLE.lastIndex; }
+    if (last < str.length) out.push(str.slice(last));
+    return out;
+  }
+  function interp(ps, s) {
+    var r = '';
+    for (var i = 0; i < ps.length; i++) { var x = ps[i]; if (typeof x === 'string') r += x; else { var v = lookup(s, x.p); r += (v == null ? '' : v); } }
+    return r;
+  }
+  function hasHole(t) { HOLE.lastIndex = 0; return HOLE.test(t); }
+  var EV = { onclick: 'click', onpointerdown: 'pointerdown', onpointermove: 'pointermove', onpointerup: 'pointerup', onpointerleave: 'pointerleave', onchange: 'change', oninput: 'input' };
+  function compileKids(n) { var out = []; for (var c = n.firstChild; c; c = c.nextSibling) { var d = compile(c); if (d) out.push(d); } return out; }
+  function compile(n) {
+    if (n.nodeType === 3) return hasHole(n.nodeValue) ? { t: 'text', ps: parts(n.nodeValue) } : { t: 'static', node: n };
+    if (n.nodeType !== 1) return null;
+    var tag = n.localName;
+    if (tag === 'helmet') return null;
+    if (tag === 'sc-for') return { t: 'for', list: n.getAttribute('list').match(WHOLE)[1], as: n.getAttribute('as'), kids: compileKids(n) };
+    if (tag === 'sc-if') return { t: 'if', cond: n.getAttribute('value').match(WHOLE)[1], kids: compileKids(n) };
+    var st = [], dyn = [], evs = [];
+    for (var i = 0; i < n.attributes.length; i++) {
+      var a = n.attributes[i], name = a.name, val = a.value;
+      if (name.indexOf('hint-') === 0) continue;
+      var w = val.match(WHOLE);
+      if (/^on/.test(name)) {
+        if (w) { var ev = EV[name] || name.slice(2); if (ev === 'change' && tag === 'input') ev = 'input'; evs.push({ ev: ev, p: w[1] }); }
+        continue;
+      }
+      if (hasHole(val)) dyn.push({ name: name, ps: parts(val) }); else st.push([name, val]);
+    }
+    return { t: 'el', ns: n.namespaceURI, tag: tag, st: st, dyn: dyn, evs: evs, kids: compileKids(n) };
+  }
+  function mountList(ds, parent, before) {
+    var ins = ds.map(function (d) { return mount(d, parent, before); });
+    return { update: function (s) { for (var i = 0; i < ins.length; i++) ins[i].update(s); }, remove: function () { ins.forEach(function (x) { x.remove(); }); } };
+  }
+  function mount(d, parent, before) {
+    if (d.t === 'static') { var tn = document.createTextNode(d.node.nodeValue); parent.insertBefore(tn, before); return { update: function () {}, remove: function () { tn.remove(); } }; }
+    if (d.t === 'text') {
+      var t = document.createTextNode(''), lastT = null; parent.insertBefore(t, before);
+      return { update: function (s) { var v = interp(d.ps, s); if (v !== lastT) { t.nodeValue = v; lastT = v; } }, remove: function () { t.remove(); } };
+    }
+    if (d.t === 'for') {
+      var an = document.createComment('for'), items = []; parent.insertBefore(an, before);
+      return {
+        update: function (s) {
+          var list = lookup(s, d.list) || [];
+          while (items.length > list.length) items.pop().remove();
+          while (items.length < list.length) items.push(mountList(d.kids, parent, an));
+          for (var i = 0; i < items.length; i++) { var sc = Object.create(s); sc[d.as] = list[i]; sc.$index = i; items[i].update(sc); }
+        },
+        remove: function () { items.forEach(function (x) { x.remove(); }); an.remove(); }
+      };
+    }
+    if (d.t === 'if') {
+      var an2 = document.createComment('if'), inst = null; parent.insertBefore(an2, before);
+      return {
+        update: function (s) {
+          var v = !!lookup(s, d.cond);
+          if (v && !inst) inst = mountList(d.kids, parent, an2);
+          if (!v && inst) { inst.remove(); inst = null; }
+          if (inst) inst.update(s);
+        },
+        remove: function () { if (inst) inst.remove(); an2.remove(); }
+      };
+    }
+    var el = d.ns && d.ns !== 'http://www.w3.org/1999/xhtml' ? document.createElementNS(d.ns, d.tag) : document.createElement(d.tag);
+    d.st.forEach(function (a) { el.setAttribute(a[0], a[1]); });
+    var handlers = [], lastA = [];
+    d.evs.forEach(function (e, i) { el.addEventListener(e.ev, function (evt) { var f = handlers[i]; if (typeof f === 'function') f(evt); }); });
+    parent.insertBefore(el, before);
+    var kids = mountList(d.kids, el, null);
+    return {
+      update: function (s) {
+        for (var i = 0; i < d.dyn.length; i++) {
+          var a = d.dyn[i], v = interp(a.ps, s);
+          if (v !== lastA[i]) { lastA[i] = v; if (a.name === 'value' && 'value' in el) el.value = v; else el.setAttribute(a.name, v); }
+        }
+        for (var j = 0; j < d.evs.length; j++) handlers[j] = lookup(s, d.evs[j].p);
+        kids.update(s);
+      },
+      remove: function () { el.remove(); }
+    };
+  }
+  window.DCLogic = function DCLogic(props) { this.props = props || {}; this.state = {}; };
+  window.DCLogic.prototype.setState = function (p) { Object.assign(this.state, p || {}); window.__dcRender && window.__dcRender(); };
+  window.DCLogic.prototype.forceUpdate = function () { window.__dcRender && window.__dcRender(); };
+  window.__dcBoot = function (Comp) {
+    var tpl = document.getElementById('dc-template');
+    var compiled = compileKids(tpl.content);
+    var comp = new Comp({}), root = mountList(compiled, document.getElementById('app'), null), busy = false;
+    window.__dcRender = function () { if (busy) return; busy = true; try { root.update(comp.renderVals()); } finally { busy = false; } };
+    window.__dcRender();
+    if (comp.componentDidMount) comp.componentDidMount();
+  };
+})();
+
+</script>
+<script>
+
+/* Ocular Motility Lab v1.0 — (c) 2026 Ahmed Bashar. Licensed under CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/). Educational use only. */
+var OML_AUTHOR = 'Ahmed Bashar', OML_VERSION = '1.0', OML_CREATED = '2026-09-25';
+var K = 0.12, CX = 380, CY = 230, RB = 60, IRR = 29, HX = 288, HY = 180, MOVE = 0.95, PXMM = 4.9, CONV = 6;
+var EYEC = { R: [248, 230], L: [512, 230] };
+var PEYE = { R: 219, L: 541 };
+var HUE = { R: '#B8321F', L: '#1F5FA8', Rrgb: '184,50,31', Lrgb: '31,95,168', Rarr: '#9E2616', Larr: '#174E8C' };
+
+function clamp(x, a, b) { return x < a ? a : (x > b ? b : x); }
+function rad(d) { return d * Math.PI / 180; }
+function r1(x) { return Math.round(x * 10) / 10; }
+function fx(x) { return (Math.round(x * 10) / 10).toString(); }
+function mm1(x) { return x.toFixed(1); }
+function pdOf(d) { return Math.round(100 * Math.tan(rad(Math.abs(d)))); }
+function sgn(n) { return n < 0 ? '−' + Math.abs(n) : (n > 0 ? '+' + n : '0'); }
+function headPts(x, y, ux, uy, L, W) {
+  var bx = x - ux * L, by = y - uy * L;
+  return fx(x) + ',' + fx(y) + ' ' + fx(bx - uy * W) + ',' + fx(by + ux * W) + ' ' + fx(bx + uy * W) + ',' + fx(by - ux * W);
+}
+
+var WAY = {
+  h: [[0, 0, 0.7], [-HX, 0, 1.25], [-HX, -HY, 1.35], [-HX, HY, 1.35], [-HX, 0, 0.55], [0, 0, 0.7], [HX, 0, 1.25], [HX, -HY, 1.35], [HX, HY, 1.35], [HX, 0, 0.55]],
+  nine: [[0, 0, 0.8], [0, -HY, 1.1], [-HX, -HY, 1.1], [-HX, 0, 1.1], [-HX, HY, 1.1], [0, HY, 1.1], [HX, HY, 1.1], [HX, 0, 1.1], [HX, -HY, 1.1], [0, -HY, 0.5]]
+};
+var STOPS = { LM: [-HX, 0], LU: [-HX, -HY], LD: [-HX, HY], RM: [HX, 0], RU: [HX, -HY], RD: [HX, HY], UC: [0, -HY], DC: [0, HY] };
+
+var MUS = {
+  LR: { name: 'Lateral rectus', nerve: 'CN VI', acts: 'Abduction' },
+  MR: { name: 'Medial rectus', nerve: 'CN III inf. div.', acts: 'Adduction' },
+  SR: { name: 'Superior rectus', nerve: 'CN III sup. div.', acts: 'Elevation · intorsion · adduction' },
+  IR: { name: 'Inferior rectus', nerve: 'CN III inf. div.', acts: 'Depression · extorsion · adduction' },
+  SO: { name: 'Superior oblique', nerve: 'CN IV', acts: 'Intorsion · depression · abduction' },
+  IO: { name: 'Inferior oblique', nerve: 'CN III inf. div.', acts: 'Extorsion · elevation · abduction' }
+};
+var YOKE = { LR: 'MR', MR: 'LR', SR: 'IO', IO: 'SR', IR: 'SO', SO: 'IR' };
+var ANTAG = { LR: 'MR', MR: 'LR', SR: 'IR', IR: 'SR', SO: 'IO', IO: 'SO' };
+var MUS_TABLE = [
+  { name: 'Medial rectus', nerve: 'CN III · inferior div.', acts: 'Adduction · — · —', test: 'Tested looking straight in' },
+  { name: 'Lateral rectus', nerve: 'CN VI', acts: 'Abduction · — · —', test: 'Tested looking straight out' },
+  { name: 'Superior rectus', nerve: 'CN III · superior div.', acts: 'Elevation · intorsion · adduction', test: 'Tested up & out (23° abducted = pure elevator). Supplied by the contralateral SR subnucleus.' },
+  { name: 'Inferior rectus', nerve: 'CN III · inferior div.', acts: 'Depression · extorsion · adduction', test: 'Tested down & out (23° abducted = pure depressor)' },
+  { name: 'Superior oblique', nerve: 'CN IV', acts: 'Intorsion · depression · abduction', test: 'Tested down & in (51° adducted = pure depressor). Contralateral nucleus; nerve exits dorsally and decussates.' },
+  { name: 'Inferior oblique', nerve: 'CN III · inferior div.', acts: 'Extorsion · elevation · abduction', test: 'Tested up & in (51° adducted = pure elevator)' },
+  { name: 'Levator palpebrae', nerve: 'CN III · superior div.', acts: 'Elevation of the upper eyelid', test: 'Müller muscle (sympathetic) adds 1–2 mm of lid lift' }
+];
+var RULES = [
+  'Superior muscles intort, inferior muscles extort.',
+  'Vertical recti adduct; obliques abduct.',
+  'LR6 · SO4 · all the rest CN III (incl. levator & pupil sphincter).',
+  "Hering's law: yoke muscles (e.g., RLR + LMR) receive equal innervation — the basis of primary vs secondary deviation.",
+  "Sherrington's law: as an agonist contracts, its direct antagonist relaxes (RLR contracts → RMR relaxes).",
+  'Muscle planes: vertical recti 23°, obliques 51° from the visual axis — so SR/IR are tested in abduction and SO/IO in adduction.',
+  'A deviation that increases in one field = weakness of the muscle pulling there, or restriction of its antagonist (forced ductions tell them apart).',
+  'Comitant = same deviation in every gaze (childhood strabismus); incomitant = varies with gaze (paralytic or restrictive).'
+];
+
+/* ================= MOTILITY CONDITIONS ================= */
+var GROUPS = ['Baseline', 'Comitant strabismus', 'Single muscle underaction', 'Cranial nerve palsies', 'Gaze & brainstem', 'Restrictive & congenital', 'Lids, pupil & NMJ'];
+function I(sub, primary, worse, head, signs, pearl) { return { sub: sub, rows: [['Primary', primary], ['Worst in', worse], ['Head posture', head]], signs: signs, pearl: pearl }; }
+var CONDS = [
+  { id: 'normal', g: 'Baseline', name: 'Normal (orthotropia)', uni: false,
+    info: I('All 12 muscles in balance', 'Aligned; symmetric corneal reflexes (slightly nasal = positive angle kappa)', '—', 'None',
+      ['Full ductions and versions in all 9 positions', 'Hering: yoke muscles receive equal innervation (RLR + LMR for right gaze)', "Sherrington: each agonist's direct antagonist relaxes", 'Cover test: no refixation movement'],
+      'The H-test isolates each muscle in its field of action: vertical recti are tested in abduction, obliques in adduction.') },
+
+  { id: 'iet', g: 'Comitant strabismus', name: 'Infantile esotropia', uni: true,
+    aff: function (e) { e.o.bH = -17; e.o.comitant = true; },
+    info: I('Comitant esotropia, onset before 6 months', 'Large, stable esotropia (often ≥ 30Δ)', 'Same in every gaze (comitant) — compare the nine positions', '—',
+      ['Cross-fixation: the adducted eye is used to look to the opposite side (pseudo-abduction deficit — doll’s head shows full abduction)', 'Often with IO overaction, DVD and latent nystagmus', 'Refractive error is usually small (unlike accommodative ET)', 'Try Alternate cover: the uncovered eye takes up fixation each time'],
+      'Treat amblyopia first; surgery is usually done in infancy (commonly before age 2) to give the best chance of some binocularity.') },
+  { id: 'aet', g: 'Comitant strabismus', name: 'Accommodative esotropia (high AC/A)', uni: true,
+    aff: function (e) { e.o.bH = -3; e.o.nearBias = -11; e.o.comitant = true; },
+    info: I('Esotropia driven by accommodation', 'Small esotropia at distance', 'NEAR — switch Target to Near', '—',
+      ['Onset typically around 2–3 years', 'Refractive type: hyperopia (≈ +4 D) fully corrected by glasses', 'High AC/A type: near ET exceeds distance ET by ≥ 10Δ → bifocals', 'Cycloplegic refraction is mandatory'],
+      'Full cycloplegic hyperopic correction first; surgery only for any non-accommodative residual.') },
+  { id: 'ixt', g: 'Comitant strabismus', name: 'Intermittent exotropia', uni: true, intermittent: true,
+    aff: function (e) { e.o.bH = 12; e.o.nearBias = -9; e.o.comitant = true; },
+    info: I('The most common exodeviation', 'Straight while controlled; exotropia when fusion breaks down', 'Distance, fatigue, illness, daydreaming', '—',
+      ['Watch it decompensate every few seconds; covering one eye breaks fusion', 'Closes one eye in bright sunlight', 'Control is graded by how easily it breaks and how fast it recovers', 'Smaller at near (switch Target to Near)'],
+      'Options: observation, overminus lenses, part-time occlusion, or surgery (e.g., bilateral LR recessions) when control deteriorates.') },
+  { id: 'ci', g: 'Comitant strabismus', name: 'Convergence insufficiency', uni: true,
+    aff: function (e) { e.m.MRv = 0.15; },
+    info: I('Vergence disorder of adolescents and young adults', 'Aligned at distance', 'NEAR — exophoria / exotropia', '—',
+      ['Asthenopia, blur and diplopia with reading', 'Remote near point of convergence (beyond ~6–10 cm)', 'Reduced positive fusional vergence at near', 'Switch Target to Near to see the exodeviation'],
+      'Office-based vergence/accommodative therapy is the most effective treatment; base-in prisms for residual symptoms.') },
+
+  { id: 'mLR', g: 'Single muscle underaction', name: 'Lateral rectus', uni: true, aff: function (e) { e.m.LR = 0.3; },
+    info: I('Abduction weakness · muscle supplied by CN VI', 'Esotropia (unopposed MR)', 'Gaze toward the affected side; distance > near', 'Face turn toward the affected side',
+      ['Limited abduction; incomitant esotropia', 'Uncrossed horizontal diplopia', 'Secondary deviation (paretic eye fixing) > primary deviation — set Fixing eye to the affected eye', 'Corneal reflex displaced temporally in the deviating eye'],
+      'Isolated LR weakness = CN VI palsy until shown otherwise; also think myasthenia, a tight MR (thyroid) and Duane syndrome.') },
+  { id: 'mMR', g: 'Single muscle underaction', name: 'Medial rectus', uni: true, aff: function (e) { e.m.MR = 0.3; },
+    info: I('Adduction weakness · CN III (inferior division)', 'Exotropia', 'Gaze away from the affected side', 'Face turn away from the affected side',
+      ['Limited adduction; crossed horizontal diplopia', 'Isolated MR palsy from CN III is rare — look for ptosis, pupil and vertical limitation', 'Mimics: INO, myasthenia, lost/slipped MR after surgery or trauma'],
+      'Preserved convergence with poor adduction on versions points to INO rather than a muscle or nerve lesion — try Target: Near.') },
+  { id: 'mSR', g: 'Single muscle underaction', name: 'Superior rectus', uni: true, aff: function (e) { e.m.SR = 0.1; },
+    info: I('Elevation weakness · CN III (superior division)', 'Hypotropia of the affected eye', 'Up & out (elevation in abduction)', 'Chin up',
+      ['Limited elevation, maximal in abduction', 'Vertical diplopia worse looking up', 'Pseudoptosis from hypotropia; a true ptosis suggests superior-division CN III', 'May be followed by contracture of the ipsilateral IR'],
+      'With the eye abducted 23°, the SR muscle plane coincides with the visual axis → a pure elevator. Try it in Single muscle.') },
+  { id: 'mIR', g: 'Single muscle underaction', name: 'Inferior rectus', uni: true, aff: function (e) { e.m.IR = 0.1; },
+    info: I('Depression weakness · CN III (inferior division)', 'Hypertropia of the affected eye', 'Down & out (depression in abduction)', 'Chin down',
+      ['Limited depression in abduction', 'Vertical diplopia worse in downgaze and reading', 'Common after orbital trauma or a lost/slipped IR after surgery', 'Mild incyclotorsion (an extortor is weak)'],
+      'Distinguish from a contralateral SO palsy with the 3-step test — head-tilt findings differ.') },
+  { id: 'mSO', g: 'Single muscle underaction', name: 'Superior oblique', uni: true, aff: function (e) { e.m.SO = 0.1; e.m.IO = 1.22; },
+    info: I('Depression-in-adduction & intorsion weakness · CN IV', 'Hypertropia of the affected eye', 'Down & in; head tilt to the same side', 'Tilt to the opposite shoulder, chin down',
+      ['Limited depression in adduction', 'Excyclotorsion — watch the iris landmark (try Magnify torsion)', 'Secondary IO overaction (overelevation in adduction)', 'Use Head tilt for the Bielschowsky test'],
+      'With the eye adducted 51°, the SO is a pure depressor — that is why it is tested down-and-in.') },
+  { id: 'mIO', g: 'Single muscle underaction', name: 'Inferior oblique', uni: true, aff: function (e) { e.m.IO = 0.1; e.m.SO = 1.2; },
+    info: I('Elevation-in-adduction weakness · CN III (inferior division)', 'Small hypotropia (often straight)', 'Up & in (elevation in adduction)', 'Head tilt toward the affected side',
+      ['Limited elevation in adduction with ipsilateral SO overaction', 'A pattern', 'Forced ductions NEGATIVE (Brown syndrome: positive)', 'Hypotropia worse on contralateral gaze and contralateral head tilt'],
+      'Rare in isolation. Before diagnosing IO palsy, exclude Brown syndrome with forced ductions.') },
+
+  { id: 'cn3', g: 'Cranial nerve palsies', name: 'CN III — complete, pupil-involving', uni: true,
+    aff: function (e) { e.m.MR = 0.03; e.m.SR = 0.03; e.m.IR = 0.03; e.m.IO = 0.03; e.o.bVx = -5; e.ptosis = 0.93; e.pp.para = 0; e.pp.nearP = 0; },
+    info: I('Oculomotor nerve · MR, SR, IR, IO, levator, pupil sphincter, ciliary muscle', '"Down and out" (unopposed LR & SO) with complete ptosis', 'Adduction, elevation and depression', 'Usually none (the ptosis prevents diplopia)',
+      ['Complete ptosis — tick "Lift ptotic lids" to examine the eye', 'Fixed, dilated pupil (does not change with room light); accommodation paresis', 'Only abduction (CN VI) remains, plus intorsion on attempted downgaze (CN IV)', 'Watch the iris landmark intort on downgaze: proves CN IV is intact'],
+      'A pupil-involving third nerve palsy is a posterior communicating artery aneurysm until proven otherwise → urgent CTA/MRA.') },
+  { id: 'cn3s', g: 'Cranial nerve palsies', name: 'CN III — pupil-sparing (ischemic)', uni: true,
+    aff: function (e) { e.m.MR = 0.03; e.m.SR = 0.03; e.m.IR = 0.03; e.m.IO = 0.03; e.o.bVx = -5; e.ptosis = 0.85; },
+    info: I('Oculomotor nerve · pupillary fibres spared', 'Down and out, ptosis — pupil normal', 'Adduction, elevation, depression', 'None',
+      ['Complete motor palsy with a normal, reactive pupil', 'Typical microvascular palsy: age > 50, diabetes, hypertension; often painful', 'Pupillomotor fibres lie superficially — spared by ischaemia, hit by compression', 'Usually recovers within about 3 months'],
+      'A partial motor palsy with a spared pupil still needs imaging. Aberrant regeneration never follows ischaemia → image it.') },
+  { id: 'cn3sup', g: 'Cranial nerve palsies', name: 'CN III — superior division', uni: true,
+    aff: function (e) { e.m.SR = 0.05; e.ptosis = 0.62; },
+    info: I('Superior division · SR + levator', 'Ptosis with small hypotropia', 'Upgaze', 'Chin up',
+      ['Ptosis plus limited elevation', 'Pupil, adduction and depression normal', 'The nerve divides in the anterior cavernous sinus / superior orbital fissure', 'Causes: ischaemic, compressive, inflammatory'],
+      'Divisional palsies usually localize anteriorly (cavernous sinus, orbit) but can arise more proximally — image.') },
+  { id: 'cn3inf', g: 'Cranial nerve palsies', name: 'CN III — inferior division', uni: true,
+    aff: function (e) { e.m.MR = 0.05; e.m.IR = 0.05; e.m.IO = 0.05; e.pp.para = 0; e.pp.nearP = 0; },
+    info: I('Inferior division · MR, IR, IO + pupil', 'Exotropia with hypertropia; dilated pupil; no ptosis', 'Adduction and depression', 'Face turn, chin down',
+      ['Limited adduction and depression; poor elevation in adduction', 'Dilated pupil — parasympathetic fibres travel with the branch to the IO', 'Lid normal', 'Localizes to the cavernous sinus or orbit'],
+      'The parasympathetic fibres reach the ciliary ganglion via the nerve to the inferior oblique.') },
+  { id: 'cn4', g: 'Cranial nerve palsies', name: 'CN IV (trochlear)', uni: true,
+    aff: function (e) { e.m.SO = 0.08; e.m.IO = 1.25; },
+    info: I('Trochlear nerve · superior oblique', 'Hypertropia of the affected eye', 'Contralateral gaze & downgaze (down-and-in); ipsilateral head tilt', 'Tilt to the opposite shoulder, chin down',
+      ['Parks–Bielschowsky 3-step: (1) which eye is higher, (2) worse on opposite gaze, (3) worse on tilt to the same side — use Head tilt', 'Excyclotorsion < 10° when unilateral; > 10° suggests bilateral', 'Secondary IO overaction: overelevation in adduction', 'Vertical/oblique diplopia worse reading or going downstairs'],
+      'Commonest causes: trauma, congenital (decompensated — old photos show a head tilt; large vertical fusional amplitudes) and microvascular. CN IV is the only nerve to exit dorsally and decussate.') },
+  { id: 'cn6', g: 'Cranial nerve palsies', name: 'CN VI (abducens)', uni: true,
+    aff: function (e) { e.m.LR = 0.35; },
+    info: I('Abducens nerve · lateral rectus', 'Esotropia', 'Ipsilateral gaze; distance > near (compare Target)', 'Face turn toward the affected side',
+      ['Limited abduction; uncrossed diplopia', 'Secondary deviation > primary — fix with the paretic eye to see it', 'Long course over the petrous apex (Dorello canal) → false-localizing sign of raised ICP', 'Bilateral CN VI: raised ICP, clivus lesions'],
+      'Adults: microvascular, raised ICP, cavernous sinus, clivus tumours. Children: benign post-viral palsy, but exclude pontine glioma. Gradenigo: VI + facial pain + otitis.') },
+  { id: 'cs', g: 'Cranial nerve palsies', name: 'Cavernous sinus / apex (III+IV+VI)', uni: true,
+    aff: function (e) { e.m = { LR: 0.03, MR: 0.03, SR: 0.03, IR: 0.03, SO: 0.03, IO: 0.03 }; e.o.bH = 3; e.o.bV = -2; e.ptosis = 0.9; e.pp.para = 0; e.pp.nearP = 0; e.pp.S = 0.45; },
+    info: I('Multiple ocular motor nerves + V1 (± V2) + sympathetics', 'Near-central, immobile eye with ptosis', 'All directions (total ophthalmoplegia)', '—',
+      ['Several ocular motor nerves on one side = cavernous sinus, superior orbital fissure or apex', 'Pupil often mid-sized & unreactive (sympathetic + parasympathetic both involved)', 'V1 (± V2) sensory loss and pain', 'Orbital apex adds optic neuropathy (vision loss, RAPD)'],
+      'Causes: meningioma, pituitary apoplexy, metastasis, carotid–cavernous fistula (red eye, bruit), thrombosis, Tolosa–Hunt, mucormycosis in diabetics.') },
+
+  { id: 'ino', g: 'Gaze & brainstem', name: 'Internuclear ophthalmoplegia (INO)', uni: true,
+    aff: function (e) { e.m.MR = 0.18; e.m.MRv = 1; e.o.bH = 0; e.slowAdd = true; }, fel: function (e) { e.nys = true; },
+    info: I('Medial longitudinal fasciculus — named for the side of the adduction deficit', 'Usually aligned', 'Gaze away from the lesion side', '—',
+      ['Ipsilateral adduction deficit / slow adducting saccade (watch the lag)', 'Abducting nystagmus of the contralateral eye', 'Convergence preserved — switch Target to Near: the eye adducts', 'May have a skew deviation'],
+      'Young, bilateral → multiple sclerosis; older, unilateral → brainstem stroke. Myasthenia can mimic an INO.') },
+  { id: 'oah', g: 'Gaze & brainstem', name: 'One-and-a-half syndrome', uni: true, gaze: 'ipsi',
+    aff: function (e) { e.m.MR = 0.02; e.m.MRv = 1; e.o.bH = 0; }, fel: function (e) { e.nys = true; },
+    info: I('PPRF / CN VI nucleus + ipsilateral MLF', 'Aligned, or exotropia of the opposite eye (paralytic pontine exotropia)', 'Every horizontal gaze except abduction of the opposite eye', '—',
+      ['"One": conjugate gaze palsy toward the lesion side', '"Half": INO on gaze away from the lesion', 'The only horizontal movement left: abduction of the contralateral eye, with nystagmus', 'Vertical movements & convergence spared'],
+      'Causes: MS, pontine infarct or haemorrhage, tumour. Add an ipsilateral CN VII palsy = "eight-and-a-half" syndrome.') },
+  { id: 'hgp', g: 'Gaze & brainstem', name: 'Horizontal gaze palsy (CN VI nucleus)', uni: true, gaze: 'ipsi',
+    info: I('CN VI nucleus (or PPRF) · conjugate gaze palsy', 'Aligned', 'Neither eye can look toward the lesion side', '—',
+      ['The abducens nucleus holds LR motor neurons + internuclear neurons to the opposite MR → a gaze palsy, not an isolated LR palsy', "Nuclear lesion abolishes all ipsilateral horizontal movement, including the doll's-head (VOR) response", 'PPRF lesion: saccades lost, VOR may be preserved', 'Often with an ipsilateral facial palsy (the facial genu loops around the nucleus)'],
+      'Congenital relatives: Möbius syndrome (VI + VII), horizontal gaze palsy with progressive scoliosis.') },
+  { id: 'par', g: 'Gaze & brainstem', name: 'Dorsal midbrain (Parinaud)', uni: false, gaze: 'up', cr: true,
+    both: function (e) { e.retract = 0.55; e.pp.LP = 0.12; e.pp.S = 0.8; },
+    info: I('Pretectal syndrome · bilateral', 'Aligned or small skew; eyelid retraction', 'Attempted upgaze', '—',
+      ['Supranuclear upgaze palsy (saccades first; doll’s head may overcome it)', 'Convergence–retraction nystagmus on attempted upgaze — watch the jerks when the light is up', 'Eyelid retraction (Collier sign)', 'Light–near dissociation: pupils barely react to room light but constrict at Near'],
+      'Causes: pineal tumour (young), hydrocephalus / shunt failure, midbrain stroke, MS.') },
+
+  { id: 'du1', g: 'Restrictive & congenital', name: 'Duane syndrome — type 1', uni: true,
+    aff: function (e) { e.m.LR = 0; e.o.bH = -3; e.duane = 1; },
+    info: I('Congenital cranial dysinnervation · CN VI absent, LR supplied by a branch of CN III', 'Straight or small esotropia', 'Abduction (limited)', 'Face turn toward the affected side',
+      ['Limited abduction, near-normal adduction', 'Globe retraction & palpebral fissure narrowing on adduction (MR + LR co-contract)', 'Fissure widens on attempted abduction', 'Usually no diplopia; up/downshoots in adduction possible'],
+      'The most common type. More often female and left eye. Unlike CN VI palsy, the deviation in primary is small despite a large abduction deficit.') },
+  { id: 'du2', g: 'Restrictive & congenital', name: 'Duane syndrome — type 2', uni: true,
+    aff: function (e) { e.m.MR = 0.3; e.o.bH = 3; e.duane = 2; },
+    info: I('Limited adduction', 'Straight or small exotropia', 'Adduction', 'Face turn away from the affected side',
+      ['Limited adduction, normal abduction', 'Retraction & fissure narrowing on attempted adduction', 'Least common type'],
+      'All Duane types share co-contraction → globe retraction on adduction.') },
+  { id: 'du3', g: 'Restrictive & congenital', name: 'Duane syndrome — type 3', uni: true,
+    aff: function (e) { e.m.LR = 0.08; e.m.MR = 0.3; e.o.bH = 0; e.duane = 3; },
+    info: I('Limited abduction and adduction', 'Straight, or small eso/exo', 'Both horizontal directions', 'Variable',
+      ['Limited abduction AND adduction', 'Retraction & narrowing on adduction', 'Up/downshoots common'],
+      'Management targets the primary-position deviation and the head posture, not the duction deficit.') },
+  { id: 'brown', g: 'Restrictive & congenital', name: 'Brown syndrome', uni: true,
+    aff: function (e) { e.o.maxUp = function (s) { return 3 + 37 * Math.pow((s + 1) / 2, 1.4); }; },
+    info: I('Superior oblique tendon–trochlea restriction', 'Usually straight (hypotropia if severe)', 'Elevation in adduction', 'Chin up if hypotropic',
+      ['Limited elevation in adduction, better in abduction', 'Positive forced ductions (restrictive — unlike IO palsy)', 'V pattern; downshoot in adduction; no SO overaction', 'Possible click on attempted elevation'],
+      'Congenital or acquired (trauma, inflammation such as rheumatoid arthritis, sinus surgery, after SO tuck). Some congenital cases resolve.') },
+  { id: 'ted', g: 'Restrictive & congenital', name: 'Thyroid eye disease', uni: true,
+    aff: function (e) { e.o.maxUp = 6; e.o.bVx = -3; e.o.maxAbd = 26; e.o.bH = -3; e.retract = 0.65; e.follow = 0.45; },
+    fel: function (e) { e.retract = 0.25; e.follow = 0.75; },
+    info: I('Restrictive myopathy · enlarged, fibrotic muscles', 'Hypotropia (tight IR), small esotropia', 'Upgaze and abduction', 'Chin up',
+      ['Muscle involvement IR > MR > SR > LR', 'Positive forced ductions', 'Upper lid retraction and lid lag on downgaze — look at the bottom row of the nine positions', 'Proptosis; watch for compressive optic neuropathy at the apex'],
+      'The commonest cause of proptosis in adults; usually bilateral and asymmetric. Smoking worsens it.') },
+  { id: 'blow', g: 'Restrictive & congenital', name: 'Orbital floor (blowout) fracture', uni: true,
+    aff: function (e) { e.o.maxUp = 5; e.o.maxDn = 12; e.o.bVx = -2; e.scale = 0.95; },
+    info: I('Floor fracture with IR / perimuscular entrapment', 'Small hypotropia', 'Upgaze (often downgaze too)', '—',
+      ['Vertical diplopia; limited elevation ± depression', 'Positive forced ductions', 'Enophthalmos, infraorbital (V2) numbness', 'Children: "white-eyed" trapdoor fracture with nausea / bradycardia (oculocardiac reflex) → urgent repair'],
+      'Repair: emergently for entrapment with oculocardiac reflex; otherwise for persistent diplopia in primary or downgaze, or significant enophthalmos.') },
+
+  { id: 'horner', g: 'Lids, pupil & NMJ', name: 'Horner syndrome', uni: true,
+    aff: function (e) { e.ptosis = 0.17; e.lower = 0.35; e.pp.S = 0.35; e.pp.tauD = 2.5; },
+    info: I('Oculosympathetic pathway (3-neuron chain)', 'Mild ptosis (1–2 mm) and miosis', 'Anisocoria greater in dim light — set Room light to Dim', '—',
+      ['Müller muscle weakness → 1–2 mm ptosis', '"Upside-down ptosis": lower lid elevated', 'Miosis with dilation lag; ± facial anhidrosis', 'Motility is normal — full work-up in the Pupils module'],
+      'Apraclonidine reverses the anisocoria (cocaine fails to dilate). Acute painful Horner → carotid dissection until proven otherwise.') },
+  { id: 'mg', g: 'Lids, pupil & NMJ', name: 'Myasthenia gravis (ocular)', uni: true,
+    aff: function (e, S) { var f = S.fat; e.ptosis = 0.14 + 0.6 * f; e.m.SR = 1 - 0.5 * f; e.m.MR = 1 - 0.45 * f; },
+    fel: function (e, S) { e.ptosis = 0.02 + 0.16 * S.fat; },
+    info: I('Neuromuscular junction (AChR / MuSK antibodies)', 'Variable ptosis ± any deviation', 'With fatigue: sustained upgaze, end of day', 'Chin up (ptosis)',
+      ['Fatigable, variable ptosis — in Manual mode hold the light up and watch the lid drop', 'Can mimic anything: CN III, CN VI, INO, gaze palsy', 'The PUPIL is never involved', 'Cogan lid twitch, curtain sign; ice-pack test improves the ptosis'],
+      'A proportion of ocular MG generalizes, mostly within 2 years (BCSC: up to 20%; EUPO: about half) — co-manage with neurology. Tests: AChR antibodies, single-fibre EMG, CT chest for thymoma.') },
+  { id: 'apo', g: 'Lids, pupil & NMJ', name: 'Aponeurotic (involutional) ptosis', uni: true,
+    aff: function (e) { e.ptosis = 0.42; e.crease = 36; },
+    info: I('Levator aponeurosis dehiscence or stretching', 'Ptosis; pupil and motility normal', 'Same or worse in downgaze', 'Chin up if severe',
+      ['Good levator function (> 12 mm)', 'High or absent lid crease (see the raised crease)', 'Thin lid, deep upper sulcus', 'Causes: age, contact lens wear, eye surgery'],
+      'The commonest acquired ptosis; repaired by aponeurosis advancement.') },
+  { id: 'cong', g: 'Lids, pupil & NMJ', name: 'Congenital (myogenic) ptosis', uni: true,
+    aff: function (e) { e.ptosis = 0.45; e.follow = 0.3; e.creaseOp = 0.12; },
+    info: I('Dysgenetic levator muscle', 'Ptosis from birth', 'Lid LAG on downgaze (the ptotic lid ends up higher)', 'Chin up, brow elevation',
+      ['Poor levator function; faint or absent lid crease', 'Lid lag in downgaze — compare the lids in the bottom row of the nine positions', 'Amblyopia risk (occlusion, induced astigmatism)', 'Check for Marcus Gunn jaw-winking and SR weakness'],
+      'Poor levator function → frontalis sling; fair/good function → levator resection.') }
+];
+var CMAP = {};
+CONDS.forEach(function (c) { CMAP[c.id] = c; });
+
+/* ================= PUPIL / RED REFLEX CONDITIONS ================= */
+var PGROUPS = ['Baseline', 'Small pupil abnormal (worse in dark)', 'Large pupil abnormal (worse in light)', 'Afferent defects (no anisocoria)', 'Light–near dissociation', 'Bilateral small pupils', 'Red reflex (Brückner test)'];
+function PI(sub, aniso, light, near, key, signs, pearl) { return { sub: sub, rows: [['Anisocoria', aniso], ['Light', light], ['Near', near], ['Key test', key]], signs: signs, pearl: pearl }; }
+function RI(sub, reflex, cause, urgency, next, signs, pearl) { return { sub: sub, rows: [['Reflex', reflex], ['Cause', cause], ['Urgency', urgency], ['Next step', next]], signs: signs, pearl: pearl }; }
+var PCONDS = [
+  { id: 'p_norm', g: 'Baseline', name: 'Normal pupils', uni: false,
+    info: PI('Normal afferent and efferent pathways', 'None', 'Brisk direct and consensual', 'Brisk, with convergence and accommodation', 'Swinging flashlight: no RAPD',
+      ['Light in one eye constricts BOTH pupils equally (hemidecussation in chiasm and pretectum → both Edinger–Westphal nuclei)', 'About 3–4 mm in bright light, 6–7 mm in the dark', 'Near triad: convergence + accommodation + miosis'],
+      'Afferent arm = optic nerve; efferent arm = parasympathetic fibres of CN III via the ciliary ganglion; the dilator is sympathetic.') },
+  { id: 'p_phys', g: 'Baseline', name: 'Physiological anisocoria', uni: true,
+    aff: function (e) { e.pp.dOff = -0.8; },
+    info: PI('Simple (essential) anisocoria', '≤ 1 mm, about the same in dim and bright light', 'Normal', 'Normal', 'Apraclonidine / cocaine: anisocoria persists',
+      ['About 20% of people have visibly unequal pupils', 'No ptosis and no dilation lag', 'May vary from day to day, even switch sides'],
+      'Old photographs help: long-standing anisocoria with normal reactions needs only reassurance.') },
+
+  { id: 'p_hpre', g: 'Small pupil abnormal (worse in dark)', name: 'Horner — central / preganglionic', uni: true,
+    aff: function (e) { e.pp.S = 0.35; e.pp.tauD = 2.6; e.ptosis = 0.17; e.lower = 0.35; },
+    info: PI('Oculosympathetic palsy, 1st/2nd-order neuron (brainstem stroke, Pancoast tumour, neck/chest lesions)', 'Greater in the DARK (small pupil abnormal)', 'Normal', 'Normal', 'Apraclonidine: reversal · Cocaine: fails · Hydroxyamphetamine: DILATES',
+      ['Mild ptosis 1–2 mm + lower-lid elevation', 'Dilation lag — switch Room light from Bright to Dim and watch the pupillogram', 'Facial anhidrosis (preganglionic)', 'Congenital Horner: lighter iris (heterochromia)'],
+      'Preganglionic: image brain, cervical cord, lung apex and chest.') },
+  { id: 'p_hpost', g: 'Small pupil abnormal (worse in dark)', name: 'Horner — postganglionic', uni: true,
+    aff: function (e) { e.pp.S = 0.35; e.pp.tauD = 2.6; e.pp.post = true; e.ptosis = 0.17; e.lower = 0.35; },
+    info: PI('Oculosympathetic palsy, 3rd-order neuron (carotid dissection, cavernous sinus, cluster headache)', 'Greater in the DARK', 'Normal', 'Normal', 'Hydroxyamphetamine: FAILS to dilate',
+      ['Painful acute Horner → internal carotid dissection until proven otherwise (MRA/CTA neck)', 'Usually no facial anhidrosis (sudomotor fibres follow the external carotid)', 'Apraclonidine reverses the anisocoria and lifts the lid'],
+      'Apraclonidine relies on denervation supersensitivity, which takes days to develop — an acute Horner can test negative.') },
+  { id: 'p_miotic', g: 'Small pupil abnormal (worse in dark)', name: 'Pharmacologic miosis (miotic drops)', uni: true,
+    aff: function (e) { e.pp.tonic = 0.7; },
+    info: PI('Topical miotic (pilocarpine, glaucoma drops, organophosphates)', 'Greater in the dark — the small pupil does not dilate', 'Poor in the small pupil', 'Poor', 'History; apraclonidine does not reverse it',
+      ['Very small, poorly reactive pupil', 'No ptosis (unlike Horner)', 'Brow ache and induced myopia with pilocarpine'],
+      'Also think of iris damage and posterior synechiae — examine at the slit lamp.') },
+
+  { id: 'p_cn3', g: 'Large pupil abnormal (worse in light)', name: 'CN III palsy (pupil-involving)', uni: true,
+    aff: function (e) { e.pp.para = 0; e.pp.nearP = 0; e.ptosis = 0.9; e.pos = { a: 15, v: -7 }; },
+    info: PI('Parasympathetic efferent defect with ptosis and ophthalmoplegia', 'Greater in BRIGHT light (large pupil abnormal)', 'Absent direct and consensual in the affected eye', 'Absent', 'Pilocarpine 1%: constricts',
+      ['Ptosis and a down-and-out eye (lid held up here)', 'Fixed, dilated pupil and accommodation paresis', 'Pupillomotor fibres are superficial (dorsomedial) → compressed early by an aneurysm'],
+      'Pupil-involving CN III palsy → posterior communicating artery aneurysm until proven otherwise: urgent CTA/MRA.') },
+  { id: 'p_adie', g: 'Large pupil abnormal (worse in light)', name: 'Adie tonic pupil', uni: true,
+    aff: function (e) { e.pp.para = 0.07; e.pp.nearP = 0.8; e.pp.tauC = 2.6; e.pp.tauD = 4.5; e.pp.supers = true; e.pp.irregular = 1; },
+    info: PI('Ciliary ganglion / short ciliary nerves (postganglionic parasympathetic)', 'Greater in bright light (may reverse over years as the pupil becomes small)', 'Poor or absent; sectoral sphincter palsy (vermiform movements)', 'Better than light — slow, tonic constriction and slow redilation (LND)', 'Pilocarpine 0.1%: affected pupil constricts (supersensitivity)',
+      ['About 70% women; unilateral in 80%', 'Try Fixation → Near, then back to Distance: slow constriction, slow redilation', 'Accommodative paresis, photophobia', 'Holmes–Adie: plus reduced deep tendon reflexes'],
+      'Supersensitivity to dilute pilocarpine develops 5–7 days after denervation in about 80%.') },
+  { id: 'p_atro', g: 'Large pupil abnormal (worse in light)', name: 'Pharmacologic mydriasis (anticholinergic)', uni: true,
+    aff: function (e) { applyDrop(e, 'atro'); },
+    info: PI('Atropine, scopolamine patch, ipratropium nebulizer, plants (Datura)', 'Greater in bright light', 'Absent', 'Absent', 'Pilocarpine 1%: FAILS to constrict',
+      ['Very large pupil (often > 7 mm), the whole sphincter paralysed', 'No ptosis and full motility — which excludes CN III', 'Accommodation paralysed'],
+      'Ask about healthcare work, gardening, nebulizers and patches — then test with pilocarpine 1%.') },
+  { id: 'p_phen', g: 'Large pupil abnormal (worse in light)', name: 'Pharmacologic mydriasis (adrenergic)', uni: true,
+    aff: function (e) { applyDrop(e, 'phen'); },
+    info: PI('Sympathomimetic — phenylephrine, nasal decongestants', 'Greater in bright light', 'Reduced but present', 'Present', 'Pilocarpine 1%: partial constriction',
+      ['Large pupil with blanched conjunctiva', 'Widened palpebral fissure (Müller muscle stimulated)', 'Accommodation spared'],
+      'Unlike atropinic mydriasis, some light reaction remains.') },
+
+  { id: 'p_rapd', g: 'Afferent defects (no anisocoria)', name: 'RAPD (e.g., optic neuritis)', uni: true,
+    aff: function (e) { e.aff = 0.35; },
+    info: PI('Relative afferent pupillary defect (Marcus Gunn pupil)', 'None — pupils stay equal', 'Weaker when the affected eye is lit (direct and consensual)', 'Normal', 'Swinging flashlight: both pupils DILATE when the light reaches the affected eye',
+      ['Press "Swinging" in dim light and watch the pupillogram', 'Asymmetric optic-nerve or extensive retinal disease causes an RAPD; cataract and refractive error do not', 'Grade with neutral-density filters (0.3–1.8 log units)'],
+      'Afferent defects never cause anisocoria: both irises receive equal efferent drive.') },
+  { id: 'p_amau', g: 'Afferent defects (no anisocoria)', name: 'Amaurotic pupil (blind eye)', uni: true,
+    aff: function (e) { e.aff = 0; },
+    info: PI('No light perception in one eye', 'None', 'Blind eye: no direct; consensual present when the good eye is lit', 'Normal', 'Light in the blind eye: NEITHER pupil reacts',
+      ['Pupils equal in room light', 'Good eye lit → both constrict', 'Swinging: marked dilation on reaching the blind eye'],
+      'Causes: optic nerve transection, CRAO, end-stage glaucoma, total retinal detachment.') },
+
+  { id: 'p_ar', g: 'Light–near dissociation', name: 'Argyll Robertson pupils', uni: false,
+    both: function (e) { e.pp.LP = 0.03; e.pp.S = 0.25; e.pp.tonic = 0.35; e.pp.irregular = 1; },
+    info: PI('Neurosyphilis — dorsal midbrain (pretectal) lesion', 'Mild; both small (< 3 mm) and irregular', 'Absent / very poor', 'Brisk (light–near dissociation)', 'Treponemal serology; lumbar puncture',
+      ['Bilateral, small, irregular pupils', 'Dilate poorly in the dark', 'Near response preserved — try Fixation → Near'],
+      'Also seen in diabetes ("pseudo-Argyll Robertson"). Mnemonic ARP: Accommodation Reflex Present, Pupillary reflex absent.') },
+  { id: 'p_par', g: 'Light–near dissociation', name: 'Dorsal midbrain (Parinaud)', uni: false,
+    both: function (e) { e.pp.LP = 0.12; e.pp.S = 0.8; e.retract = 0.45; },
+    info: PI('Pretectal syndrome', 'None', 'Poor', 'Better (light–near dissociation)', 'MRI: pineal-region mass, hydrocephalus',
+      ['Mid-dilated pupils', 'Upgaze palsy, convergence–retraction nystagmus, lid retraction (Collier)'],
+      'LND list: Adie, Argyll Robertson, dorsal midbrain, severe bilateral afferent loss, aberrant CN III regeneration, diabetes.') },
+
+  { id: 'p_opi', g: 'Bilateral small pupils', name: 'Opioid / pontine miosis', uni: false,
+    both: function (e) { e.pp.tonic = 0.82; },
+    info: PI('Bilateral pinpoint pupils — opioids, pontine haemorrhage, organophosphates', 'None', 'Present but hard to see (use a magnifier)', '—', 'Naloxone reverses opioid miosis',
+      ['Pinpoint pupils bilaterally', 'Pontine lesion: coma, horizontal gaze palsy, ocular bobbing'],
+      'Bilateral small pupils: also old age, Argyll Robertson, bilateral Horner, miotic drops.') },
+
+  { id: 'r_norm', g: 'Red reflex (Brückner test)', name: 'Normal red reflex', uni: false, red: true,
+    info: RI('Direct ophthalmoscope at ~1 m, semi-dark room, both eyes at once', 'Bright, equal orange-red', '—', '—', 'Routine screening of every newborn and infant',
+      ['Both reflexes equal in colour and brightness', 'Corneal light reflexes centred and symmetric', 'Pupils dilate in the dark room — easier to see'],
+      'The Brückner test screens for media opacity, anisometropia and strabismus in one glance (BCSC §6).') },
+  { id: 'r_rb', g: 'Red reflex (Brückner test)', name: 'Leukocoria — retinoblastoma', uni: true, red: true,
+    aff: function (e) { e.rr = { base: '#EDE6D6', inner: '#FFFFFF', innerOp: 0.55, pen: '#D8D0BF' }; },
+    info: RI('White pupillary reflex', 'White (leukocoria) in the affected eye', 'Retinoblastoma — the commonest primary intraocular malignancy of childhood', 'URGENT — same-week ocular oncology referral', 'Dilated exam under anaesthesia, ultrasound (calcification), MRI (avoid CT)',
+      ['Leukocoria is the commonest presentation, then strabismus', 'Often first noticed in flash photographs (also visible in the Penlight view)', 'Differential: Coats disease, persistent fetal vasculature, ROP, toxocara, cataract'],
+      'Every child with a squint needs a dilated fundus exam — retinoblastoma can present as strabismus.') },
+  { id: 'r_cat', g: 'Red reflex (Brückner test)', name: 'Congenital cataract', uni: true, red: true,
+    aff: function (e) { e.rr = { opR: 0.62, opCol: '#2E1C14', opOp: 0.92, pen: '#9E988D' }; },
+    info: RI('Lens opacity', 'Dark central opacity against a dull red reflex', 'Congenital / infantile cataract', 'URGENT — visually significant cataracts need surgery in the first weeks of life', 'Paediatric ophthalmology; systemic work-up if bilateral (TORCH, galactosaemia)',
+      ['An opacity shows as a dark shadow in the red reflex', 'Dense unilateral cataract → deprivation amblyopia quickly', 'Nystagmus suggests dense bilateral deprivation'],
+      'Early surgery plus optical correction and amblyopia treatment decide the visual outcome.') },
+  { id: 'r_strab', g: 'Red reflex (Brückner test)', name: 'Strabismus (Brückner)', uni: true, red: true,
+    aff: function (e) { e.pos = { a: -13, v: 0 }; e.rr = { base: '#D0532A', inner: '#F58B47', innerOp: 0.9 }; },
+    info: RI('Ocular misalignment (here esotropia)', 'Brighter reflex in the deviating eye', 'Strabismus', 'Soon — amblyopia risk', 'Cover test, cycloplegic refraction, dilated fundus exam',
+      ['A strabismic eye tends to give a brighter red reflex than the fixing eye (BCSC)', 'Corneal light reflex decentred temporally in esotropia (Hirschberg)'],
+      'Asymmetric reflexes in a child always need a full orthoptic and fundus examination.') },
+  { id: 'r_aniso', g: 'Red reflex (Brückner test)', name: 'Anisometropia', uni: true, red: true,
+    aff: function (e) { e.rr = { cres: 0.85, base: '#C4461F' }; },
+    info: RI('Unequal refractive error', 'Asymmetric reflex with a bright crescent', 'Anisometropia (or high isoametropia)', 'Soon — amblyopia risk', 'Cycloplegic refraction; treat amblyopia',
+      ['The crescent position and size reflect the type and amount of refractive error', 'Eyes may be straight — the reflex is the only clue'],
+      'Anisometropic amblyopia is easily missed because the eyes look normal.') },
+  { id: 'r_vh', g: 'Red reflex (Brückner test)', name: 'Vitreous haemorrhage / opacity', uni: true, red: true,
+    aff: function (e) { e.rr = { base: '#4A150C', inner: '#6A2210', innerOp: 0.45 }; },
+    info: RI('Media opacity behind the lens', 'Dull, dark red or absent', 'Vitreous haemorrhage (in an infant: consider abusive head trauma), vitritis', 'URGENT', 'B-scan ultrasound; retinal examination',
+      ['Reduced or absent reflex with a clear lens', 'Look for retinal haemorrhages in the fellow eye'],
+      'An absent red reflex in a baby is an emergency until proven otherwise.') }
+];
+var PMAP = {};
+PCONDS.forEach(function (c) { PMAP[c.id] = c; });
+
+var DRUGS = [
+  { id: 'pilo01', name: 'Pilocarpine 0.1%', cls: 'Dilute cholinergic agonist', use: 'Adie tonic pupil: denervation supersensitivity → the affected pupil constricts more than the normal one.' },
+  { id: 'pilo1', name: 'Pilocarpine 1%', cls: 'Cholinergic agonist (miotic)', use: 'Constricts normal, CN III and Adie pupils; FAILS in anticholinergic (atropinic) mydriasis; partial after adrenergic mydriasis.' },
+  { id: 'apra', name: 'Apraclonidine 0.5%', cls: 'α2 agonist, weak α1', use: 'Horner: α1 supersensitivity → the affected pupil dilates and the ptosis improves (reversal of anisocoria). Little effect on a normal eye. Avoid in young children.' },
+  { id: 'coca', name: 'Cocaine 10%', cls: 'Blocks noradrenaline reuptake', use: 'Normal pupil dilates; Horner pupil fails to dilate. Post-cocaine anisocoria ≥ 1 mm confirms Horner.' },
+  { id: 'hydroxy', name: 'Hydroxyamphetamine 1%', cls: 'Releases NA from the 3rd-order terminal', use: 'Localizes Horner: postganglionic pupil fails to dilate; central/preganglionic dilates. Wait 72 h after cocaine.' },
+  { id: 'trop', name: 'Tropicamide 1%', cls: 'Antimuscarinic, short-acting', use: 'Routine dilation. Onset 20–40 min; lasts a few hours; weak cycloplegia (not enough for children).' },
+  { id: 'cyclo', name: 'Cyclopentolate 1%', cls: 'Antimuscarinic, cycloplegic', use: 'Preferred cycloplegic for children. Onset 30–60 min; lasts up to a day.' },
+  { id: 'atro', name: 'Atropine 1%', cls: 'Antimuscarinic, long-acting', use: 'Onset 45–120 min; mydriasis and cycloplegia for 1–2 weeks; used for penalization. Pilocarpine 1% cannot overcome it.' },
+  { id: 'phen', name: 'Phenylephrine 2.5%', cls: 'α1 agonist', use: 'Dilates without cycloplegia; blanches the conjunctiva and widens the fissure; light reaction partly preserved.' }
+];
+var DRUGMAP = {};
+DRUGS.forEach(function (d) { DRUGMAP[d.id] = d; });
+var WORKUP = [
+  { q: 'Do both pupils react to light?', a: 'Test direct and consensual reactions with the penlight. A poorly reactive pupil is the abnormal one (large-pupil pathway, step 6).' },
+  { q: 'Is there an RAPD?', a: 'Swinging flashlight in dim light. An afferent defect never causes anisocoria.' },
+  { q: 'Is the anisocoria greater in dim or in bright light?', a: 'Greater (or equal) in DIM → the small pupil is abnormal (sympathetic). Greater in BRIGHT → the large pupil is abnormal (parasympathetic).' },
+  { q: 'Small pupil abnormal: Horner or physiological?', a: 'Cocaine 4–10% (≥ 1 mm post-cocaine anisocoria = Horner) or apraclonidine 0.5–1% (reversal = Horner; persists = physiological). Dilation lag supports Horner.' },
+  { q: 'Localize the Horner', a: 'Hydroxyamphetamine 1% (≥ 72 h after cocaine): pupil fails to dilate → postganglionic; dilates → central/preganglionic. Image accordingly.' },
+  { q: 'Large pupil abnormal: look at the slit lamp', a: 'Iris damage (trauma, synechiae, angle closure)? Sectoral sphincter palsy / vermiform movements → Adie. Check ptosis and motility for CN III.' },
+  { q: 'Dilute pilocarpine 0.1%', a: 'Larger pupil constricts → cholinergic supersensitivity → Adie tonic pupil.' },
+  { q: 'Pilocarpine 1%', a: 'Constricts → CN III palsy (image for aneurysm if acute). Fails to constrict → pharmacologic (anticholinergic) mydriasis.' }
+];
+
+/* ================= EYE & PUPIL MODELS ================= */
+function baseEye() {
+  return {
+    m: { LR: 1, MR: 1, SR: 1, IR: 1, SO: 1, IO: 1 }, o: {}, ptosis: 0, lower: 0, retract: 0, follow: 1, crease: 20, creaseOp: 0.9,
+    nys: false, slowAdd: false, duane: 0, scale: 1, aff: 1, pos: { a: 0, v: 0 }, rr: null,
+    pp: { S: 1, para: 1, nearP: 1, LP: 1, tonic: 0, dOff: 0, supers: false, post: false, blocked: false, adren: false, tauC: 0.3, tauD: 0.9, irregular: 0 }
+  };
+}
+function applyDrop(e, d) {
+  var pp = e.pp;
+  if (d === 'pilo01') pp.tonic += pp.blocked ? 0 : (pp.supers ? 0.62 : 0.06);
+  else if (d === 'pilo1') pp.tonic += pp.blocked ? 0.02 : (pp.adren ? 0.45 : 0.8);
+  else if (d === 'apra') { if (pp.S < 0.7) { pp.S += 0.8; e.ptosis *= 0.15; e.lower *= 0.15; } else pp.S -= 0.04; }
+  else if (d === 'coca') { pp.S += (pp.S < 0.7) ? 0.03 : 0.5; }
+  else if (d === 'hydroxy') { pp.S += (pp.S < 0.7 && pp.post) ? 0.03 : 0.5; }
+  else if (d === 'trop') { pp.para *= 0.08; pp.nearP *= 0.1; pp.blocked = true; pp.S += 0.05; }
+  else if (d === 'cyclo') { pp.para *= 0.03; pp.nearP *= 0.03; pp.blocked = true; pp.S += 0.05; }
+  else if (d === 'atro') { pp.para = 0; pp.nearP = 0; pp.blocked = true; pp.S += 0.15; }
+  else if (d === 'phen') { pp.S += 0.5; pp.para *= 0.45; pp.adren = true; e.retract += 0.25; }
+}
+function pupilTarget(P, X, env) {
+  var e = P[X], pp = e.pp, aR = P.R.aff, aL = P.L.aff;
+  var Dl = env.amb * (aR + aL) / 2 + 0.95 * (env.lR * aR + env.lL * aL);
+  var c = pp.para * pp.LP * Math.min(Dl, 1.4) * 0.85 + pp.nearP * env.near * 0.45 + pp.tonic;
+  c = clamp(c, 0, 0.93);
+  var base = 3.2 + 4.0 * pp.S;
+  return clamp(1.8 + (base - 1.8) * (1 - c) + pp.dOff, 1.2, 9.5);
+}
+function eyeModel(e, aVer, cv, vDes, tIp) {
+  var m = e.m, o = e.o;
+  var gH = aVer >= 0 ? m.LR : m.MR;
+  var gV = (m.MRv !== undefined) ? m.MRv : m.MR;
+  var aDes = aVer - cv;
+  var bH = (o.bH !== undefined) ? o.bH : 16 * (m.LR - m.MR);
+  if (cv > 0 && o.nearBias) bH += o.nearBias * (cv / CONV);
+  var fH = o.comitant ? 1 : ((aDes * bH <= 0) ? 1 : Math.max(0, 1 - Math.abs(aDes) / 30));
+  var a = aVer * gH - cv * gV + bH * fH;
+  a = clamp(a, -(o.maxAdd !== undefined ? o.maxAdd : 50), (o.maxAbd !== undefined ? o.maxAbd : 50));
+  var s = clamp(a / 35, -1, 1);
+  var wR = 0.6 + 0.4 * s, wO = 1 - wR;
+  var gUp = m.SR * wR + m.IO * wO, gDn = m.IR * wR + m.SO * wO;
+  var bV = (o.bV !== undefined) ? o.bV : 14 * (gUp - gDn);
+  bV += (o.bVx || 0);
+  if (tIp > 0) bV += 8 * (m.SR - m.SO) - 3 * (m.IO - m.IR);
+  if (tIp < 0) bV += 8 * (m.IO - m.IR) - 3 * (m.SR - m.SO);
+  var fV = (vDes * bV <= 0) ? 1 : Math.max(0.25, 1 - Math.abs(vDes) / 35);
+  var v = vDes * (vDes >= 0 ? gUp : gDn) + bV * fV;
+  var mu = typeof o.maxUp === 'function' ? o.maxUp(s) : (o.maxUp !== undefined ? o.maxUp : 45);
+  var md = typeof o.maxDn === 'function' ? o.maxDn(s) : (o.maxDn !== undefined ? o.maxDn : 45);
+  v = clamp(v, -md, mu);
+  var tor = 4 * ((m.IO + m.IR) - (m.SO + m.SR));
+  if (vDes > 0) tor += (vDes / 22) * 6 * (m.IO - m.SR);
+  else tor += (-vDes / 22) * 6 * (m.IR - m.SO);
+  tor += -5 * tIp;
+  return { a: a, v: v, tor: tor, aDes: aDes, vDes: vDes };
+}
+function eyeOut(side, e, cx, cy, tilt, cv) {
+  var aVer = side === 'R' ? -cx : cx;
+  var tIp = tilt === 0 ? 0 : (((tilt > 0) === (side === 'R')) ? 1 : -1);
+  var r = eyeModel(e, aVer, cv || 0, cy, tIp);
+  r.x = side === 'R' ? -r.a : r.a;
+  return r;
+}
+function limitCmd(c, side, x, y) {
+  x = clamp(x, -50, 50); y = clamp(y, -42, 42);
+  if (c.gaze === 'ipsi') { if (side === 'R') x = Math.max(x, 0); else x = Math.min(x, 0); }
+  if (c.gaze === 'up') y = Math.min(y, 0);
+  return [x, y];
+}
+function solve(P, side, fix, tx, ty, tilt, cv, start, iters) {
+  var cx = start ? start[0] : tx, cy = start ? start[1] : ty;
+  var e = fix === 'R' ? P.R : P.L;
+  var xr = tx + (fix === 'R' ? cv : -cv);
+  for (var i = 0; i < iters; i++) {
+    var r = eyeOut(fix, e, cx, cy, tilt, cv);
+    var l = limitCmd(P.c, side, cx + (xr - r.x) * 0.85, cy + (ty - r.v) * 0.85);
+    cx = l[0]; cy = l[1];
+  }
+  return [cx, cy];
+}
+function intermittentK(S) {
+  if (S.cover !== 'none') return 1;
+  var ph = (S.time % 10) / 10;
+  return ph < 0.45 ? 0 : (ph < 0.55 ? (ph - 0.45) / 0.1 : 1);
+}
+function buildP(S) {
+  var c = CMAP[S.cond] || CMAP.normal;
+  var R = baseEye(), L = baseEye();
+  var aff = S.side === 'R' ? R : L, fel = S.side === 'R' ? L : R;
+  if (c.both) { c.both(R, S); c.both(L, S); }
+  if (c.aff) c.aff(aff, S);
+  if (c.fel) c.fel(fel, S);
+  if (c.intermittent) { var k = intermittentK(S); aff.o.bH = aff.o.bH * k; aff.o.nearBias = (aff.o.nearBias || 0) * k; }
+  return { R: R, L: L, c: c };
+}
+function buildPP(S) {
+  var c = PMAP[S.pcond] || PMAP.p_norm;
+  var R = baseEye(), L = baseEye();
+  var aff = S.side === 'R' ? R : L, fel = S.side === 'R' ? L : R;
+  if (c.both) { c.both(R, S); c.both(L, S); }
+  if (c.aff) c.aff(aff, S);
+  if (c.fel) c.fel(fel, S);
+  if (S.drops.R) applyDrop(R, S.drops.R);
+  if (S.drops.L) applyDrop(L, S.drops.L);
+  return { R: R, L: L, c: c };
+}
+function autoFix(c, S) { return c.uni ? (S.side === 'R' ? 'L' : 'R') : 'R'; }
+function coverNow(S) {
+  if (S.cover === 'alt') return (Math.floor(S.time * S.speed / 1.6) % 2 === 0) ? 'R' : 'L';
+  return S.cover;
+}
+function fixOf(c, S) {
+  var cov = coverNow(S);
+  if (cov === 'R') return 'L';
+  if (cov === 'L') return 'R';
+  return S.fix === 'auto' ? autoFix(c, S) : S.fix;
+}
+
+/* ---------- shared eye drawing geometry ---------- */
+function eyeGeom(X, e, pose, o) {
+  var T = X === 'R' ? -1 : 1;
+  var a = pose.a, v = pose.v;
+  var sc = e.scale * (1 - 0.04 * (o.crp || 0));
+  var n = 0, w = 0;
+  if (e.duane) { n = clamp(-pose.aDes / 35, 0, 1) * 0.9; if (e.duane !== 2) w = clamp(pose.aDes / 35, 0, 1) * 0.6; sc *= 1 - 0.06 * n; }
+  var th = o.th || 0;
+  var dxs = T * RB * Math.sin(rad(a)), dys = -RB * Math.sin(rad(v));
+  var c0 = Math.cos(rad(-th)), s0 = Math.sin(rad(-th));
+  var ix = dxs * c0 - dys * s0, iy = dxs * s0 + dys * c0;
+  var cosA = Math.max(0.55, Math.cos(rad(a))), cosV = Math.max(0.55, Math.cos(rad(v)));
+  var ig = 'translate(' + fx(ix) + ' ' + fx(iy) + ') scale(' + (cosA * sc).toFixed(3) + ' ' + (cosV * sc).toFixed(3) + ') rotate(' + fx(T * pose.tor * (o.torMul || 1)) + ')';
+  var xReq = o.tx + (X === 'R' ? (o.cv || 0) : -(o.cv || 0));
+  var devX = T * a - xReq, devY = v - o.ty;
+  var rfx = ix + clamp(-devX * 0.72, -25, 25) * sc - T * 2, rfy = iy + clamp(devY * 0.72, -25, 25) * sc;
+  var pu0 = -24 + dys * 0.6 * e.follow;
+  var pl = 29 + Math.max(0, dys) * 0.25 - e.lower * 14 - n * 6 + w * 3;
+  var pt = o.lift ? Math.min(e.ptosis, 0.04) : e.ptosis;
+  var pu = pu0 - e.retract * 12 + n * 12 - w * 7;
+  pu = pu + pt * ((pl - 2) - pu);
+  pu = Math.min(pu, pl - 1);
+  var creaseY = Math.min(pu0 - e.crease, pu - 6);
+  var prPx = clamp((o.mm || 4) / 2 * PXMM, 2.5, 24);
+  return {
+    ig: ig, pr: fx(prPx), prY: fx(prPx * (1 - 0.13 * e.pp.irregular * (1 + 0.25 * Math.sin((o.time || 0) * 3)))),
+    rfx: fx(rfx), rfy: fx(rfy), rfOp: (pt > 0.8 || o.reflex === false) ? 0 : 0.95,
+    up: 'M -88 -80 L 88 -80 L 88 1 L 75 1 Q 0 ' + fx(2 * pu) + ' -75 1 L -88 1 Z',
+    lo: 'M -88 -1 L -75 -1 Q 0 ' + fx(2 * pl) + ' 75 -1 L 88 -1 L 88 80 L -88 80 Z',
+    upL: 'M -75 0 Q 0 ' + fx(2 * pu) + ' 75 0',
+    loL: 'M -72 1 Q 0 ' + fx(2 * pl) + ' 72 1',
+    cr: 'M -64 -8 Q 0 ' + fx(2 * creaseY + 8) + ' 64 -8', crOp: e.creaseOp, prPx: prPx
+  };
+}
+
+/* ---------- single-muscle demonstration ---------- */
+var SOLO_STARTS = {
+  rect: [{ label: 'Primary position', a: 0 }, { label: 'Abducted 23° (muscle plane = visual axis)', a: 23 }, { label: 'Adducted 45°', a: -45 }],
+  obl: [{ label: 'Primary position', a: 0 }, { label: 'Adducted 51° (muscle plane = visual axis)', a: -51 }, { label: 'Abducted 39° (perpendicular)', a: 39 }],
+  hor: [{ label: 'Primary position', a: 0 }]
+};
+function soloKind(mu) { return (mu === 'LR' || mu === 'MR') ? 'hor' : ((mu === 'SR' || mu === 'IR') ? 'rect' : 'obl'); }
+function soloPose(mu, a0, c) {
+  var r = { a: a0, v: 0, tor: 0, comps: [], ang: 0 };
+  if (mu === 'LR') { r.a = a0 + 38 * c; r.comps = [['Abduction', 1]]; }
+  else if (mu === 'MR') { r.a = a0 - 38 * c; r.comps = [['Adduction', 1]]; }
+  else if (mu === 'SR' || mu === 'IR') {
+    var ang = 23 - a0, vc = Math.cos(rad(ang)), tc = Math.sin(rad(ang)), sg = mu === 'SR' ? 1 : -1;
+    r.v = sg * 24 * vc * c; r.tor = -sg * 14 * tc * c; r.a = a0 - 5 * Math.abs(tc) * c; r.ang = ang;
+    r.comps = mu === 'SR' ? [['Elevation', vc], ['Intorsion', tc], ['Adduction', 0.4 * Math.abs(tc)]] : [['Depression', vc], ['Extorsion', tc], ['Adduction', 0.4 * Math.abs(tc)]];
+  } else {
+    var ang2 = 51 + a0, vc2 = Math.cos(rad(ang2)), tc2 = Math.sin(rad(ang2)), sg2 = mu === 'IO' ? 1 : -1;
+    r.v = sg2 * 24 * vc2 * c; r.tor = sg2 * 14 * tc2 * c; r.a = a0 + 5 * Math.abs(tc2) * c; r.ang = ang2;
+    r.comps = mu === 'SO' ? [['Intorsion', tc2], ['Depression', vc2], ['Abduction', 0.4 * Math.abs(tc2)]] : [['Extorsion', tc2], ['Elevation', vc2], ['Abduction', 0.4 * Math.abs(tc2)]];
+  }
+  return r;
+}
+
+var GAZE = {
+  C: { name: 'Primary position', short: 'Primary', desc: 'Straight ahead — every muscle in tonic balance.', movers: [], relax: [] },
+  R: { name: 'Dextroversion', short: 'Right', desc: "Both eyes to the patient's right.", movers: [['R', 'LR'], ['L', 'MR']], relax: [['R', 'MR'], ['L', 'LR']] },
+  L: { name: 'Levoversion', short: 'Left', desc: "Both eyes to the patient's left.", movers: [['L', 'LR'], ['R', 'MR']], relax: [['L', 'MR'], ['R', 'LR']] },
+  U: { name: 'Sursumversion', short: 'Up', desc: 'Straight up — all four elevators share the work.', movers: [['R', 'SR'], ['R', 'IO'], ['L', 'SR'], ['L', 'IO']], relax: [['R', 'IR'], ['R', 'SO'], ['L', 'IR'], ['L', 'SO']] },
+  D: { name: 'Deorsumversion', short: 'Down', desc: 'Straight down — all four depressors share the work.', movers: [['R', 'IR'], ['R', 'SO'], ['L', 'IR'], ['L', 'SO']], relax: [['R', 'SR'], ['R', 'IO'], ['L', 'SR'], ['L', 'IO']] },
+  RU: { name: 'Dextroelevation', short: 'Up-right', desc: "Up and to the patient's right. RE abducted → SR is the elevator; LE adducted → IO is the elevator.", movers: [['R', 'SR'], ['L', 'IO']], relax: [['R', 'IR'], ['L', 'SO']] },
+  RD: { name: 'Dextrodepression', short: 'Down-right', desc: "Down and to the patient's right. RE abducted → IR depresses; LE adducted → SO depresses.", movers: [['R', 'IR'], ['L', 'SO']], relax: [['R', 'SR'], ['L', 'IO']] },
+  LU: { name: 'Levoelevation', short: 'Up-left', desc: "Up and to the patient's left. LE abducted → SR; RE adducted → IO.", movers: [['L', 'SR'], ['R', 'IO']], relax: [['L', 'IR'], ['R', 'SO']] },
+  LD: { name: 'Levodepression', short: 'Down-left', desc: "Down and to the patient's left. LE abducted → IR; RE adducted → SO.", movers: [['L', 'IR'], ['R', 'SO']], relax: [['L', 'SR'], ['R', 'IO']] }
+};
+function gazeKey(tx, ty) {
+  var h = tx < -8 ? 'R' : (tx > 8 ? 'L' : ''), v = ty > 6 ? 'U' : (ty < -6 ? 'D' : '');
+  return (h + v) || 'C';
+}
+var FIELDS = { LR: [1, 0], MR: [-1, 0], SR: [1, 1], IR: [1, -1], IO: [-1, 1], SO: [-1, -1] };
+var MONT = [[-1, 1], [0, 1], [1, 1], [-1, 0], [0, 0], [1, 0], [-1, -1], [0, -1], [1, -1]];
+
+class Component extends DCLogic {
+  S() {
+    if (!this._s) {
+      this._s = {
+        module: 'mot', mode: 'h', cond: 'normal', side: 'R', fix: 'auto', cover: 'none', tilt: 0, near: false, room: 'bright',
+        lift: false, axes: true, arrows: true, labels: true, guide: true, marker: true, magnify: false, reflex: true,
+        speed: 1, playing: true, tab: 'cond', soloM: 'SR', soloStart: 0,
+        time: 0, seg: 0, tt: 0, tx: 0, ty: 0, dirx: -1, diry: 0, moving: true, ptr: [0, 0], drag: false, cmd: [0, 0], fat: 0, soloC: 0,
+        disp: { R: { a: 0, v: 0, tor: 0 }, L: { a: 0, v: 0, tor: 0 } }, pdM: { R: 4, L: 4 }, model: null,
+        pcond: 'p_norm', plight: 'off', pnear: false, proom: 'bright', pview: 'pen', plift: true, drops: { R: null, L: null }, dropEye: 'R', ptab: 'cond',
+        pd: { R: 4, L: 4 }, penX: 380, swingT: 0, hist: [], histT: 0
+      };
+    }
+    return this._s;
+  }
+  componentDidMount() {
+    var self = this;
+    this._alive = true;
+    this._last = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    this._loop = function (now) {
+      if (!self._alive) return;
+      self.step(now);
+      self.setState({ f: self.S().time });
+      self._raf = requestAnimationFrame(self._loop);
+    };
+    this._raf = requestAnimationFrame(this._loop);
+  }
+  componentWillUnmount() { this._alive = false; if (this._raf) cancelAnimationFrame(this._raf); }
+
+  step(now) {
+    var S = this.S();
+    var dt = Math.min(0.05, Math.max(0, (now - this._last) / 1000));
+    this._last = now;
+    S.time += dt;
+    if (S.module === 'mot') { this.advanceTarget(dt); this.compute(dt); }
+    else this.computePupil(dt);
+  }
+  advanceTarget(dt) {
+    var S = this.S();
+    if (S.mode === 'h' || S.mode === 'nine') {
+      var W = WAY[S.mode], n = W.length;
+      if (S.playing) S.tt += dt * S.speed;
+      var guard = 0;
+      while (guard < 6) {
+        guard++;
+        var total = MOVE + W[(S.seg + 1) % n][2];
+        if (S.tt < total) break;
+        S.tt -= total; S.seg = (S.seg + 1) % n;
+      }
+      var p0 = W[S.seg], p1 = W[(S.seg + 1) % n], p2 = W[(S.seg + 2) % n];
+      var u = clamp(S.tt / MOVE, 0, 1), ez = 0.5 - 0.5 * Math.cos(Math.PI * u);
+      S.tx = (p0[0] + (p1[0] - p0[0]) * ez) * K; S.ty = -(p0[1] + (p1[1] - p0[1]) * ez) * K;
+      S.moving = u < 1;
+      var dx = S.moving ? p1[0] - p0[0] : p2[0] - p1[0], dy = S.moving ? p1[1] - p0[1] : p2[1] - p1[1];
+      var dl = Math.sqrt(dx * dx + dy * dy) || 1;
+      S.dirx = dx / dl; S.diry = dy / dl;
+    } else if (S.mode === 'manual') {
+      var k = 1 - Math.exp(-dt / 0.12);
+      S.tx += (S.ptr[0] * K - S.tx) * k; S.ty += (-S.ptr[1] * K - S.ty) * k;
+    } else {
+      S.tx = 0; S.ty = 0;
+      if (S.playing) S.soloC += dt * S.speed;
+    }
+  }
+  compute(dt) {
+    var S = this.S();
+    if (S.cond === 'mg' && S.mode !== 'solo') {
+      if (S.ty > 6) S.fat = clamp(S.fat + dt * 0.16 * (S.ty / 21.6), 0, 1);
+      else S.fat = clamp(S.fat - dt * 0.05, 0, 1);
+    }
+    var P = buildP(S), mR, mL, fix, cv = S.near ? CONV : 0;
+    if (S.mode === 'solo') {
+      var kind = soloKind(S.soloM), st = SOLO_STARTS[kind][Math.min(S.soloStart, SOLO_STARTS[kind].length - 1)];
+      var c = 0.5 - 0.5 * Math.cos(2 * Math.PI * (S.soloC / 3.4));
+      var pr = soloPose(S.soloM, st.a, c), py = soloPose(YOKE[S.soloM], -st.a, c);
+      mR = { a: pr.a, v: pr.v, tor: pr.tor, aDes: pr.a, x: -pr.a, pose: pr, c: c, a0: st.a };
+      mL = { a: -pr.a, v: pr.v, tor: py.tor, aDes: -pr.a, x: -pr.a, pose: py, c: c };
+      fix = 'R'; cv = 0;
+      S.cmd = [-pr.a, pr.v];
+    } else {
+      fix = fixOf(P.c, S);
+      S.cmd = solve(P, S.side, fix, S.tx, S.ty, S.tilt, cv, S.cmd, 30);
+      mR = eyeOut('R', P.R, S.cmd[0], S.cmd[1], S.tilt, cv);
+      mL = eyeOut('L', P.L, S.cmd[0], S.cmd[1], S.tilt, cv);
+    }
+    S.model = { R: mR, L: mL, fix: fix, P: P, cv: cv };
+    var cov = coverNow(S);
+    var env = { amb: S.room === 'dim' ? 0.12 : 0.75, lR: cov === 'R' ? 0 : 0.25, lL: cov === 'L' ? 0 : 0.25, near: S.near ? 1 : 0 };
+    var sides = ['R', 'L'];
+    for (var i = 0; i < 2; i++) {
+      var X = sides[i], e = P[X], m = S.model[X], d = S.disp[X];
+      var tgt = pupilTarget(P, X, env);
+      if (!dt) { d.a = m.a; d.v = m.v; d.tor = m.tor; S.pdM[X] = tgt; continue; }
+      var tauA = S.mode === 'solo' ? 0.03 : ((e.slowAdd && m.a < d.a) ? 0.4 : 0.07);
+      d.a += (m.a - d.a) * (1 - Math.exp(-dt / tauA));
+      d.v += (m.v - d.v) * (1 - Math.exp(-dt / (S.mode === 'solo' ? 0.03 : 0.07)));
+      d.tor += (m.tor - d.tor) * (1 - Math.exp(-dt / 0.12));
+      var tauP = tgt < S.pdM[X] ? e.pp.tauC : e.pp.tauD;
+      S.pdM[X] += (tgt - S.pdM[X]) * (1 - Math.exp(-dt / tauP));
+    }
+  }
+  litEye(S) {
+    if (S.pview === 'red' || S.plight === 'off') return '';
+    if (Math.abs(S.penX - PEYE.R) < 40) return 'R';
+    if (Math.abs(S.penX - PEYE.L) < 40) return 'L';
+    return '';
+  }
+  penv(S) {
+    var red = S.pview === 'red', lit = this.litEye(S);
+    return { amb: red ? 0.03 : (S.proom === 'dim' ? 0.12 : 0.75), lR: red ? 0.12 : (lit === 'R' ? 1 : 0), lL: red ? 0.12 : (lit === 'L' ? 1 : 0), near: S.pnear ? 1 : 0 };
+  }
+  computePupil(dt) {
+    var S = this.S();
+    var tgtX = S.penX;
+    if (S.plight === 'R') tgtX = PEYE.R;
+    else if (S.plight === 'L') tgtX = PEYE.L;
+    else if (S.plight === 'swing') {
+      if (S.playing) S.swingT += dt * S.speed;
+      tgtX = ((S.swingT / 2.8) % 1) < 0.5 ? PEYE.R : PEYE.L;
+    }
+    S.penX += (tgtX - S.penX) * (dt ? (1 - Math.exp(-dt / 0.09)) : 1);
+    var P = buildPP(S), env = this.penv(S);
+    var sides = ['R', 'L'];
+    for (var i = 0; i < 2; i++) {
+      var X = sides[i], tgt = pupilTarget(P, X, env), pp = P[X].pp;
+      if (!dt) { S.pd[X] = tgt; continue; }
+      var tau = tgt < S.pd[X] ? pp.tauC : pp.tauD;
+      S.pd[X] += (tgt - S.pd[X]) * (1 - Math.exp(-dt / tau));
+    }
+    S.histT += dt;
+    if (S.histT >= 0.08) {
+      S.histT = 0;
+      S.hist.push({ t: S.time, R: S.pd.R, L: S.pd.L, lit: this.litEye(S) });
+      while (S.hist.length && S.hist[0].t < S.time - 10.2) S.hist.shift();
+    }
+    S.pP = P;
+  }
+
+  set(k, v) {
+    var S = this.S();
+    S[k] = v;
+    if (k === 'mode') { S.seg = 0; S.tt = 0; S.soloC = 0; if (v === 'manual') S.ptr = [S.tx / K, -S.ty / K]; }
+    if (k === 'cond') { S.fat = 0; }
+    if (k === 'soloM') { S.soloStart = 0; S.soloC = 0; }
+    if (k === 'soloStart') { S.soloC = 0; }
+    if (k === 'pcond') { var pc = PMAP[v]; if (pc) S.pview = pc.red ? 'red' : 'pen'; }
+    if (k === 'plight' && v === 'swing') S.swingT = 0;
+    this.setState({ f: S.time + 0.0001 });
+  }
+  ptrFromEvent(ev) {
+    var S = this.S();
+    if (!ev || !ev.currentTarget || !ev.currentTarget.getBoundingClientRect) return;
+    var r = ev.currentTarget.getBoundingClientRect();
+    var sx = 760 / (r.width || 760), sy = 460 / (r.height || 460);
+    S.ptr = [clamp((ev.clientX - r.left) * sx - CX, -340, 340), clamp((ev.clientY - r.top) * sy - CY, -215, 215)];
+  }
+  onDown(ev) {
+    var S = this.S();
+    if (S.mode === 'solo') return;
+    if (S.mode !== 'manual') this.set('mode', 'manual');
+    S.drag = true;
+    this.ptrFromEvent(ev);
+  }
+  onMove(ev) { var S = this.S(); if (S.mode === 'manual' && S.drag) this.ptrFromEvent(ev); }
+  onUp() { this.S().drag = false; }
+
+  seg(list, cur, key) {
+    var self = this;
+    return list.map(function (o) {
+      var on = o.v === cur;
+      return { label: o.label, on: on, pick: function () { self.set(key, o.v); }, bg: on ? '#1C2127' : 'transparent', fg: on ? '#FFFFFF' : '#1C2127' };
+    });
+  }
+  checks(list) {
+    var self = this, S = this.S();
+    return list.map(function (t) {
+      var on = !!S[t[0]];
+      return { label: t[1], on: on, pick: function () { self.set(t[0], !S[t[0]]); }, box: on ? '#1C2127' : '#FFFFFF', check: on ? '✓' : '' };
+    });
+  }
+  condList(groups, conds, cur, key) {
+    var self = this;
+    return groups.map(function (gname) {
+      return {
+        name: gname,
+        items: conds.filter(function (cc) { return cc.g === gname; }).map(function (cc) {
+          var on = cur === cc.id;
+          return { label: cc.name, on: on, pick: function () { self.set(key, cc.id); }, bg: on ? '#1C2127' : '#FBFAF7', fg: on ? '#FFFFFF' : '#1C2127', bd: on ? '#1C2127' : '#E3DED4' };
+        })
+      };
+    });
+  }
+
+  eyeView(X, S, P) {
+    var e = P[X], d = S.disp[X], m = S.model[X];
+    var T = X === 'R' ? -1 : 1;
+    var a = d.a;
+    if (e.nys && a > 12 && S.mode !== 'solo') {
+      var ph = (S.time * 2.6) % 1;
+      var j = ph < 0.14 ? ph / 0.14 : 1 - (ph - 0.14) / 0.86;
+      a += 3.4 * j - 1.7;
+    }
+    var crp = 0;
+    if (P.c.cr && S.mode !== 'solo' && S.ty > 5) {
+      var q = (S.time * 1.5) % 1;
+      crp = q < 0.1 ? q / 0.1 : Math.max(0, 1 - (q - 0.1) / 0.25);
+      a -= 7 * crp;
+    }
+    var out = eyeGeom(X, e, { a: a, v: d.v, tor: d.tor, aDes: m.aDes }, {
+      th: -12 * S.tilt, tx: S.tx, ty: S.ty, cv: S.model.cv, lift: S.lift, torMul: S.magnify ? 3 : 1, mm: S.pdM[X], crp: crp, reflex: S.reflex, time: S.time
+    });
+    out.occ = coverNow(S) === X ? 0.82 : 0;
+    out.arrOp = S.arrows ? 1 : 0;
+    var aC = X === 'R' ? -S.cmd[0] : S.cmd[0], vC = S.cmd[1];
+    var act;
+    if (S.mode === 'solo') {
+      act = { LR: 0, MR: 0, SR: 0, IR: 0, SO: 0, IO: 0 };
+      act[X === 'R' ? S.soloM : YOKE[S.soloM]] = S.model.R.c;
+    } else {
+      var s = clamp(aC / 30, -1, 1), upA = clamp(vC / 18, 0, 1), dnA = clamp(-vC / 18, 0, 1);
+      act = {
+        LR: clamp(aC / 28, 0, 1), MR: clamp((-aC + S.model.cv) / 28, 0, 1),
+        SR: upA * clamp(0.5 + 0.6 * s, 0, 1), IO: upA * clamp(0.5 - 0.6 * s, 0, 1),
+        IR: dnA * clamp(0.5 + 0.6 * s, 0, 1), SO: dnA * clamp(0.5 - 0.6 * s, 0, 1)
+      };
+    }
+    var keys = ['LR', 'MR', 'SR', 'IR', 'SO', 'IO'];
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i], g = FIELDS[k];
+      var sxv = g[0] * T, syv = -g[1];
+      var x1, y1, x2, y2;
+      if (syv === 0) { x1 = sxv * 84; y1 = 0; x2 = sxv * 114; y2 = 0; }
+      else { x1 = sxv * 50; y1 = syv * 36; x2 = sxv * 70; y2 = syv * 54; }
+      var ddx = x2 - x1, ddy = y2 - y1, l = Math.sqrt(ddx * ddx + ddy * ddy), ux = ddx / l, uy = ddy / l;
+      var strength = e.m[k];
+      var weak = strength < 0.5, over = strength > 1.1;
+      var col = weak ? '#6D625A' : (over ? '#B7791F' : (X === 'R' ? HUE.Rarr : HUE.Larr));
+      out[k] = {
+        x1: fx(x1), y1: fx(y1), x2: fx(x2 - ux * 5), y2: fx(y2 - uy * 5),
+        hd: headPts(x2 + ux * 5, y2 + uy * 5, ux, uy, 11, 6),
+        lx: fx(syv === 0 ? (x1 + x2) / 2 : x2 + ux * 13), ly: fx(syv === 0 ? -9 : y2 + uy * 13 + 4),
+        op: (0.2 + 0.8 * act[k]).toFixed(2), col: col, dash: weak ? '4 4' : 'none'
+      };
+    }
+    return out;
+  }
+  grades(P, S) {
+    var fix = autoFix(P.c, S), out = { R: {}, L: {} };
+    var sides = ['R', 'L'], keys = Object.keys(FIELDS);
+    for (var si = 0; si < 2; si++) {
+      var X = sides[si], T = X === 'R' ? -1 : 1;
+      for (var ki = 0; ki < keys.length; ki++) {
+        var mu = keys[ki], f = FIELDS[mu];
+        var tx = f[0] * T * HX * K, ty = f[1] * HY * K;
+        var cmd = solve(P, S.side, fix, tx, ty, 0, 0, null, 60);
+        var r = eyeOut(X, P[X], cmd[0], cmd[1], 0, 0);
+        var ratio = f[1] === 0 ? (f[0] * r.a) / (HX * K) : (r.v / ty);
+        out[X][mu] = clamp(Math.round((ratio - 1) * 4), -4, 4);
+      }
+    }
+    return out;
+  }
+  chart(X, G) {
+    var T = X === 'R' ? -1 : 1, rgb = X === 'R' ? HUE.Rrgb : HUE.Lrgb;
+    return ['LR', 'SR', 'IR', 'MR', 'IO', 'SO'].map(function (mu) {
+      var f = FIELDS[mu], g = G[X][mu];
+      var cx = (f[0] * T) < 0 ? 22 : 128, cy = f[1] > 0 ? 22 : (f[1] < 0 ? 130 : 76);
+      var bg = '#F6F3EC', fg = '#5E6670', bd = '#DDD7CB';
+      if (g < 0) { bg = 'rgba(' + rgb + ',' + (0.14 + 0.2 * Math.abs(g)).toFixed(2) + ')'; fg = Math.abs(g) >= 3 ? '#FFFFFF' : '#1C2127'; bd = 'rgb(' + rgb + ')'; }
+      if (g > 0) { bg = 'rgba(214,150,40,' + (0.25 + 0.15 * g).toFixed(2) + ')'; fg = '#3A2A10'; bd = '#B7791F'; }
+      return { mu: X + mu, g: sgn(g), left: cx - 20 + 3, top: cy - 20 + 34, bg: bg, fg: fg, bd: bd };
+    });
+  }
+  devText(mo, mf, oth, fixE, cv) {
+    var To = oth === 'R' ? -1 : 1;
+    var reqX = mf.x + (fixE === 'R' ? -2 * cv : 2 * cv);
+    return { da: mo.a - To * reqX, dv: mo.v - mf.v, devX: To * mo.a - reqX, devY: mo.v - mf.v };
+  }
+  montage(S, P) {
+    var self = this, cv = S.near ? CONV : 0;
+    var fix = S.mode === 'solo' ? 'R' : ((S.fix === 'auto') ? autoFix(P.c, S) : S.fix);
+    var env = { amb: S.room === 'dim' ? 0.12 : 0.75, lR: 0.25, lL: 0.25, near: S.near ? 1 : 0 };
+    var mmR = pupilTarget(P, 'R', env), mmL = pupilTarget(P, 'L', env);
+    var tX = CX + S.tx / K, tY = CY - S.ty / K;
+    return MONT.map(function (mt) {
+      var px = mt[0] * HX, py = -mt[1] * HY, tx = px * K, ty = -py * K;
+      var cmd = solve(P, S.side, fix, tx, ty, 0, cv, null, 40);
+      var r = eyeOut('R', P.R, cmd[0], cmd[1], 0, cv), l = eyeOut('L', P.L, cmd[0], cmd[1], 0, cv);
+      var o = { th: 0, tx: tx, ty: ty, cv: cv, lift: S.lift, torMul: S.magnify ? 3 : 1, reflex: S.reflex };
+      o.mm = mmR; var gR = eyeGeom('R', P.R, r, o);
+      o.mm = mmL; var gL = eyeGeom('L', P.L, l, o);
+      var gk = gazeKey(tx, ty), gz = GAZE[gk];
+      var yoke = gz.movers.length === 2 ? gz.movers.map(function (mv) { return mv[0] + mv[1]; }).join(' · ') : (gk === 'U' ? 'SR + IO' : (gk === 'D' ? 'IR + SO' : ''));
+      var oth = fix === 'R' ? 'L' : 'R', mo = oth === 'R' ? r : l, mf = fix === 'R' ? r : l;
+      var dd = self.devText(mo, mf, oth, fix, cv), parts = [];
+      if (Math.abs(dd.da) >= 1) parts.push((oth === 'R' ? 'RE ' : 'LE ') + (dd.da > 0 ? 'XT ' : 'ET ') + pdOf(dd.da) + 'Δ');
+      if (Math.abs(dd.dv) >= 1) parts.push((oth === 'R' ? 'RE ' : 'LE ') + (dd.dv > 0 ? 'HT ' : 'HoT ') + pdOf(dd.dv) + 'Δ');
+      var here = Math.sqrt(Math.pow(tX - (CX + px), 2) + Math.pow(tY - (CY + py), 2)) < 30;
+      return {
+        R: gR, L: gL, name: gz.short, yoke: yoke, dev: parts.length ? parts.join(' · ') : 'Ortho', devCol: parts.length ? '#8A5A2B' : '#6B7280',
+        bd: here ? '#1C2127' : '#E3DED4',
+        pick: function () { S.ptr = [px, py]; if (S.mode !== 'manual') self.set('mode', 'manual'); else self.set('ptr', [px, py]); }
+      };
+    });
+  }
+
+  renderMot(S, V) {
+    var self = this;
+    if (!S.model) this.compute(0);
+    var P = S.model.P, M = S.model, c = P.c, cv = M.cv;
+    var solo = S.mode === 'solo';
+    V.modes = this.seg([{ label: 'H pattern', v: 'h' }, { label: 'Nine positions', v: 'nine' }, { label: 'Manual', v: 'manual' }, { label: 'Single muscle', v: 'solo' }], S.mode, 'mode');
+    V.groups = this.condList(GROUPS, CONDS, S.cond, 'cond');
+    V.soloMus = ['SR', 'IO', 'LR', 'IR', 'SO', 'MR'].map(function (mu) {
+      var on = S.soloM === mu;
+      return { label: 'R' + mu, on: on, pick: function () { self.set('soloM', mu); }, bg: on ? HUE.R : '#FFFFFF', fg: on ? '#FFFFFF' : HUE.R, bd: HUE.R };
+    });
+    var kind = soloKind(S.soloM);
+    V.soloStarts = SOLO_STARTS[kind].map(function (o, i) {
+      var on = Math.min(S.soloStart, SOLO_STARTS[kind].length - 1) === i;
+      return { label: o.label, on: on, pick: function () { self.set('soloStart', i); }, bg: on ? '#1C2127' : '#FBFAF7', fg: on ? '#FFFFFF' : '#1C2127', bd: on ? '#1C2127' : '#E3DED4' };
+    });
+    V.fixes = this.seg([{ label: 'Better eye', v: 'auto' }, { label: 'Right', v: 'R' }, { label: 'Left', v: 'L' }], S.fix, 'fix');
+    V.covers = this.seg([{ label: 'Off', v: 'none' }, { label: 'Cover right', v: 'R' }, { label: 'Cover left', v: 'L' }, { label: 'Alternate', v: 'alt' }], S.cover, 'cover');
+    V.targets = this.seg([{ label: 'Distance', v: false }, { label: 'Near', v: true }], S.near, 'near');
+    V.rooms = this.seg([{ label: 'Bright', v: 'bright' }, { label: 'Dim', v: 'dim' }], S.room, 'room');
+    V.tilts = this.seg([{ label: 'To left shoulder', v: -1 }, { label: 'Level', v: 0 }, { label: 'To right shoulder', v: 1 }], S.tilt, 'tilt');
+    V.displays = this.checks([['guide', 'Guide arrows and H path'], ['labels', 'Yoke labels'], ['marker', 'Torsion marker'], ['magnify', 'Magnify torsion ×3'], ['lift', 'Lift ptotic lids'], ['reflex', 'Corneal light reflex'], ['axes', 'Visual axes'], ['arrows', 'Muscle arrows']]);
+    V.speedTxt = S.speed.toFixed(1) + '×';
+    V.onSpeed = function (ev) { var v = parseFloat(ev && ev.target ? ev.target.value : 1); if (!isNaN(v)) self.set('speed', v); };
+
+    var tX = CX + S.tx / K, tY = CY - S.ty / K;
+    var isPath = (S.mode === 'h' || S.mode === 'nine') && S.guide;
+    var pulse = (S.time * 1.1) % 1;
+    V.tg = {
+      x: fx(tX), y: fx(tY), op: solo ? 0.85 : 1, r: S.near ? 7 : 10, ly: fx(tY + 30), nearOp: S.near && !solo ? 1 : 0,
+      ringR: fx(12 + 16 * pulse), ringOp: (0.7 * (1 - pulse)).toFixed(2),
+      nextOp: isPath ? (S.moving ? 0.95 : (0.35 + 0.55 * (0.5 + 0.5 * Math.sin(S.time * 6)))).toFixed(2) : 0,
+      ax1: fx(tX + S.dirx * 20), ay1: fx(tY + S.diry * 20), ax2: fx(tX + S.dirx * 50), ay2: fx(tY + S.diry * 50),
+      ahd: headPts(tX + S.dirx * 62, tY + S.diry * 62, S.dirx, S.diry, 13, 7)
+    };
+    var lf = S.labels ? 1 : 0;
+    V.st = {
+      hOp: (S.mode === 'h' && S.guide) ? 1 : 0, nOp: (S.mode === 'nine' && S.guide) ? 1 : 0,
+      dotOp: solo ? 0 : 0.8, dot9Op: (S.mode === 'nine' || S.mode === 'manual') ? 0.8 : 0,
+      labOp: solo ? 0 : lf, lab9Op: (S.mode === 'nine' || S.mode === 'manual') ? lf : 0
+    };
+    V.lab = {};
+    Object.keys(STOPS).forEach(function (kk) {
+      var p = STOPS[kk], dd = Math.sqrt(Math.pow(tX - (CX + p[0]), 2) + Math.pow(tY - (CY + p[1]), 2));
+      V.lab[kk] = dd < 26 ? 1 : 0.5;
+    });
+    var th = -12 * S.tilt;
+    V.headT = 'rotate(' + th + ' 380 236)';
+    V.eR = this.eyeView('R', S, P); V.eL = this.eyeView('L', S, P);
+    V.mkOp = S.marker ? 1 : 0;
+    var cov = coverNow(S);
+    function axis(X) {
+      var ec = EYEC[X], T = X === 'R' ? -1 : 1, d = S.disp[X];
+      var c0 = Math.cos(rad(th)), s0 = Math.sin(rad(th)), dx0 = ec[0] - 380, dy0 = ec[1] - 236;
+      var wx = 380 + dx0 * c0 - dy0 * s0, wy = 236 + dx0 * s0 + dy0 * c0;
+      var ex = CX + (T * d.a) / K, ey = CY - d.v / K;
+      return { x1: fx(wx), y1: fx(wy), x2: fx(clamp(ex, -40, 800)), y2: fx(clamp(ey, -40, 500)), op: (S.axes && cov !== X) ? 0.9 : (S.axes ? 0.35 : 0) };
+    }
+    V.axR = axis('R'); V.axL = axis('L');
+    V.cursor = solo ? 'default' : 'crosshair';
+    V.touch = S.mode === 'manual' ? 'none' : 'pan-y';
+
+    var fixE = M.fix, oth = fixE === 'R' ? 'L' : 'R';
+    var mo = M[oth], mf = M[fixE];
+    var dd = this.devText(mo, mf, oth, fixE, cv), da = dd.da, dv = dd.dv;
+    var nm = oth === 'R' ? 'RE' : 'LE';
+    var affE = c.uni ? S.side : 'R';
+    if (solo) {
+      V.dev = { h: 'Single-muscle demonstration', v: 'Light held in primary position', hCol: '#1C2127', vCol: '#5E6670', fix: 'The corneal reflex decentres as the eye rotates away from the light (≈ 1 mm per 7°).', hir: '', tor: '', note: '' };
+      V.pv = { fx: 44, fy: 34, fOp: 0, tCol: HUE.R, fCol: HUE.L, title: '—', sub: 'Diplopia is not modelled in this mode.' };
+    } else {
+      var hTxt = Math.abs(da) < 1 ? 'Horizontal: aligned' : nm + ' ' + (da > 0 ? 'exotropia' : 'esotropia') + ' ' + r1(Math.abs(da)) + '° · ' + pdOf(da) + 'Δ';
+      var vTxt = Math.abs(dv) < 1 ? 'Vertical: aligned' : nm + ' ' + (dv > 0 ? 'hypertropia' : 'hypotropia') + ' ' + r1(Math.abs(dv)) + '° · ' + pdOf(dv) + 'Δ';
+      var hir = 'Hirschberg: reflexes symmetric';
+      if (Math.abs(da) >= 1 || Math.abs(dv) >= 1) {
+        var parts = [];
+        if (Math.abs(da) >= 1) parts.push(r1(Math.abs(da) / 7) + ' mm ' + (da < 0 ? 'temporal' : 'nasal'));
+        if (Math.abs(dv) >= 1) parts.push(r1(Math.abs(dv) / 7) + ' mm ' + (dv > 0 ? 'inferior' : 'superior'));
+        hir = 'Hirschberg: ' + nm + ' reflex ≈ ' + parts.join(', ');
+      }
+      var xr = S.tx + (fixE === 'R' ? cv : -cv);
+      var fixMiss = Math.sqrt(Math.pow(mf.x - xr, 2) + Math.pow(mf.v - S.ty, 2)) > 1.5;
+      var torV = M[affE].tor;
+      var torTxt = Math.abs(torV) > 1.5 ? ((affE === 'R' ? 'RE ' : 'LE ') + (torV > 0 ? 'excyclotorsion ' : 'incyclotorsion ') + r1(Math.abs(torV)) + '°' + (S.magnify ? ' (drawn ×3)' : '')) : 'No significant torsion';
+      var note = '';
+      if (S.cover !== 'none') note = S.cover === 'alt' ? 'Alternate cover: each eye refixates as the occluder switches — this reveals the full (latent + manifest) deviation.' : 'Covered eye drifts behind the occluder — uncover to see the refixation movement.';
+      else if (c.uni && fixE === S.side && (Math.abs(da) >= 1 || Math.abs(dv) >= 1)) note = 'Affected eye fixing → secondary deviation (Hering’s law): larger than the primary deviation.';
+      else if (fixMiss) note = 'The fixing eye cannot reach the target in this gaze.';
+      V.dev = {
+        h: hTxt, v: vTxt, hCol: Math.abs(da) < 1 ? '#5E6670' : (oth === 'R' ? HUE.R : HUE.L), vCol: Math.abs(dv) < 1 ? '#5E6670' : (oth === 'R' ? HUE.R : HUE.L),
+        fix: 'Fixing: ' + (fixE === 'R' ? 'right eye' : 'left eye') + (S.cover !== 'none' ? ' (other eye covered)' : (S.fix === 'auto' ? ' (better eye)' : '')) + (S.near ? ' · near target' : ''),
+        hir: hir, tor: torTxt, note: note
+      };
+      var fused = Math.abs(da) < 1 && Math.abs(dv) < 1;
+      var lidShut = c.uni && P[S.side].ptosis > 0.8 && !S.lift;
+      var title, sub;
+      if (S.cover !== 'none') { title = 'Monocular view'; sub = 'One eye covered — no diplopia.'; }
+      else if (fused) { title = 'Single vision'; sub = 'Images fall on corresponding points.'; }
+      else if (lidShut) { title = 'No diplopia'; sub = 'The ptotic lid occludes the eye — lift the lids to reveal it.'; }
+      else {
+        var t = [];
+        if (Math.abs(da) >= 1) t.push(da < 0 ? 'uncrossed' : 'crossed');
+        if (Math.abs(dv) >= 1) t.push('vertical');
+        title = 'Diplopia: ' + t.join(' + ');
+        sub = 'Ring = ' + nm + ' (false) image, displaced toward the field of the weak muscle.';
+      }
+      V.pv = {
+        fx: fx(44 + clamp(dd.devX * 1.5, -42, 42)), fy: fx(34 + clamp(dd.devY * 1.5, -32, 32)), fOp: (S.cover !== 'none' || fused || lidShut) ? 0 : 1,
+        tCol: fixE === 'R' ? '#F08A78' : '#86B6F0', fCol: oth === 'R' ? '#F08A78' : '#86B6F0', title: title, sub: sub
+      };
+    }
+    var G = this.grades(P, S);
+    V.chR = this.chart('R', G); V.chL = this.chart('L', G);
+    V.mont = this.montage(S, P);
+    V.montNote = c.name + (c.uni ? (' · ' + (S.side === 'R' ? 'right' : 'left') + ' eye') : '') + (S.near ? ' · near' : '') + ' · click a picture to send the light there';
+
+    var gz = GAZE[gazeKey(S.tx, S.ty)];
+    var movers = gz.movers.map(function (mv) {
+      var X = mv[0], mu = mv[1], sgth = P[X].m[mu];
+      var status = 'normal', sBg = '#2D353D', sFg = '#AEB7C1';
+      if (sgth < 0.5) { status = 'paretic'; sBg = '#F08A78'; sFg = '#1C2127'; }
+      else if (sgth < 0.9) { status = 'weak'; sBg = '#E8B86A'; sFg = '#1C2127'; }
+      else if (sgth > 1.1) { status = 'overacts'; sBg = '#E8B86A'; sFg = '#1C2127'; }
+      return { code: X + mu, name: (X === 'R' ? 'Right ' : 'Left ') + MUS[mu].name.toLowerCase(), detail: MUS[mu].acts + ' · ' + MUS[mu].nerve, bg: X === 'R' ? HUE.R : HUE.L, status: status, sBg: sBg, sFg: sFg };
+    });
+    V.now = {
+      name: gz.name, desc: gz.desc + (S.near ? ' Near target: both MRs add convergence.' : ''), movers: movers,
+      moversTitle: movers.length === 2 ? 'Prime movers — yoke pair' : 'Prime movers',
+      relax: gz.relax.length ? 'Relaxing (Sherrington): ' + gz.relax.map(function (r) { return r[0] + r[1]; }).join(', ') + '.' : "Hering's law keeps the eyes yoked; Sherrington's law relaxes each antagonist."
+    };
+    var soloV = { title: '', nerve: '', bars: [], angle: '', note: '', yoke: '', planeT: 'rotate(0 126 104)', axisT: 'rotate(0 126 104)' };
+    if (solo) {
+      var pose = M.R.pose, ranks = ['Primary', 'Secondary', 'Tertiary'];
+      soloV.title = 'R' + S.soloM + ' — ' + MUS[S.soloM].name;
+      soloV.nerve = MUS[S.soloM].nerve + ' · actions: ' + MUS[S.soloM].acts;
+      soloV.bars = pose.comps.map(function (cp, i) { var p = Math.round(Math.abs(cp[1]) * 100); return { rank: ranks[i], label: cp[0], pct: p + '%', w: p + '%' }; });
+      soloV.planeT = 'rotate(' + (kind === 'rect' ? 23 : (kind === 'obl' ? -51 : 0)) + ' 126 104)';
+      soloV.axisT = 'rotate(' + fx(M.R.a) + ' 126 104)';
+      if (kind === 'hor') { soloV.angle = 'Muscle plane = visual axis'; soloV.note = 'Horizontal recti pull in the horizontal plane: a pure horizontal rotation from any start position.'; }
+      else {
+        var ang = Math.round(Math.abs(pose.ang));
+        soloV.angle = 'Visual axis ↔ muscle plane: ' + ang + '°';
+        if (ang < 3) soloV.note = 'Axis and plane coincide → a pure ' + (S.soloM === 'SR' || S.soloM === 'IO' ? 'elevator' : 'depressor') + '. This is the position used to test it clinically.';
+        else if (ang > 80) soloV.note = 'Axis perpendicular to the plane → the action is almost purely torsional.';
+        else soloV.note = 'Oblique angle → the pull splits between a vertical and a torsional component (plus a small horizontal one).';
+      }
+      soloV.yoke = 'Yoke in the left eye: L' + YOKE[S.soloM] + ' (' + MUS[YOKE[S.soloM]].name.toLowerCase() + '). Direct antagonist: R' + ANTAG[S.soloM] + ' relaxes (Sherrington).';
+    }
+    V.solo = soloV;
+    V.info = {
+      name: c.name, sub: c.info.sub, pearl: c.info.pearl,
+      rows: c.info.rows.map(function (r) { return { k: r[0], v: r[1] }; }),
+      signs: c.info.signs.map(function (t) { return { t: t }; }),
+      aff: c.uni ? ('Affected: ' + (S.side === 'R' ? 'right eye (OD)' : 'left eye (OS)') + (c.gaze === 'ipsi' ? ' — lesion side' : '')) : (c.id === 'normal' ? '' : 'Bilateral'),
+      affCol: S.side === 'R' ? HUE.R : HUE.L
+    };
+    V.tabs = [{ label: 'Condition', v: 'cond' }, { label: 'Muscle actions', v: 'mus' }].map(function (o) {
+      var on = S.tab === o.v;
+      return { label: o.label, on: on, pick: function () { self.set('tab', o.v); }, fg: on ? '#1C2127' : '#6B7280', bd: on ? '#1C2127' : 'transparent' };
+    });
+    V.tabCond = S.tab === 'cond'; V.tabMus = S.tab === 'mus';
+    V.isMG = c.id === 'mg'; V.fatTxt = Math.round(S.fat * 100) + '%';
+    V.rest = function () { S.fat = 0; };
+    V.hint = S.mode === 'manual' ? 'Manual: click or drag on the stage — or click a picture below — to place the light. Settings stay usable.' : (solo ? 'Single muscle: the fellow eye shows the yoke muscle.' : 'The yellow arrow shows the next movement. Click the stage to switch to Manual.');
+    V.stageNote = solo ? ('R' + S.soloM + ' contracting · yoke L' + YOKE[S.soloM]) : ((S.mode === 'manual' ? 'Manual · click or drag' : '') + (S.cover === 'alt' ? '  Alternate cover' : '') + (S.tilt !== 0 ? '  Head tilted ' + (S.tilt > 0 ? 'right' : 'left') : ''));
+    V.isSolo = solo; V.notSolo = !solo;
+    V.exitSolo = function () { self.set('mode', 'h'); };
+    V.musTable = MUS_TABLE; V.rules = RULES.map(function (t) { return { t: t }; });
+  }
+
+  pupilReactions(P) {
+    var dim = { amb: 0.12 }, bright = { amb: 0.75 };
+    function sz(X, o) { return pupilTarget(P, X, { amb: o.amb, lR: o.lR || 0, lL: o.lL || 0, near: o.near || 0 }); }
+    function grade(dl, base, slow) {
+      var q = dl / Math.max(0.3, base - 1.8);
+      if (dl < 0.25 || q < 0.12) return 'Absent';
+      if (slow) return 'Slow, tonic';
+      if (dl < 0.5) return 'Small but present';
+      return q >= 0.35 ? 'Brisk' : 'Sluggish';
+    }
+    function col(txt) { return txt === 'Absent' ? '#B8321F' : (txt === 'Brisk' ? '#1C2127' : '#8A5A2B'); }
+    var out = { rows: [] }, v = {};
+    ['R', 'L'].forEach(function (X) {
+      var o = X === 'R' ? 'L' : 'R', slow = P[X].pp.tauC > 2;
+      var base = sz(X, dim);
+      var litSelf = { amb: 0.12 }, litOther = { amb: 0.12 };
+      litSelf['l' + X] = 1; litOther['l' + o] = 1;
+      v[X] = {
+        bright: sz(X, bright), dim: base,
+        direct: grade(base - sz(X, litSelf), base, slow), cons: grade(base - sz(X, litOther), base, slow),
+        near: grade(base - sz(X, { amb: 0.12, near: 1 }), base, slow)
+      };
+    });
+    var rows = [['Bright room', mm1(v.R.bright) + ' mm', mm1(v.L.bright) + ' mm'], ['Dim room', mm1(v.R.dim) + ' mm', mm1(v.L.dim) + ' mm'], ['Direct', v.R.direct, v.L.direct], ['Consensual', v.R.cons, v.L.cons], ['Near', v.R.near, v.L.near]];
+    out.rows = rows.map(function (r, i) { return { k: r[0], r: r[1], l: r[2], rc: i < 2 ? '#1C2127' : col(r[1]), lc: i < 2 ? '#1C2127' : col(r[2]) }; });
+    var aB = Math.abs(v.R.bright - v.L.bright), aD = Math.abs(v.R.dim - v.L.dim);
+    if (aB < 0.4 && aD < 0.4) out.aniso = 'No significant anisocoria (bright ' + mm1(aB) + ' mm, dim ' + mm1(aD) + ' mm).';
+    else if (Math.abs(aB - aD) < 0.35) out.aniso = 'Anisocoria ≈ equal in bright (' + mm1(aB) + ' mm) and dim (' + mm1(aD) + ' mm) light → physiological pattern.';
+    else if (aD > aB) out.aniso = 'Anisocoria greater in DIM (' + mm1(aD) + ' vs ' + mm1(aB) + ' mm) → the SMALL pupil is abnormal.';
+    else out.aniso = 'Anisocoria greater in BRIGHT (' + mm1(aB) + ' vs ' + mm1(aD) + ' mm) → the LARGE pupil is abnormal.';
+    var cR = (sz('R', dim) - sz('R', { amb: 0.12, lR: 1 })) + (sz('L', dim) - sz('L', { amb: 0.12, lR: 1 }));
+    var cL = (sz('R', dim) - sz('R', { amb: 0.12, lL: 1 })) + (sz('L', dim) - sz('L', { amb: 0.12, lL: 1 }));
+    if (cR < 0.3 && cL < 0.3) out.rapd = 'Swinging flashlight: not assessable (both pupils unreactive).';
+    else if (cL < 0.75 * cR) out.rapd = 'Swinging flashlight: RAPD LEFT eye' + (cL < 0.2 ? ' (amaurotic)' : '') + '.';
+    else if (cR < 0.75 * cL) out.rapd = 'Swinging flashlight: RAPD RIGHT eye' + (cR < 0.2 ? ' (amaurotic)' : '') + '.';
+    else out.rapd = 'Swinging flashlight: no RAPD.';
+    return out;
+  }
+  renderPup(S, V) {
+    var self = this;
+    if (!S.pP) this.computePupil(0);
+    var P = buildPP(S), c = P.c, red = S.pview === 'red';
+    V.pgroups = this.condList(PGROUPS, PCONDS, S.pcond, 'pcond');
+    V.pviews = this.seg([{ label: 'Penlight', v: 'pen' }, { label: 'Red reflex (Brückner)', v: 'red' }], S.pview, 'pview');
+    V.plights = this.seg([{ label: 'Off', v: 'off' }, { label: 'Light → right', v: 'R' }, { label: 'Light → left', v: 'L' }, { label: 'Swinging', v: 'swing' }], S.plight, 'plight');
+    V.pnears = this.seg([{ label: 'Distance', v: false }, { label: 'Near', v: true }], S.pnear, 'pnear');
+    V.prooms = this.seg([{ label: 'Bright', v: 'bright' }, { label: 'Dim', v: 'dim' }], S.proom, 'proom');
+    V.dropEyes = this.seg([{ label: 'Right', v: 'R' }, { label: 'Left', v: 'L' }, { label: 'Both', v: 'B' }], S.dropEye, 'dropEye');
+    V.drugBtns = DRUGS.map(function (d) {
+      var on = S.drops.R === d.id || S.drops.L === d.id;
+      return {
+        label: d.name, use: d.use, bg: on ? '#1C2127' : '#FBFAF7', fg: on ? '#FFFFFF' : '#1C2127', bd: on ? '#1C2127' : '#E3DED4',
+        pick: function () { if (S.dropEye === 'R' || S.dropEye === 'B') S.drops.R = d.id; if (S.dropEye === 'L' || S.dropEye === 'B') S.drops.L = d.id; self.set('ptab', S.ptab); }
+      };
+    });
+    V.clearDrops = function () { S.drops = { R: null, L: null }; self.set('ptab', S.ptab); };
+    V.dropState = (S.drops.R || S.drops.L) ? ('OD: ' + (S.drops.R ? DRUGMAP[S.drops.R].name : '—') + '  ·  OS: ' + (S.drops.L ? DRUGMAP[S.drops.L].name : '—')) : 'No drops';
+    V.pdisplays = this.checks([['plift', 'Lift ptotic lids']]);
+    V.phint = 'Drops act at once here (in clinic, read after 30–60 min). Hover a drop for its use.';
+
+    var lit = this.litEye(S);
+    var near = S.pnear ? CONV : 0;
+    function pe(X) {
+      var e = P[X];
+      var pose = { a: e.pos.a - near, v: e.pos.v, tor: 0, aDes: e.pos.a - near };
+      var g = eyeGeom(X, e, pose, { th: 0, tx: 0, ty: 0, cv: near, lift: S.plift, mm: S.pd[X], reflex: true, time: S.time });
+      var rr = e.rr || {}, pr = g.prPx;
+      g.pfill = (!red && rr.pen) ? rr.pen : '#0B0908';
+      g.scl = e.pp.adren ? '#F8F6F2' : '#F1ECE4';
+      g.rfR = (!red && lit === X) ? 5.5 : 3.2;
+      g.rfOp = red ? 0 : (lit === X ? 1 : 0.8);
+      g.rr = {
+        base: rr.base || '#B8421C', inner: rr.inner || '#E36A2E', innerOp: rr.innerOp !== undefined ? rr.innerOp : 0.75, innerR: fx(pr * 0.72),
+        cres: rr.cres || 0, cresR: fx(pr * 0.62), cy: fx(pr * 0.3),
+        opR: fx(pr * (rr.opR || 0)), opCol: rr.opCol || '#2E1C14', opOp: rr.opOp || 0
+      };
+      return g;
+    }
+    V.pR = pe('R'); V.pL = pe('L');
+    V.pst = {
+      dark: red ? 0.84 : (S.proom === 'dim' ? 0.42 : 0), redOp: red ? 1 : 0, nearOp: S.pnear ? 1 : 0,
+      dR: mm1(S.pd.R) + ' mm', dL: mm1(S.pd.L) + ' mm',
+      note: red ? 'Dark room · ophthalmoscope at 1 m' : (S.plight === 'swing' ? 'Swinging flashlight' : (lit ? 'Light on the ' + (lit === 'R' ? 'right' : 'left') + ' eye' : (S.pnear ? 'Near target' : '')))
+    };
+    var penOn = !red && S.plight !== 'off', lx = S.penX;
+    V.pen = { op: penOn ? 1 : 0, bx: fx(lx - 10), beam: fx(lx - 7) + ',372 ' + fx(lx + 7) + ',372 ' + fx(lx + 52) + ',230 ' + fx(lx - 52) + ',230' };
+    var H = S.hist, x0 = 40, x1 = 500, now = S.time;
+    function PX(t) { return x0 + (t - (now - 10)) / 10 * (x1 - x0); }
+    function PY(mm) { return 150 - (clamp(mm, 1, 9) - 1) / 8 * 132; }
+    var ptsR = [], ptsL = [], band = '';
+    for (var i = 0; i < H.length; i++) {
+      var h = H[i]; if (h.t < now - 10) continue;
+      ptsR.push(fx(PX(h.t)) + ',' + fx(PY(h.R))); ptsL.push(fx(PX(h.t)) + ',' + fx(PY(h.L)));
+      if (h.lit) { var bw = 460 * 0.08 / 10 + 1.2; band += 'M ' + fx(Math.max(x0, PX(h.t) - 1)) + ' 18 h ' + fx(bw) + ' v 132 h ' + fx(-bw) + ' Z '; }
+    }
+    var yR = PY(S.pd.R), yL = PY(S.pd.L);
+    if (Math.abs(yR - yL) < 13) { var mid = (yR + yL) / 2; if (S.pd.R >= S.pd.L) { yR = mid - 7; yL = mid + 7; } else { yR = mid + 7; yL = mid - 7; } }
+    V.pg = { R: ptsR.join(' ') || '40,150', L: ptsL.join(' ') || '40,150', band: band || 'M 0 0 Z', ry: fx(yR + 4), ly: fx(yL + 4), rv: mm1(S.pd.R), lv: mm1(S.pd.L) };
+    V.rx = this.pupilReactions(P);
+    var an = Math.abs(S.pd.R - S.pd.L);
+    V.live = {
+      r: mm1(S.pd.R), l: mm1(S.pd.L), a: mm1(an),
+      note: red ? 'Red reflex view: the room is dark, so both pupils dilate. Compare colour, brightness and symmetry of the two reflexes.' :
+        ('Room ' + (S.proom === 'dim' ? 'dim' : 'bright') + (lit ? ' · penlight on ' + (lit === 'R' ? 'OD' : 'OS') : '') + (S.pnear ? ' · near target' : '') + '. ' + (an >= 0.5 ? ((S.pd.R > S.pd.L ? 'OD' : 'OS') + ' is larger.') : 'Pupils about equal.'))
+    };
+    V.pinfo = {
+      name: c.name, sub: c.info.sub, pearl: c.info.pearl,
+      rows: c.info.rows.map(function (r) { return { k: r[0], v: r[1] }; }),
+      signs: c.info.signs.map(function (t) { return { t: t }; }),
+      aff: c.uni ? ('Affected: ' + (S.side === 'R' ? 'right eye (OD)' : 'left eye (OS)')) : (c.id === 'p_norm' || c.id === 'r_norm' ? '' : 'Bilateral'),
+      affCol: S.side === 'R' ? HUE.R : HUE.L
+    };
+    V.ptabs = [{ label: 'Condition', v: 'cond' }, { label: 'Anisocoria work-up', v: 'work' }, { label: 'Drops', v: 'drops' }].map(function (o) {
+      var on = S.ptab === o.v;
+      return { label: o.label, on: on, pick: function () { self.set('ptab', o.v); }, fg: on ? '#1C2127' : '#6B7280', bd: on ? '#1C2127' : 'transparent' };
+    });
+    V.ptabCond = S.ptab === 'cond'; V.ptabWork = S.ptab === 'work'; V.ptabDrops = S.ptab === 'drops';
+    V.workup = WORKUP.map(function (w, i) { return { n: i + 1, q: w.q, a: w.a }; });
+    V.drugTable = DRUGS;
+  }
+
+  renderVals() {
+    var S = this.S(), self = this, V = {};
+    V.modules = this.seg([{ label: 'Eye movements', v: 'mot' }, { label: 'Pupils & red reflex', v: 'pup' }], S.module, 'module').map(function (it) {
+      it.bg = it.on ? '#FFFFFF' : 'transparent'; it.fg = it.on ? '#1C2127' : '#D5DCE3'; return it;
+    });
+    V.isMot = S.module === 'mot'; V.isPup = S.module === 'pup';
+    V.playing = S.playing; V.paused = !S.playing; V.playLabel = S.playing ? 'Pause' : 'Play';
+    V.togglePlay = function () { self.set('playing', !S.playing); };
+    V.onDown = function (ev) { self.onDown(ev); };
+    V.onMove = function (ev) { self.onMove(ev); };
+    V.onUp = function () { self.onUp(); };
+    V.speed = S.speed;
+    V.sides = [{ label: 'Right eye (OD)', v: 'R', col: HUE.R }, { label: 'Left eye (OS)', v: 'L', col: HUE.L }].map(function (o) {
+      var on = S.side === o.v;
+      return { label: o.label, on: on, pick: function () { self.set('side', o.v); }, bg: on ? o.col : '#FFFFFF', fg: on ? '#FFFFFF' : o.col, bd: o.col };
+    });
+    this.renderMot(S, V);
+    this.renderPup(S, V);
+    return V;
+  }
+}
+
+if (window.console && console.info) console.info('Ocular Motility Lab v' + OML_VERSION + ' — © 2026 ' + OML_AUTHOR + '. Licensed CC BY-NC-ND 4.0. Educational use only.');
+window.__dcBoot(Component);
+</script>
+</body>
+</html>
