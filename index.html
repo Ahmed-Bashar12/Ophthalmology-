@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   ============================================================
-  Ocular Motility Lab  ·  version 1.1  ·  created 25 September 2026
+  Ocular Motility Lab  ·  version 1.2  ·  created 25 September 2026
   Copyright (c) 2026 Ahmed Bashar. Concept and design by Ahmed Bashar.
   Licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
   International (CC BY-NC-ND 4.0): https://creativecommons.org/licenses/by-nc-nd/4.0/
@@ -28,7 +28,7 @@
 <meta property="og:description" content="Interactive eye-movement, strabismus and pupil simulator by Ahmed Bashar.">
 <meta property="og:type" content="website">
 <link rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Ocular Motility Lab", "description": "Interactive simulator of extraocular muscle actions, the H-test, cranial nerve palsies, strabismus, pupil disorders and the red reflex, for medical education.", "author": {"@type": "Person", "name": "Ahmed Bashar"}, "creator": {"@type": "Person", "name": "Ahmed Bashar"}, "copyrightHolder": {"@type": "Person", "name": "Ahmed Bashar"}, "copyrightYear": 2026, "dateCreated": "2026-09-25", "datePublished": "2026-09-25", "version": "1.1", "license": "https://creativecommons.org/licenses/by-nc-nd/4.0/", "inLanguage": "en", "educationalUse": "Teaching and self-study", "learningResourceType": "Interactive simulation", "audience": {"@type": "EducationalAudience", "educationalRole": "Medical students, ophthalmology residents, orthoptists"}, "isBasedOn": ["AAO Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology (2020-2021)", "AAO Basic and Clinical Science Course, Section 6: Pediatric Ophthalmology and Strabismus (2020-2021)", "EUPO Course 2016: Neuro-Ophthalmology and Strabismus"]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "LearningResource", "name": "Ocular Motility Lab", "description": "Interactive simulator of extraocular muscle actions, the H-test, cranial nerve palsies, strabismus, pupil disorders and the red reflex, for medical education.", "author": {"@type": "Person", "name": "Ahmed Bashar"}, "creator": {"@type": "Person", "name": "Ahmed Bashar"}, "copyrightHolder": {"@type": "Person", "name": "Ahmed Bashar"}, "copyrightYear": 2026, "dateCreated": "2026-09-25", "datePublished": "2026-09-25", "version": "1.2", "license": "https://creativecommons.org/licenses/by-nc-nd/4.0/", "inLanguage": "en", "educationalUse": "Teaching and self-study", "learningResourceType": "Interactive simulation", "audience": {"@type": "EducationalAudience", "educationalRole": "Medical students, ophthalmology residents, orthoptists"}, "isBasedOn": ["AAO Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology (2020-2021)", "AAO Basic and Clinical Science Course, Section 6: Pediatric Ophthalmology and Strabismus (2020-2021)", "EUPO Course 2016: Neuro-Ophthalmology and Strabismus"]}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
@@ -49,8 +49,14 @@ a{color:#1F5FA8}a:hover{color:#174E8C}
 .twocol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .pupgrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:10px}
 input[type=range]{accent-color:#1C2127}
+.qback{position:fixed;inset:0;z-index:50;background:rgba(22,27,32,0.55);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+.qpanel{box-sizing:border-box;width:100%;max-width:940px;max-height:100%;display:flex;flex-direction:column;background:#FFFFFF;border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,0.28);overflow:hidden}
+.qgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 32px}
+.qitems{display:grid;grid-template-columns:minmax(0,1fr);gap:0 12px}
+@media (max-width:860px){.qgrid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:1240px){.layout{grid-template-columns:250px minmax(0,1fr)}.rightcol{grid-column:1 / -1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}.leftcol{position:static;height:auto;min-height:0}.leftcol .scroll{max-height:320px}.rightcol{display:flex}.pupgrid{grid-template-columns:minmax(0,1fr)}.montage{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}}
+@media (max-width:860px){.leftcol .qscroll{max-height:none}}
 </style>
 
 </head>
@@ -84,8 +90,93 @@ input[type=range]{accent-color:#1C2127}
 <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.2 6.2 A5.2 5.2 0 1 1 3.4 10.4" style="fill: none; stroke: #1C2127; stroke-width: 1.8; stroke-linecap: round"></path><path d="M1.6 2.6 L3.2 6.4 L7 5.2" style="fill: none; stroke: #1C2127; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"></path></svg>
 <span>Reset</span>
 </button>
+<button class="btn" onClick="{{quizAct}}" style="height: 48px; min-width: 104px; padding: 0 18px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1.5px solid #1C2127; border-radius: 12px; background: #1C2127; color: #FFFFFF; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13.5px">
+<svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" rx="3" style="fill: none; stroke: #FFFFFF; stroke-width: 1.6"></rect><path d="M 4.6 8.2 L 7 10.5 L 11.4 5.6" style="fill: none; stroke: #FFD66B; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round"></path></svg>
+<span>{{quizLabel}}</span>
+</button>
 </div>
 </div>
+
+
+<!-- ================= QUIZ SETUP ================= -->
+<sc-if value="{{qSetupOpen}}">
+<div class="qback">
+<div class="qpanel" role="dialog" aria-modal="true" aria-label="Quiz setup">
+<div style="padding: 18px 22px 12px; border-bottom: 1px solid #ECE7DD; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px">
+<div>
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 26px; line-height: 1.1">Set up a quiz</div>
+<div style="font-size: 13px; color: #5E6670; margin-top: 4px">Choose the conditions to be tested on. Each case is picked at random from your choice, in a random eye.</div>
+</div>
+<button class="btn" onClick="{{qs.cancel}}" aria-label="Close" style="flex-shrink: 0; width: 40px; height: 40px; border: none; border-radius: 10px; background: #F1EDE5; color: #1C2127; font-size: 20px; line-height: 1">×</button>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px">
+<div role="group" aria-label="Level" style="display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{qs.levels}}" as="it">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 14px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+<div style="flex: 1 1 280px; font-size: 12.5px; line-height: 1.4; color: #4A525B">{{qs.levelNote}}</div>
+</div>
+</div>
+<div class="scroll" style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 4px 22px 16px">
+<div class="qgrid">
+<div>
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 19px; margin: 6px 0 2px">Eye movements</div>
+<sc-for list="{{qs.mot}}" as="grp">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 10px 0 2px; padding-bottom: 3px; border-bottom: 1px solid #ECE7DD">
+<span style="font-size: 12px; font-weight: 600; color: #8A5A2B">{{grp.name}}</span>
+<span style="display: flex; gap: 2px"><button class="btn" onClick="{{grp.all}}" style="height: 28px; padding: 0 8px; border: none; border-radius: 6px; background: transparent; color: #1F5FA8; font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 600">All</button><button class="btn" onClick="{{grp.none}}" style="height: 28px; padding: 0 8px; border: none; border-radius: 6px; background: transparent; color: #1F5FA8; font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 600">None</button></span>
+</div>
+<div class="qitems">
+<sc-for list="{{grp.items}}" as="it">
+<button class="btn" role="checkbox" aria-checked="{{it.on}}" onClick="{{it.pick}}" style="min-height: 34px; padding: 3px 2px; display: flex; align-items: center; gap: 9px; border: none; background: transparent; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; line-height: 1.3; text-align: left"><span style="flex-shrink: 0; width: 18px; height: 18px; box-sizing: border-box; border-radius: 4px; border: 1.5px solid #1C2127; background: {{it.box}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; line-height: 1">{{it.check}}</span><span>{{it.label}}</span></button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+<div>
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 19px; margin: 6px 0 2px">Pupils &amp; red reflex</div>
+<sc-for list="{{qs.pup}}" as="grp">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 10px 0 2px; padding-bottom: 3px; border-bottom: 1px solid #ECE7DD">
+<span style="font-size: 12px; font-weight: 600; color: #8A5A2B">{{grp.name}}</span>
+<span style="display: flex; gap: 2px"><button class="btn" onClick="{{grp.all}}" style="height: 28px; padding: 0 8px; border: none; border-radius: 6px; background: transparent; color: #1F5FA8; font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 600">All</button><button class="btn" onClick="{{grp.none}}" style="height: 28px; padding: 0 8px; border: none; border-radius: 6px; background: transparent; color: #1F5FA8; font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 600">None</button></span>
+</div>
+<div class="qitems">
+<sc-for list="{{grp.items}}" as="it">
+<button class="btn" role="checkbox" aria-checked="{{it.on}}" onClick="{{it.pick}}" style="min-height: 34px; padding: 3px 2px; display: flex; align-items: center; gap: 9px; border: none; background: transparent; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; line-height: 1.3; text-align: left"><span style="flex-shrink: 0; width: 18px; height: 18px; box-sizing: border-box; border-radius: 4px; border: 1.5px solid #1C2127; background: {{it.box}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; line-height: 1">{{it.check}}</span><span>{{it.label}}</span></button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="padding: 12px 22px 16px; border-top: 1px solid #ECE7DD; display: flex; flex-direction: column; gap: 10px; background: #FBFAF7">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px">
+<div style="display: flex; align-items: center; gap: 8px">
+<span style="font-size: 12.5px; color: #5E6670">Cases</span>
+<div role="group" aria-label="Number of cases" style="display: flex; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{qs.ns}}" as="it">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 14px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column">
+<sc-for list="{{qs.opts}}" as="it">
+<button class="btn" role="checkbox" aria-checked="{{it.on}}" onClick="{{it.pick}}" style="min-height: 34px; padding: 3px 2px; display: flex; align-items: center; gap: 9px; border: none; background: transparent; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; line-height: 1.3; text-align: left"><span style="flex-shrink: 0; width: 18px; height: 18px; box-sizing: border-box; border-radius: 4px; border: 1.5px solid #1C2127; background: {{it.box}}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; line-height: 1">{{it.check}}</span><span>{{it.label}}</span></button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px 12px">
+<span style="margin-right: auto; font-size: 13px; font-weight: 600">{{qs.count}}</span>
+<span style="font-size: 13px; font-weight: 600; color: #B8321F">{{qs.err}}</span>
+<button class="btn" onClick="{{qs.cancel}}" style="height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid #CFC8BA; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13.5px">Cancel</button>
+<button class="btn" onClick="{{qs.start}}" style="height: 44px; padding: 0 22px; border-radius: 10px; border: none; background: #1C2127; color: #FFFFFF; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13.5px">Start quiz</button>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
 
 <!-- ============================================================ -->
 <!-- ================= MODULE 1: EYE MOVEMENTS ================== -->
@@ -95,7 +186,59 @@ input[type=range]{accent-color:#1C2127}
 
 <!-- LEFT -->
 <div class="leftcol" style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 14px 12px 12px 14px; display: flex; flex-direction: column; gap: 10px">
-<sc-if value="{{notSolo}}" hint-placeholder-val="{{true}}">
+<sc-if value="{{inQuiz}}">
+<sc-if value="{{qp.playing}}">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px">
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 22px; line-height: 1.1">{{qp.title}}</div>
+<div style="font-size: 12px; font-weight: 600; color: #2F7D4F">{{qp.score}}</div>
+</div>
+<sc-if value="{{qp.hasProg}}"><div style="height: 5px; border-radius: 3px; background: #ECE7DD; overflow: hidden"><div style="height: 5px; width: {{qp.prog}}; background: #1C2127"></div></div></sc-if>
+<div style="font-size: 12.5px; line-height: 1.45; color: #4A525B">{{qp.prompt}}</div>
+<div class="scroll qscroll" style="flex-grow: 1; min-height: 0; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 5px">
+<div style="font-size: 12.5px; font-weight: 600; color: #1C2127">What is the diagnosis?</div>
+<sc-for list="{{qp.opts}}" as="it">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="text-align: left; min-height: 38px; padding: 7px 11px; border-radius: 9px; border: 1.5px solid {{it.bd}}; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13px; line-height: 1.3; display: flex; justify-content: space-between; align-items: center; gap: 8px"><span>{{it.label}}</span><span style="font-weight: 700">{{it.mark}}</span></button>
+</sc-for>
+<sc-if value="{{qp.askSide}}">
+<div style="font-size: 12.5px; font-weight: 600; color: #1C2127; margin-top: 8px">Which eye is affected?</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px">
+<sc-for list="{{qp.sides}}" as="it">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="min-height: 38px; padding: 4px 6px; border-radius: 9px; border: 1.5px solid {{it.bd}}; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 12.5px; line-height: 1.2">{{it.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{qp.answered}}">
+<div role="status" style="padding: 10px 12px; border-radius: 10px; background: {{qp.fbBg}}; border: 1px solid {{qp.fbBd}}; display: flex; flex-direction: column; gap: 3px">
+<div style="font-weight: 600; font-size: 14px; color: {{qp.fbCol}}">{{qp.fbTitle}}</div>
+<div style="font-size: 12.5px; line-height: 1.4; color: #1C2127">{{qp.fbText}}</div>
+<div style="font-size: 12.5px; line-height: 1.4; color: #1C2127">{{qp.fbText2}}</div>
+<div style="font-size: 12px; line-height: 1.4; color: #5E6670">{{qp.fbMore}}</div>
+</div>
+</sc-if>
+<button class="btn" onClick="{{qp.main}}" style="flex-shrink: 0; height: 46px; border-radius: 10px; border: none; background: {{qp.mainBg}}; color: {{qp.mainFg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 14px">{{qp.mainLabel}}</button>
+<sc-if value="{{qp.showFinish}}"><button class="btn" onClick="{{qp.finish}}" style="flex-shrink: 0; height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFC8BA; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13px">Finish and see results</button></sc-if>
+</sc-if>
+<sc-if value="{{qp.done}}">
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.1">Quiz complete</div>
+<div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 32px">{{qp.resScore}}</span><span style="font-size: 13px; color: #4A525B">{{qp.resPct}}</span></div>
+<div class="scroll qscroll" style="flex-grow: 1; min-height: 0; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 6px">
+<sc-if value="{{qp.empty}}"><div style="font-size: 13px; color: #5E6670">No cases were answered.</div></sc-if>
+<sc-for list="{{qp.hist}}" as="h">
+<div style="display: flex; gap: 9px; padding: 7px 9px; border-radius: 9px; background: #F8F6F1">
+<span style="flex-shrink: 0; width: 18px; font-weight: 700; color: {{h.col}}">{{h.mark}}</span>
+<div style="min-width: 0"><div style="font-size: 13px; font-weight: 600; line-height: 1.3">{{h.label}}</div><div style="font-size: 11.5px; line-height: 1.35; color: #5E6670">{{h.sub}}</div></div>
+</div>
+</sc-for>
+</div>
+<button class="btn" onClick="{{qp.again}}" style="flex-shrink: 0; height: 44px; border-radius: 10px; border: none; background: #1C2127; color: #FFFFFF; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13.5px">New quiz, same settings</button>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; flex-shrink: 0">
+<button class="btn" onClick="{{qp.change}}" style="height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFC8BA; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13px">Change conditions</button>
+<button class="btn" onClick="{{qp.exit}}" style="height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFC8BA; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13px">Exit quiz</button>
+</div>
+</sc-if>
+</sc-if>
+<sc-if value="{{showList}}" hint-placeholder-val="{{true}}">
 <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258">Affected eye (one-sided conditions)</div>
 <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px">
 <sc-for list="{{sides}}" as="it" hint-placeholder-count="2">
@@ -137,6 +280,12 @@ input[type=range]{accent-color:#1C2127}
 <div class="center">
 <div onPointerDown="{{onDown}}" onPointerMove="{{onMove}}" onPointerUp="{{onUp}}" onPointerLeave="{{onUp}}" style="position: relative; width: 100%; aspect-ratio: 760 / 460; border-radius: 14px; overflow: hidden; background: #161B20; cursor: {{cursor}}; touch-action: {{touch}}">
 <svg width="100%" height="100%" viewBox="0 0 760 460" style="display: block">
+<defs>
+<linearGradient id="pzGl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#CFEAFB" stop-opacity="0.62"></stop><stop offset="1" stop-color="#CFEAFB" stop-opacity="0.14"></stop></linearGradient>
+<linearGradient id="pzGr" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#CFEAFB" stop-opacity="0.62"></stop><stop offset="1" stop-color="#CFEAFB" stop-opacity="0.14"></stop></linearGradient>
+<linearGradient id="pzGt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CFEAFB" stop-opacity="0.62"></stop><stop offset="1" stop-color="#CFEAFB" stop-opacity="0.14"></stop></linearGradient>
+<linearGradient id="pzGb" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#CFEAFB" stop-opacity="0.62"></stop><stop offset="1" stop-color="#CFEAFB" stop-opacity="0.14"></stop></linearGradient>
+</defs>
 <rect x="0" y="0" width="760" height="460" style="fill: #161B20"></rect>
 <g style="stroke: #20262D; stroke-width: 1">
 <line x1="92" y1="0" x2="92" y2="460"></line><line x1="380" y1="0" x2="380" y2="460"></line><line x1="668" y1="0" x2="668" y2="460"></line>
@@ -184,6 +333,14 @@ input[type=range]{accent-color:#1C2127}
 <g style="opacity: {{eR.IO.op}}"><line x1="{{eR.IO.x1}}" y1="{{eR.IO.y1}}" x2="{{eR.IO.x2}}" y2="{{eR.IO.y2}}" style="stroke: {{eR.IO.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eR.IO.dash}}"></line><polygon points="{{eR.IO.hd}}" style="fill: {{eR.IO.col}}"></polygon><text x="{{eR.IO.lx}}" y="{{eR.IO.ly}}" style="fill: {{eR.IO.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">IO</text></g>
 </g>
 <g style="opacity: {{eR.occ}}"><rect x="-98" y="-76" width="196" height="152" rx="22" style="fill: #232A31"></rect><text x="0" y="5" style="fill: #C9D1D9; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px; letter-spacing: 0.14em; text-anchor: middle">OCCLUDER</text></g>
+<g style="opacity: {{eR.pz.op}}">
+<rect x="{{eR.pz.x}}" y="{{eR.pz.y}}" width="{{eR.pz.w}}" height="{{eR.pz.h}}" rx="4" style="fill: url(#{{eR.pz.grad}}); stroke: rgba(214, 238, 252, 0.75); stroke-width: 1.2"></rect>
+<path d="{{eR.pz.rungs}}" style="fill: none; stroke: rgba(226, 244, 255, 0.5); stroke-width: 1"></path>
+<rect x="{{eR.pz.cx}}" y="{{eR.pz.cy}}" width="{{eR.pz.cw}}" height="{{eR.pz.ch}}" style="fill: rgba(214, 238, 252, 0.1); stroke: #F2FAFF; stroke-width: 2"></rect>
+<path d="{{eR.pz.base}}" style="fill: none; stroke: #F2FAFF; stroke-width: 4; stroke-linecap: round"></path>
+<sc-for list="{{eR.pz.ticks}}" as="t"><text x="{{t.x}}" y="{{t.y}}" style="fill: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 10.5px; text-anchor: middle; opacity: {{t.op}}; paint-order: stroke; stroke: #1C2127; stroke-width: 3px; stroke-linejoin: round">{{t.v}}</text></sc-for>
+<text x="{{eR.pz.lx}}" y="{{eR.pz.ly}}" style="fill: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px; text-anchor: {{eR.pz.la}}; paint-order: stroke; stroke: #1C2127; stroke-width: 4px; stroke-linejoin: round">{{eR.pz.lab}}</text>
+</g>
 </g>
 
 <g transform="translate(512 230)">
@@ -212,6 +369,14 @@ input[type=range]{accent-color:#1C2127}
 <g style="opacity: {{eL.IO.op}}"><line x1="{{eL.IO.x1}}" y1="{{eL.IO.y1}}" x2="{{eL.IO.x2}}" y2="{{eL.IO.y2}}" style="stroke: {{eL.IO.col}}; stroke-width: 3; stroke-linecap: round; stroke-dasharray: {{eL.IO.dash}}"></line><polygon points="{{eL.IO.hd}}" style="fill: {{eL.IO.col}}"></polygon><text x="{{eL.IO.lx}}" y="{{eL.IO.ly}}" style="fill: {{eL.IO.col}}; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 11px; text-anchor: middle">IO</text></g>
 </g>
 <g style="opacity: {{eL.occ}}"><rect x="-98" y="-76" width="196" height="152" rx="22" style="fill: #232A31"></rect><text x="0" y="5" style="fill: #C9D1D9; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px; letter-spacing: 0.14em; text-anchor: middle">OCCLUDER</text></g>
+<g style="opacity: {{eL.pz.op}}">
+<rect x="{{eL.pz.x}}" y="{{eL.pz.y}}" width="{{eL.pz.w}}" height="{{eL.pz.h}}" rx="4" style="fill: url(#{{eL.pz.grad}}); stroke: rgba(214, 238, 252, 0.75); stroke-width: 1.2"></rect>
+<path d="{{eL.pz.rungs}}" style="fill: none; stroke: rgba(226, 244, 255, 0.5); stroke-width: 1"></path>
+<rect x="{{eL.pz.cx}}" y="{{eL.pz.cy}}" width="{{eL.pz.cw}}" height="{{eL.pz.ch}}" style="fill: rgba(214, 238, 252, 0.1); stroke: #F2FAFF; stroke-width: 2"></rect>
+<path d="{{eL.pz.base}}" style="fill: none; stroke: #F2FAFF; stroke-width: 4; stroke-linecap: round"></path>
+<sc-for list="{{eL.pz.ticks}}" as="t"><text x="{{t.x}}" y="{{t.y}}" style="fill: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 10.5px; text-anchor: middle; opacity: {{t.op}}; paint-order: stroke; stroke: #1C2127; stroke-width: 3px; stroke-linejoin: round">{{t.v}}</text></sc-for>
+<text x="{{eL.pz.lx}}" y="{{eL.pz.ly}}" style="fill: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px; text-anchor: {{eL.pz.la}}; paint-order: stroke; stroke: #1C2127; stroke-width: 4px; stroke-linejoin: round">{{eL.pz.lab}}</text>
+</g>
 </g>
 </g>
 
@@ -311,6 +476,33 @@ input[type=range]{accent-color:#1C2127}
 </sc-for>
 </div>
 </div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Prism bar</span>
+<div role="group" aria-label="Prism bar position" style="display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{prEyes}}" as="it">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Base</span>
+<div role="group" aria-label="Prism base direction" style="display: flex; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<sc-for list="{{prBases}}" as="it">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="height: 36px; padding: 0 12px; border: none; border-radius: 8px; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13.5px">{{it.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 12.5px; color: #5E6670">Strength</span>
+<div style="display: flex; align-items: center; gap: 2px; padding: 3px; background: #EEEAE2; border-radius: 10px">
+<button class="btn" onClick="{{prDec}}" aria-label="Weaker prism" style="width: 36px; height: 36px; border: none; border-radius: 8px; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 18px; line-height: 1">−</button>
+<span aria-live="polite" style="min-width: 58px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px">{{prVal}}</span>
+<button class="btn" onClick="{{prInc}}" aria-label="Stronger prism" style="width: 36px; height: 36px; border: none; border-radius: 8px; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 18px; line-height: 1">+</button>
+</div>
+</div>
+<div style="flex: 1 1 240px; font-size: 12px; line-height: 1.45; color: #6B7280">{{prHint}}</div>
 </div>
 <div style="display: flex; flex-direction: column; gap: 6px">
 <span style="font-size: 12.5px; color: #5E6670">Display</span>
@@ -420,6 +612,7 @@ input[type=range]{accent-color:#1C2127}
 <div style="font-size: 12px; line-height: 1.4; color: #333A42">{{dev.fix}}</div>
 <div style="font-size: 12px; line-height: 1.4; color: #333A42">{{dev.hir}}</div>
 <div style="font-size: 12px; line-height: 1.4; color: #333A42">{{dev.tor}}</div>
+<sc-if value="{{dev.pr}}"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.4; font-weight: 600; color: #1F5FA8">{{dev.pr}}</div></sc-if>
 <div style="font-size: 12px; line-height: 1.4; font-weight: 600; color: #8A5A2B">{{dev.note}}</div>
 <div style="display: flex; gap: 10px; align-items: center; margin-top: 6px; padding-top: 10px; border-top: 1px solid #ECE7DD">
 <div style="flex-shrink: 0; position: relative; width: 104px; height: 84px; border-radius: 10px; background: #161B20; overflow: hidden">
@@ -438,6 +631,13 @@ input[type=range]{accent-color:#1C2127}
 </div>
 </div>
 
+<sc-if value="{{hideMeas}}">
+<div style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258">Versions</div>
+<div style="font-size: 12.5px; line-height: 1.45; color: #4A525B">Hidden in this quiz. Grade the versions yourself from the nine gaze photos below the stage.</div>
+</div>
+</sc-if>
+<sc-if value="{{showMeas}}">
 <div class="twocol">
 <div style="position: relative; height: 212px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px">
 <div style="position: absolute; left: 12px; top: 10px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #B8321F">RE versions</div>
@@ -456,6 +656,7 @@ input[type=range]{accent-color:#1C2127}
 <div style="position: absolute; left: 12px; bottom: 8px; font-size: 10.5px; color: #6B7280">your view</div>
 </div>
 </div>
+</sc-if>
 
 <div style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; display: flex; flex-direction: column; overflow: hidden">
 <div role="tablist" style="display: flex; gap: 4px; padding: 8px 8px 0; border-bottom: 1px solid #ECE7DD">
@@ -465,6 +666,13 @@ input[type=range]{accent-color:#1C2127}
 </div>
 <div style="padding: 14px 16px 16px">
 <sc-if value="{{tabCond}}" hint-placeholder-val="{{true}}">
+<sc-if value="{{condLocked}}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 20px; line-height: 1.15">Hidden during the quiz</div>
+<div style="font-size: 12.5px; line-height: 1.45; color: #4A525B">The condition card opens when you check your answer. The Muscle actions tab is still available.</div>
+</div>
+</sc-if>
+<sc-if value="{{condOpen}}">
 <div style="display: flex; flex-direction: column; gap: 10px">
 <div>
 <div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 20px; line-height: 1.15">{{info.name}}</div>
@@ -490,6 +698,7 @@ input[type=range]{accent-color:#1C2127}
 </div>
 <div style="padding: 10px 12px; border-radius: 10px; background: #FBF3E4; border: 1px solid #EBD9B8; font-size: 12.5px; line-height: 1.45; color: #4A3A22"><b>Pearl · </b>{{info.pearl}}</div>
 </div>
+</sc-if>
 </sc-if>
 <sc-if value="{{tabMus}}" hint-placeholder-val="{{false}}">
 <div style="display: flex; flex-direction: column; gap: 8px">
@@ -520,6 +729,59 @@ input[type=range]{accent-color:#1C2127}
 <div class="layout">
 
 <div class="leftcol" style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 14px 12px 12px 14px; display: flex; flex-direction: column; gap: 10px">
+<sc-if value="{{inQuiz}}">
+<sc-if value="{{qp.playing}}">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px">
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 22px; line-height: 1.1">{{qp.title}}</div>
+<div style="font-size: 12px; font-weight: 600; color: #2F7D4F">{{qp.score}}</div>
+</div>
+<sc-if value="{{qp.hasProg}}"><div style="height: 5px; border-radius: 3px; background: #ECE7DD; overflow: hidden"><div style="height: 5px; width: {{qp.prog}}; background: #1C2127"></div></div></sc-if>
+<div style="font-size: 12.5px; line-height: 1.45; color: #4A525B">{{qp.prompt}}</div>
+<div class="scroll qscroll" style="flex-grow: 1; min-height: 0; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 5px">
+<div style="font-size: 12.5px; font-weight: 600; color: #1C2127">What is the diagnosis?</div>
+<sc-for list="{{qp.opts}}" as="it">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="text-align: left; min-height: 38px; padding: 7px 11px; border-radius: 9px; border: 1.5px solid {{it.bd}}; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 13px; line-height: 1.3; display: flex; justify-content: space-between; align-items: center; gap: 8px"><span>{{it.label}}</span><span style="font-weight: 700">{{it.mark}}</span></button>
+</sc-for>
+<sc-if value="{{qp.askSide}}">
+<div style="font-size: 12.5px; font-weight: 600; color: #1C2127; margin-top: 8px">Which eye is affected?</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px">
+<sc-for list="{{qp.sides}}" as="it">
+<button class="btn" onClick="{{it.pick}}" aria-pressed="{{it.on}}" style="min-height: 38px; padding: 4px 6px; border-radius: 9px; border: 1.5px solid {{it.bd}}; background: {{it.bg}}; color: {{it.fg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; font-size: 12.5px; line-height: 1.2">{{it.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{qp.answered}}">
+<div role="status" style="padding: 10px 12px; border-radius: 10px; background: {{qp.fbBg}}; border: 1px solid {{qp.fbBd}}; display: flex; flex-direction: column; gap: 3px">
+<div style="font-weight: 600; font-size: 14px; color: {{qp.fbCol}}">{{qp.fbTitle}}</div>
+<div style="font-size: 12.5px; line-height: 1.4; color: #1C2127">{{qp.fbText}}</div>
+<div style="font-size: 12.5px; line-height: 1.4; color: #1C2127">{{qp.fbText2}}</div>
+<div style="font-size: 12px; line-height: 1.4; color: #5E6670">{{qp.fbMore}}</div>
+</div>
+</sc-if>
+<button class="btn" onClick="{{qp.main}}" style="flex-shrink: 0; height: 46px; border-radius: 10px; border: none; background: {{qp.mainBg}}; color: {{qp.mainFg}}; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 14px">{{qp.mainLabel}}</button>
+<sc-if value="{{qp.showFinish}}"><button class="btn" onClick="{{qp.finish}}" style="flex-shrink: 0; height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFC8BA; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13px">Finish and see results</button></sc-if>
+</sc-if>
+<sc-if value="{{qp.done}}">
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.1">Quiz complete</div>
+<div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 32px">{{qp.resScore}}</span><span style="font-size: 13px; color: #4A525B">{{qp.resPct}}</span></div>
+<div class="scroll qscroll" style="flex-grow: 1; min-height: 0; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 6px">
+<sc-if value="{{qp.empty}}"><div style="font-size: 13px; color: #5E6670">No cases were answered.</div></sc-if>
+<sc-for list="{{qp.hist}}" as="h">
+<div style="display: flex; gap: 9px; padding: 7px 9px; border-radius: 9px; background: #F8F6F1">
+<span style="flex-shrink: 0; width: 18px; font-weight: 700; color: {{h.col}}">{{h.mark}}</span>
+<div style="min-width: 0"><div style="font-size: 13px; font-weight: 600; line-height: 1.3">{{h.label}}</div><div style="font-size: 11.5px; line-height: 1.35; color: #5E6670">{{h.sub}}</div></div>
+</div>
+</sc-for>
+</div>
+<button class="btn" onClick="{{qp.again}}" style="flex-shrink: 0; height: 44px; border-radius: 10px; border: none; background: #1C2127; color: #FFFFFF; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13.5px">New quiz, same settings</button>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; flex-shrink: 0">
+<button class="btn" onClick="{{qp.change}}" style="height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFC8BA; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13px">Change conditions</button>
+<button class="btn" onClick="{{qp.exit}}" style="height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFC8BA; background: #FFFFFF; color: #1C2127; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: 13px">Exit quiz</button>
+</div>
+</sc-if>
+</sc-if>
+<sc-if value="{{notQuiz}}">
 <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258">Affected eye (one-sided conditions)</div>
 <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px">
 <sc-for list="{{sides}}" as="it" hint-placeholder-count="2">
@@ -537,6 +799,7 @@ input[type=range]{accent-color:#1C2127}
 </div>
 </sc-for>
 </div>
+</sc-if>
 </div>
 
 <div class="center">
@@ -702,13 +965,18 @@ input[type=range]{accent-color:#1C2127}
 <div style="background: #FFFFFF; border: 1px solid #DDD7CB; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px">
 <div style="font-size: 10.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: #6B6258">Reactions (steady state, with current drops)</div>
 <div style="display: grid; grid-template-columns: 84px repeat(2, minmax(0, 1fr)); gap: 5px 8px; font-size: 12px; line-height: 1.3">
+<sc-if value="{{rxShow}}">
 <span></span><span style="font-weight: 600; color: #B8321F">OD</span><span style="font-weight: 600; color: #1F5FA8">OS</span>
 <sc-for list="{{rx.rows}}" as="r" hint-placeholder-count="5">
 <span style="color: #6B6258; font-weight: 600">{{r.k}}</span><span style="color: {{r.rc}}">{{r.r}}</span><span style="color: {{r.lc}}">{{r.l}}</span>
 </sc-for>
+</sc-if>
 </div>
+<sc-if value="{{rxHide}}"><div style="font-size: 12.5px; line-height: 1.45; color: #4A525B">Hidden in this quiz. Test the direct, consensual and near reactions yourself with the penlight and room light.</div></sc-if>
+<sc-if value="{{rxInterp}}">
 <div style="font-size: 12.5px; line-height: 1.4; font-weight: 600; color: #1C2127; padding-top: 6px; border-top: 1px solid #ECE7DD">{{rx.aniso}}</div>
 <div style="font-size: 12.5px; line-height: 1.4; font-weight: 600; color: #8A5A2B">{{rx.rapd}}</div>
+</sc-if>
 </div>
 </div>
 </div>
@@ -731,6 +999,13 @@ input[type=range]{accent-color:#1C2127}
 </div>
 <div style="padding: 14px 16px 16px">
 <sc-if value="{{ptabCond}}" hint-placeholder-val="{{true}}">
+<sc-if value="{{pcondLocked}}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 20px; line-height: 1.15">Hidden during the quiz</div>
+<div style="font-size: 12.5px; line-height: 1.45; color: #4A525B">The condition card opens when you check your answer. The Anisocoria work-up and Drops tabs are still available.</div>
+</div>
+</sc-if>
+<sc-if value="{{pcondOpen}}">
 <div style="display: flex; flex-direction: column; gap: 10px">
 <div>
 <div style="font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 20px; line-height: 1.15">{{pinfo.name}}</div>
@@ -749,6 +1024,7 @@ input[type=range]{accent-color:#1C2127}
 </div>
 <div style="padding: 10px 12px; border-radius: 10px; background: #FBF3E4; border: 1px solid #EBD9B8; font-size: 12.5px; line-height: 1.45; color: #4A3A22"><b>Pearl · </b>{{pinfo.pearl}}</div>
 </div>
+</sc-if>
 </sc-if>
 <sc-if value="{{ptabWork}}" hint-placeholder-val="{{false}}">
 <div style="display: flex; flex-direction: column; gap: 8px">
@@ -782,7 +1058,7 @@ input[type=range]{accent-color:#1C2127}
 <div style="flex: 1 1 420px; max-width: 760px; display: flex; flex-direction: column; gap: 6px">
 <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #8A5A2B"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 L15 14 H1 Z" style="fill: none; stroke: #8A5A2B; stroke-width: 1.6; stroke-linejoin: round"></path><path d="M8 6 V9.6 M8 11.6 V11.7" style="fill: none; stroke: #8A5A2B; stroke-width: 1.8; stroke-linecap: round"></path></svg>Educational use only</div>
 <div style="font-size: 12.5px; line-height: 1.55; color: #4A525B">This simulator is a simplified teaching model for medical education. It is not a medical device and must not be used for diagnosis, treatment or any clinical decision. Content is summarised from AAO BCSC Sections 5 and 6 (2020–2021) and the EUPO 2016 course; always follow current clinical guidance.</div>
-<div style="font-size: 12px; color: #6B7280">Version 1.1 · first published 25 September 2026</div>
+<div style="font-size: 12px; color: #6B7280">Version 1.2 · first published 25 September 2026</div>
 </div>
 <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; text-align: right">
 <svg xmlns="http://www.w3.org/2000/svg" width="190" height="106" style="display: block" viewBox="0 0 2141.000000 1199.245166" role="img" aria-label="Signature of Ahmed Bashar"><g transform="translate(-288.000000,1360.815856) scale(0.100000,-0.100000)"
@@ -1094,8 +1370,8 @@ m-6635 -1317 c19 -23 -47 -76 -204 -162 -146 -80 -517 -299 -589 -349 -58 -39
 </script>
 <script>
 
-/* Ocular Motility Lab v1.1 — (c) 2026 Ahmed Bashar. Licensed under CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/). Educational use only. */
-var OML_AUTHOR = 'Ahmed Bashar', OML_VERSION = '1.1', OML_CREATED = '2026-09-25';
+/* Ocular Motility Lab v1.2 — (c) 2026 Ahmed Bashar. Licensed under CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/). Educational use only. */
+var OML_AUTHOR = 'Ahmed Bashar', OML_VERSION = '1.2', OML_CREATED = '2026-09-25';
 var K = 0.12, CX = 380, CY = 230, RB = 60, IRR = 29, HX = 288, HY = 180, MOVE = 0.95, PXMM = 4.9, CONV = 6;
 var EYEC = { R: [248, 230], L: [512, 230] };
 var PEYE = { R: 219, L: 541 };
@@ -1648,6 +1924,61 @@ function gazeKey(tx, ty) {
 var FIELDS = { LR: [1, 0], MR: [-1, 0], SR: [1, 1], IR: [1, -1], IO: [-1, 1], SO: [-1, -1] };
 var MONT = [[-1, 1], [0, 1], [1, 1], [-1, 0], [0, 0], [1, 0], [-1, -1], [0, -1], [1, -1]];
 
+/* ---------- prism bar ---------- */
+// Standard prism-bar steps. Vertical bars stop at 25 prism dioptres.
+var PRISMS = [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45, 50];
+var PRISM_VMAX = 11;
+function prismVert(S) { return S.prBase === 'BU' || S.prBase === 'BD'; }
+function prismIdx(S) { return prismVert(S) ? Math.min(S.prIdx, PRISM_VMAX) : S.prIdx; }
+function prismVal(S) { return PRISMS[prismIdx(S)]; }
+// A prism displaces the image toward its apex, so the eye behind it must rotate
+// toward the apex by atan(P/100) to fixate. Returned in screen degrees (x: +right, y: +up).
+function prismOff(S, X) {
+  if (S.prEye !== X || S.mode === 'solo') return { x: 0, y: 0 };
+  var th = Math.atan(prismVal(S) / 100) * 180 / Math.PI;
+  var nasal = X === 'R' ? 1 : -1;
+  if (S.prBase === 'BO') return { x: nasal * th, y: 0 };
+  if (S.prBase === 'BI') return { x: -nasal * th, y: 0 };
+  if (S.prBase === 'BU') return { x: 0, y: -th };
+  return { x: 0, y: th };
+}
+
+/* ---------- quiz ---------- */
+var QUIZ_UG = ['normal', 'iet', 'aet', 'ixt', 'cn3', 'cn3s', 'cn4', 'cn6', 'ino', 'ted', 'blow', 'horner', 'mg', 'apo',
+  'p_norm', 'p_hpost', 'p_cn3', 'p_adie', 'p_atro', 'p_rapd', 'r_norm', 'r_rb', 'r_cat', 'r_strab'];
+var QNORMAL = { normal: 1, p_norm: 1, r_norm: 1 };
+var QKEY = 'oml-quiz-v1';
+function qAll() { return CONDS.map(function (c) { return c.id; }).concat(PCONDS.map(function (c) { return c.id; })); }
+function qMod(id) { return CMAP[id] ? 'mot' : 'pup'; }
+function qCond(id) { return CMAP[id] || PMAP[id]; }
+function qLabel(id) {
+  var c = qCond(id);
+  if (!c) return id;
+  if (c.g === 'Single muscle underaction') return 'Isolated ' + c.name.toLowerCase() + ' weakness';
+  if (id === 'p_par') return c.name + ' — pupils';
+  return c.name;
+}
+function qSideOf(id, side) { var c = qCond(id); return c && c.uni ? side : 'B'; }
+function qSideName(id, side) {
+  var c = qCond(id);
+  if (!c) return '';
+  if (!c.uni) return QNORMAL[id] ? 'no affected eye' : 'both eyes';
+  if (c.gaze === 'ipsi') return side === 'R' ? 'right-sided lesion' : 'left-sided lesion';
+  return side === 'R' ? 'right eye' : 'left eye';
+}
+function qPreset(level) {
+  var ids = level === 'ug' ? QUIZ_UG : qAll(), o = {};
+  ids.forEach(function (id) { o[id] = true; });
+  return o;
+}
+function shuffle(a) {
+  a = a.slice();
+  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+function qLoad() { try { var o = JSON.parse(window.localStorage.getItem(QKEY) || 'null'); return (o && typeof o === 'object') ? o : null; } catch (e) { return null; } }
+function qSave(S) { try { window.localStorage.setItem(QKEY, JSON.stringify({ sel: S.qsel, n: S.qn, meas: S.qmeas, side: S.qside, level: S.qlevel })); } catch (e) { } }
+
 class Component extends DCLogic {
   defaults() {
     return {
@@ -1657,24 +1988,91 @@ class Component extends DCLogic {
         time: 0, seg: 0, tt: 0, tx: 0, ty: 0, dirx: -1, diry: 0, moving: true, ptr: [0, 0], drag: false, cmd: [0, 0], fat: 0, soloC: 0,
         disp: { R: { a: 0, v: 0, tor: 0 }, L: { a: 0, v: 0, tor: 0 } }, pdM: { R: 4, L: 4 }, model: null,
         pcond: 'p_norm', plight: 'off', pnear: false, proom: 'bright', pview: 'pen', plift: true, drops: { R: null, L: null }, dropEye: 'R', ptab: 'cond',
-        pd: { R: 4, L: 4 }, penX: 380, swingT: 0, hist: [], histT: 0
+        pd: { R: 4, L: 4 }, penX: 380, swingT: 0, hist: [], histT: 0,
+        prEye: 'none', prBase: 'BO', prIdx: 5,
+        quiz: null, qSetup: false, qerr: '', qsel: qPreset('ug'), qn: 10, qmeas: true, qside: false, qlevel: 'ug'
     };
   }
   S() {
-    if (!this._s) this._s = this.defaults();
+    if (!this._s) {
+      this._s = this.defaults();
+      var st = qLoad(), s0 = this._s;
+      if (st) {
+        if (st.sel && typeof st.sel === 'object') s0.qsel = st.sel;
+        if ([0, 5, 10, 20].indexOf(st.n) >= 0) s0.qn = st.n;
+        if (typeof st.meas === 'boolean') s0.qmeas = st.meas;
+        if (typeof st.side === 'boolean') s0.qside = st.side;
+        if (['ug', 'pg', 'custom'].indexOf(st.level) >= 0) s0.qlevel = st.level;
+      }
+    }
     return this._s;
   }
   // Reset: clear condition, cover, tilt, near target, dim room, drops, penlight etc.
   // Stays on the current module; keeps the current eye and pupil positions so both
   // glide back to normal instead of jumping.
-  reset() {
+  // A clean state that keeps the current module, the quiz, the quiz settings, and the
+  // current eye/pupil positions (so they glide to the new state rather than jump).
+  fresh() {
     var old = this.S(), d = this.defaults();
     d.module = old.module;
     d.time = old.time; d.tx = old.tx; d.ty = old.ty; d.cmd = old.cmd;
     d.disp = old.disp; d.pdM = old.pdM; d.pd = old.pd; d.model = old.model; d.pP = old.pP;
+    d.quiz = old.quiz; d.qsel = old.qsel; d.qn = old.qn; d.qmeas = old.qmeas; d.qside = old.qside; d.qlevel = old.qlevel;
+    return d;
+  }
+  reset() {
+    var old = this.S(), d = this.fresh(), q = old.quiz;
+    if (q && q.cur && !q.done) { d.module = q.cur.mod; d.cond = old.cond; d.pcond = old.pcond; d.side = old.side; }
     this._s = d;
     this.setState({ f: d.time + 0.0001 });
   }
+  qBlind(S) { var q = S.quiz; return !!(q && q.cur && !q.cur.answered && !q.done); }
+  qMeas(S) { return !this.qBlind(S) || S.quiz.meas; }
+  qOpen() { var S = this.S(); S.qSetup = true; S.qerr = ''; this.setState({ f: S.time + 0.0001 }); }
+  qStart() {
+    var S = this.S();
+    var pool = qAll().filter(function (id) { return S.qsel[id]; });
+    if (pool.length < 2) { S.qerr = 'Choose at least two conditions.'; this.setState({ f: S.time + 0.0001 }); return; }
+    qSave(S);
+    S.qSetup = false; S.qerr = '';
+    S.quiz = { pool: pool, bag: [], n: S.qn, meas: S.qmeas, side: S.qside, idx: 0, score: 0, sideScore: 0, sideAsked: 0, hist: [], done: false, cur: null, last: null };
+    this.qNext();
+  }
+  qNext() {
+    var q = this.S().quiz;
+    if (!q) return;
+    if (q.n && q.idx >= q.n) { q.done = true; this.setState({ f: this.S().time + 0.0001 }); return; }
+    if (!q.bag.length) {
+      q.bag = shuffle(q.pool);
+      if (q.bag.length > 1 && q.bag[0] === q.last) q.bag.push(q.bag.shift());
+    }
+    var id = q.bag.shift(), mod = qMod(id), side = Math.random() < 0.5 ? 'R' : 'L';
+    var d = this.fresh();
+    d.module = mod; d.side = side;
+    if (mod === 'mot') d.cond = id; else { d.pcond = id; d.pview = 'pen'; }
+    q.idx++; q.last = id;
+    q.cur = { id: id, mod: mod, side: side, opts: this.qOptions(id, q.pool), pick: null, pickSide: null, answered: false };
+    d.quiz = q;
+    this._s = d;
+    this.setState({ f: d.time + 0.0001 });
+  }
+  qOptions(id, pool) {
+    if (pool.length <= 6) return shuffle(pool);
+    var mod = qMod(id), others = pool.filter(function (x) { return x !== id; });
+    var same = shuffle(others.filter(function (x) { return qMod(x) === mod; })), diff = shuffle(others.filter(function (x) { return qMod(x) !== mod; }));
+    return shuffle([id].concat(same.concat(diff).slice(0, 5)));
+  }
+  qCheck() {
+    var S = this.S(), q = S.quiz, c = q && q.cur;
+    if (!c || c.answered || !c.pick || (q.side && !c.pickSide)) return;
+    c.answered = true;
+    var ok = c.pick === c.id, sideOk = !q.side || c.pickSide === qSideOf(c.id, c.side);
+    if (ok) q.score++;
+    if (q.side) { q.sideAsked++; if (sideOk) q.sideScore++; }
+    q.hist.push({ id: c.id, side: c.side, pick: c.pick, ok: ok, sideOk: sideOk });
+    this.setState({ f: S.time + 0.0001 });
+  }
+  qEnd() { var S = this.S(); S.quiz = null; S.qSetup = false; this.setState({ f: S.time + 0.0001 }); }
   componentDidMount() {
     var self = this;
     this._alive = true;
@@ -1686,6 +2084,10 @@ class Component extends DCLogic {
       self._raf = requestAnimationFrame(self._loop);
     };
     this._raf = requestAnimationFrame(this._loop);
+    document.addEventListener('keydown', function (ev) {
+      var S = self.S();
+      if (ev.key === 'Escape' && S.qSetup) { S.qSetup = false; self.setState({ f: S.time + 0.0001 }); }
+    });
   }
   componentWillUnmount() { this._alive = false; if (this._raf) cancelAnimationFrame(this._raf); }
 
@@ -1741,7 +2143,8 @@ class Component extends DCLogic {
       S.cmd = [-pr.a, pr.v];
     } else {
       fix = fixOf(P.c, S);
-      S.cmd = solve(P, S.side, fix, S.tx, S.ty, S.tilt, cv, S.cmd, 30);
+      var offF = prismOff(S, fix);
+      S.cmd = solve(P, S.side, fix, S.tx + offF.x, S.ty + offF.y, S.tilt, cv, S.cmd, 30);
       mR = eyeOut('R', P.R, S.cmd[0], S.cmd[1], S.tilt, cv);
       mL = eyeOut('L', P.L, S.cmd[0], S.cmd[1], S.tilt, cv);
     }
@@ -1800,6 +2203,8 @@ class Component extends DCLogic {
 
   set(k, v) {
     var S = this.S();
+    if (k === 'module' && S.quiz && S.quiz.cur && !S.quiz.done && v !== S.quiz.cur.mod) return;
+    if (k === 'mode' && v === 'solo' && S.quiz) return;
     S[k] = v;
     if (k === 'mode') { S.seg = 0; S.tt = 0; S.soloC = 0; if (v === 'manual') S.ptr = [S.tx / K, -S.ty / K]; }
     if (k === 'cond') { S.fat = 0; }
@@ -1886,7 +2291,8 @@ class Component extends DCLogic {
         IR: dnA * clamp(0.5 + 0.6 * s, 0, 1), SO: dnA * clamp(0.5 - 0.6 * s, 0, 1)
       };
     }
-    var keys = ['LR', 'MR', 'SR', 'IR', 'SO', 'IO'];
+    var keys = ['LR', 'MR', 'SR', 'IR', 'SO', 'IO'], blind = this.qBlind(S);
+    out.pz = this.prismView(X, S);
     for (var i = 0; i < keys.length; i++) {
       var k = keys[i], g = FIELDS[k];
       var sxv = g[0] * T, syv = -g[1];
@@ -1895,7 +2301,7 @@ class Component extends DCLogic {
       else { x1 = sxv * 50; y1 = syv * 36; x2 = sxv * 70; y2 = syv * 54; }
       var ddx = x2 - x1, ddy = y2 - y1, l = Math.sqrt(ddx * ddx + ddy * ddy), ux = ddx / l, uy = ddy / l;
       var strength = e.m[k];
-      var weak = strength < 0.5, over = strength > 1.1;
+      var weak = !blind && strength < 0.5, over = !blind && strength > 1.1;
       var col = weak ? '#6D625A' : (over ? '#B7791F' : (X === 'R' ? HUE.Rarr : HUE.Larr));
       out[k] = {
         x1: fx(x1), y1: fx(y1), x2: fx(x2 - ux * 5), y2: fx(y2 - uy * 5),
@@ -1905,6 +2311,32 @@ class Component extends DCLogic {
       };
     }
     return out;
+  }
+  prismView(X, S) {
+    var off = { op: 0, x: 0, y: 0, w: 0, h: 0, grad: 'pzGl', rungs: 'M 0 0', cx: 0, cy: 0, cw: 0, ch: 0, base: 'M 0 0', ticks: [], lab: '', lx: 0, ly: 0, la: 'middle' };
+    if (S.prEye !== X || S.mode === 'solo' || S.module !== 'mot') return off;
+    var vert = prismVert(S), idx = prismIdx(S), n = vert ? PRISM_VMAX + 1 : PRISMS.length, step = 30, k;
+    var T = X === 'R' ? -1 : 1, lab = PRISMS[idx] + 'Δ ' + S.prBase, rungs = '', ticks = [];
+    if (!vert) {
+      // horizontal-deviation bar: held vertically, prisms stacked, bases facing sideways
+      var bx = S.prBase === 'BO' ? T : -T;
+      for (k = -5; k <= 4; k++) rungs += 'M -26 ' + (k * step + 15) + ' L 26 ' + (k * step + 15) + ' ';
+      for (k = -4; k <= 4; k++) {
+        if (!k || idx + k < 0 || idx + k >= n) continue;
+        ticks.push({ x: 0, y: -k * step + 4, v: PRISMS[idx + k], op: (0.95 - 0.17 * Math.abs(k)).toFixed(2) });
+      }
+      return { op: 1, x: -26, y: -150, w: 52, h: 300, grad: bx < 0 ? 'pzGl' : 'pzGr', rungs: rungs, cx: -26, cy: -15, cw: 52, ch: 30,
+        base: 'M ' + (bx * 26) + ' -150 L ' + (bx * 26) + ' 150', ticks: ticks, lab: lab, lx: 0, ly: -160, la: 'middle' };
+    }
+    // vertical-deviation bar: held horizontally, bases facing up or down
+    var by = S.prBase === 'BU' ? -1 : 1;
+    for (k = -5; k <= 4; k++) rungs += 'M ' + (k * step + 15) + ' -24 L ' + (k * step + 15) + ' 24 ';
+    for (k = -4; k <= 4; k++) {
+      if (!k || idx + k < 0 || idx + k >= n) continue;
+      ticks.push({ x: T * k * step, y: -by * 12 + 4, v: PRISMS[idx + k], op: (0.95 - 0.17 * Math.abs(k)).toFixed(2) });
+    }
+    return { op: 1, x: -150, y: -24, w: 300, h: 48, grad: by < 0 ? 'pzGt' : 'pzGb', rungs: rungs, cx: -15, cy: -24, cw: 30, ch: 48,
+      base: 'M -150 ' + (by * 24) + ' L 150 ' + (by * 24), ticks: ticks, lab: lab, lx: 0, ly: by < 0 ? -34 : 44, la: 'middle' };
   }
   grades(P, S) {
     var fix = autoFix(P.c, S), out = { R: {}, L: {} };
@@ -1939,7 +2371,7 @@ class Component extends DCLogic {
     return { da: mo.a - To * reqX, dv: mo.v - mf.v, devX: To * mo.a - reqX, devY: mo.v - mf.v };
   }
   montage(S, P) {
-    var self = this, cv = S.near ? CONV : 0;
+    var self = this, cv = S.near ? CONV : 0, meas = this.qMeas(S);
     var fix = S.mode === 'solo' ? 'R' : ((S.fix === 'auto') ? autoFix(P.c, S) : S.fix);
     var env = { amb: S.room === 'dim' ? 0.12 : 0.75, lR: 0.25, lL: 0.25, near: S.near ? 1 : 0 };
     var mmR = pupilTarget(P, 'R', env), mmL = pupilTarget(P, 'L', env);
@@ -1958,6 +2390,7 @@ class Component extends DCLogic {
       if (Math.abs(dd.da) >= 1) parts.push((oth === 'R' ? 'RE ' : 'LE ') + (dd.da > 0 ? 'XT ' : 'ET ') + pdOf(dd.da) + 'Δ');
       if (Math.abs(dd.dv) >= 1) parts.push((oth === 'R' ? 'RE ' : 'LE ') + (dd.dv > 0 ? 'HT ' : 'HoT ') + pdOf(dd.dv) + 'Δ');
       var here = Math.sqrt(Math.pow(tX - (CX + px), 2) + Math.pow(tY - (CY + py), 2)) < 30;
+      if (!meas) parts = [''];
       return {
         R: gR, L: gL, name: gz.short, yoke: yoke, dev: parts.length ? parts.join(' · ') : 'Ortho', devCol: parts.length ? '#8A5A2B' : '#6B7280',
         bd: here ? '#1C2127' : '#E3DED4',
@@ -1970,8 +2403,15 @@ class Component extends DCLogic {
     var self = this;
     if (!S.model) this.compute(0);
     var P = S.model.P, M = S.model, c = P.c, cv = M.cv;
-    var solo = S.mode === 'solo';
-    V.modes = this.seg([{ label: 'H pattern', v: 'h' }, { label: 'Nine positions', v: 'nine' }, { label: 'Manual', v: 'manual' }, { label: 'Single muscle', v: 'solo' }], S.mode, 'mode');
+    var solo = S.mode === 'solo', blind = this.qBlind(S), meas = this.qMeas(S);
+    var modeList = [{ label: 'H pattern', v: 'h' }, { label: 'Nine positions', v: 'nine' }, { label: 'Manual', v: 'manual' }];
+    if (!S.quiz) modeList.push({ label: 'Single muscle', v: 'solo' });
+    V.modes = this.seg(modeList, S.mode, 'mode');
+    V.prEyes = this.seg([{ label: 'Off', v: 'none' }, { label: 'Before right', v: 'R' }, { label: 'Before left', v: 'L' }], S.prEye, 'prEye');
+    V.prBases = this.seg([{ label: 'In', v: 'BI' }, { label: 'Out', v: 'BO' }, { label: 'Up', v: 'BU' }, { label: 'Down', v: 'BD' }], S.prBase, 'prBase');
+    V.prVal = prismVal(S) + 'Δ';
+    V.prDec = function () { self.set('prIdx', Math.max(0, prismIdx(S) - 1)); };
+    V.prInc = function () { self.set('prIdx', Math.min(prismVert(S) ? PRISM_VMAX : PRISMS.length - 1, prismIdx(S) + 1)); };
     V.groups = this.condList(GROUPS, CONDS, S.cond, 'cond');
     V.soloMus = ['SR', 'IO', 'LR', 'IR', 'SO', 'MR'].map(function (mu) {
       var on = S.soloM === mu;
@@ -2032,6 +2472,10 @@ class Component extends DCLogic {
     var mo = M[oth], mf = M[fixE];
     var dd = this.devText(mo, mf, oth, fixE, cv), da = dd.da, dv = dd.dv;
     var nm = oth === 'R' ? 'RE' : 'LE';
+    // What a prism test "sees": the deviation left over once each eye's prism is allowed for.
+    var offF = prismOff(S, fixE), offO = prismOff(S, oth), prOn = S.prEye !== 'none' && !solo;
+    var resX = dd.devX + offF.x - offO.x, resY = dd.devY + offF.y - offO.y;
+    var rda = (oth === 'R' ? -1 : 1) * resX, rdv = resY;
     var affE = c.uni ? S.side : 'R';
     if (solo) {
       V.dev = { h: 'Single-muscle demonstration', v: 'Light held in primary position', hCol: '#1C2127', vCol: '#5E6670', fix: 'The corneal reflex decentres as the eye rotates away from the light (≈ 1 mm per 7°).', hir: '', tor: '', note: '' };
@@ -2046,47 +2490,66 @@ class Component extends DCLogic {
         if (Math.abs(dv) >= 1) parts.push(r1(Math.abs(dv) / 7) + ' mm ' + (dv > 0 ? 'inferior' : 'superior'));
         hir = 'Hirschberg: ' + nm + ' reflex ≈ ' + parts.join(', ');
       }
-      var xr = S.tx + (fixE === 'R' ? cv : -cv);
-      var fixMiss = Math.sqrt(Math.pow(mf.x - xr, 2) + Math.pow(mf.v - S.ty, 2)) > 1.5;
+      var xr = S.tx + (fixE === 'R' ? cv : -cv) + offF.x;
+      var fixMiss = Math.sqrt(Math.pow(mf.x - xr, 2) + Math.pow(mf.v - (S.ty + offF.y), 2)) > 1.5;
       var torV = M[affE].tor;
       var torTxt = Math.abs(torV) > 1.5 ? ((affE === 'R' ? 'RE ' : 'LE ') + (torV > 0 ? 'excyclotorsion ' : 'incyclotorsion ') + r1(Math.abs(torV)) + '°' + (S.magnify ? ' (drawn ×3)' : '')) : 'No significant torsion';
       var note = '';
-      if (S.cover !== 'none') note = S.cover === 'alt' ? 'Alternate cover: each eye refixates as the occluder switches — this reveals the full (latent + manifest) deviation.' : 'Covered eye drifts behind the occluder — uncover to see the refixation movement.';
-      else if (c.uni && fixE === S.side && (Math.abs(da) >= 1 || Math.abs(dv) >= 1)) note = 'Affected eye fixing → secondary deviation (Hering’s law): larger than the primary deviation.';
+      if (S.cover === 'alt' && prOn) note = 'Alternate cover with prism: change the strength until the refixation movement stops (neutralisation).';
+      else if (S.cover !== 'none') note = S.cover === 'alt' ? 'Alternate cover: each eye refixates as the occluder switches — this reveals the full (latent + manifest) deviation.' : 'Covered eye drifts behind the occluder — uncover to see the refixation movement.';
+      else if (!blind && c.uni && fixE === S.side && (Math.abs(da) >= 1 || Math.abs(dv) >= 1)) note = 'Affected eye fixing → secondary deviation (Hering’s law): larger than the primary deviation.';
       else if (fixMiss) note = 'The fixing eye cannot reach the target in this gaze.';
       V.dev = {
         h: hTxt, v: vTxt, hCol: Math.abs(da) < 1 ? '#5E6670' : (oth === 'R' ? HUE.R : HUE.L), vCol: Math.abs(dv) < 1 ? '#5E6670' : (oth === 'R' ? HUE.R : HUE.L),
         fix: 'Fixing: ' + (fixE === 'R' ? 'right eye' : 'left eye') + (S.cover !== 'none' ? ' (other eye covered)' : (S.fix === 'auto' ? ' (better eye)' : '')) + (S.near ? ' · near target' : ''),
-        hir: hir, tor: torTxt, note: note
+        hir: hir, tor: torTxt, note: note, pr: ''
       };
-      var fused = Math.abs(da) < 1 && Math.abs(dv) < 1;
+      if (prOn) {
+        var prTxt = 'Prism ' + prismVal(S) + 'Δ ' + S.prBase + ' before the ' + (S.prEye === 'R' ? 'right' : 'left') + ' eye';
+        if (meas) {
+          var rp = [];
+          if (pdOf(rda) > 2) rp.push(pdOf(rda) + 'Δ ' + (rda > 0 ? 'exo' : 'eso'));
+          if (pdOf(rdv) > 2) rp.push(pdOf(rdv) + 'Δ ' + nm + (rdv > 0 ? ' hyper' : ' hypo'));
+          prTxt += rp.length ? ' · residual ' + rp.join(', ') : ' · neutralised';
+        }
+        V.dev.pr = prTxt;
+      }
+      if (!meas) {
+        V.dev.h = 'Measurements hidden in this quiz'; V.dev.v = 'Use the cover test and prism bar'; V.dev.hCol = '#5E6670'; V.dev.vCol = '#5E6670';
+        V.dev.hir = ''; V.dev.tor = '';
+      }
+      var fusedTrue = Math.abs(da) < 1 && Math.abs(dv) < 1;
+      var fused = Math.abs(rda) < 1 && Math.abs(rdv) < 1;
       var lidShut = c.uni && P[S.side].ptosis > 0.8 && !S.lift;
       var title, sub;
       if (S.cover !== 'none') { title = 'Monocular view'; sub = 'One eye covered — no diplopia.'; }
+      else if (fused && !fusedTrue && prOn) { title = 'Single vision with the prism'; sub = 'The prism moves the image onto the fovea of the deviating eye.'; }
       else if (fused) { title = 'Single vision'; sub = 'Images fall on corresponding points.'; }
       else if (lidShut) { title = 'No diplopia'; sub = 'The ptotic lid occludes the eye — lift the lids to reveal it.'; }
       else {
         var t = [];
-        if (Math.abs(da) >= 1) t.push(da < 0 ? 'uncrossed' : 'crossed');
-        if (Math.abs(dv) >= 1) t.push('vertical');
+        if (Math.abs(rda) >= 1) t.push(rda < 0 ? 'uncrossed' : 'crossed');
+        if (Math.abs(rdv) >= 1) t.push('vertical');
         title = 'Diplopia: ' + t.join(' + ');
-        sub = 'Ring = ' + nm + ' (false) image, displaced toward the field of the weak muscle.';
+        sub = 'Ring = ' + nm + ' (false) image' + (blind ? '.' : ', displaced toward the field of the weak muscle.');
       }
       V.pv = {
-        fx: fx(44 + clamp(dd.devX * 1.5, -42, 42)), fy: fx(34 + clamp(dd.devY * 1.5, -32, 32)), fOp: (S.cover !== 'none' || fused || lidShut) ? 0 : 1,
+        fx: fx(44 + clamp(resX * 1.5, -42, 42)), fy: fx(34 + clamp(resY * 1.5, -32, 32)), fOp: (S.cover !== 'none' || fused || lidShut) ? 0 : 1,
         tCol: fixE === 'R' ? '#F08A78' : '#86B6F0', fCol: oth === 'R' ? '#F08A78' : '#86B6F0', title: title, sub: sub
       };
     }
     var G = this.grades(P, S);
     V.chR = this.chart('R', G); V.chL = this.chart('L', G);
     V.mont = this.montage(S, P);
-    V.montNote = c.name + (c.uni ? (' · ' + (S.side === 'R' ? 'right' : 'left') + ' eye') : '') + (S.near ? ' · near' : '') + ' · click a picture to send the light there';
+    V.montNote = (blind ? 'Quiz case' : (c.name + (c.uni ? (' · ' + (S.side === 'R' ? 'right' : 'left') + ' eye') : ''))) + (S.near ? ' · near' : '') + ' · click a picture to send the light there';
+    V.showMeas = meas; V.hideMeas = !meas;
 
     var gz = GAZE[gazeKey(S.tx, S.ty)];
     var movers = gz.movers.map(function (mv) {
       var X = mv[0], mu = mv[1], sgth = P[X].m[mu];
       var status = 'normal', sBg = '#2D353D', sFg = '#AEB7C1';
-      if (sgth < 0.5) { status = 'paretic'; sBg = '#F08A78'; sFg = '#1C2127'; }
+      if (blind) { status = ''; sBg = 'transparent'; }
+      else if (sgth < 0.5) { status = 'paretic'; sBg = '#F08A78'; sFg = '#1C2127'; }
       else if (sgth < 0.9) { status = 'weak'; sBg = '#E8B86A'; sFg = '#1C2127'; }
       else if (sgth > 1.1) { status = 'overacts'; sBg = '#E8B86A'; sFg = '#1C2127'; }
       return { code: X + mu, name: (X === 'R' ? 'Right ' : 'Left ') + MUS[mu].name.toLowerCase(), detail: MUS[mu].acts + ' · ' + MUS[mu].nerve, bg: X === 'R' ? HUE.R : HUE.L, status: status, sBg: sBg, sFg: sFg };
@@ -2127,10 +2590,12 @@ class Component extends DCLogic {
       return { label: o.label, on: on, pick: function () { self.set('tab', o.v); }, fg: on ? '#1C2127' : '#6B7280', bd: on ? '#1C2127' : 'transparent' };
     });
     V.tabCond = S.tab === 'cond'; V.tabMus = S.tab === 'mus';
-    V.isMG = c.id === 'mg'; V.fatTxt = Math.round(S.fat * 100) + '%';
+    V.condOpen = !blind; V.condLocked = blind;
+    V.isMG = c.id === 'mg' && !blind; V.fatTxt = Math.round(S.fat * 100) + '%';
     V.rest = function () { S.fat = 0; };
     V.hint = S.mode === 'manual' ? 'Manual: click or drag on the stage — or click a picture below — to place the light. Settings stay usable.' : (solo ? 'Single muscle: the fellow eye shows the yoke muscle.' : 'The yellow arrow shows the next movement. Click the stage to switch to Manual.');
-    V.stageNote = solo ? ('R' + S.soloM + ' contracting · yoke L' + YOKE[S.soloM]) : ((S.mode === 'manual' ? 'Manual · click or drag' : '') + (S.cover === 'alt' ? '  Alternate cover' : '') + (S.tilt !== 0 ? '  Head tilted ' + (S.tilt > 0 ? 'right' : 'left') : ''));
+    V.stageNote = solo ? ('R' + S.soloM + ' contracting · yoke L' + YOKE[S.soloM]) : ((S.mode === 'manual' ? 'Manual · click or drag' : '') + (S.cover === 'alt' ? '  Alternate cover' : '') + (S.tilt !== 0 ? '  Head tilted ' + (S.tilt > 0 ? 'right' : 'left') : '') + (S.prEye !== 'none' ? '  Prism ' + prismVal(S) + 'Δ ' + S.prBase + ' ' + (S.prEye === 'R' ? 'RE' : 'LE') : ''));
+    V.prHint = 'Hold the prism over the deviating eye: base out for esotropia, base in for exotropia, base down over a hypertropic eye. Then alternate cover and change the strength until the eyes stop moving.';
     V.isSolo = solo; V.notSolo = !solo;
     V.exitSolo = function () { self.set('mode', 'h'); };
     V.musTable = MUS_TABLE; V.rules = RULES.map(function (t) { return { t: t }; });
@@ -2235,6 +2700,10 @@ class Component extends DCLogic {
     if (Math.abs(yR - yL) < 13) { var mid = (yR + yL) / 2; if (S.pd.R >= S.pd.L) { yR = mid - 7; yL = mid + 7; } else { yR = mid + 7; yL = mid - 7; } }
     V.pg = { R: ptsR.join(' ') || '40,150', L: ptsL.join(' ') || '40,150', band: band || 'M 0 0 Z', ry: fx(yR + 4), ly: fx(yL + 4), rv: mm1(S.pd.R), lv: mm1(S.pd.L) };
     V.rx = this.pupilReactions(P);
+    var pblind = this.qBlind(S);
+    if (pblind) { V.rx.aniso = ''; V.rx.rapd = ''; }
+    V.rxShow = this.qMeas(S); V.rxHide = !V.rxShow; V.rxInterp = !pblind;
+    V.pcondOpen = !pblind; V.pcondLocked = pblind;
     var an = Math.abs(S.pd.R - S.pd.L);
     V.live = {
       r: mm1(S.pd.R), l: mm1(S.pd.L), a: mm1(an),
@@ -2257,12 +2726,141 @@ class Component extends DCLogic {
     V.drugTable = DRUGS;
   }
 
+  quizPanel(S) {
+    var self = this, q = S.quiz;
+    if (!q) return {};
+    var qp = { playing: !!(q.cur && !q.done), done: !!q.done };
+    if (q.done) {
+      var n = q.hist.length;
+      qp.resScore = q.score + ' / ' + n;
+      qp.resPct = (n ? Math.round(100 * q.score / n) : 0) + '% correct' + (q.side && q.sideAsked ? ' · sides ' + q.sideScore + ' / ' + q.sideAsked : '');
+      qp.hist = q.hist.map(function (h, i) {
+        return {
+          n: i + 1, mark: h.ok ? '✓' : '✗', col: h.ok ? '#2F7D4F' : '#B8321F', label: qLabel(h.id),
+          sub: qSideName(h.id, h.side) + (h.ok ? '' : ' · you chose ' + qLabel(h.pick)) + (q.side && !h.sideOk ? ' · side missed' : '')
+        };
+      });
+      qp.empty = n === 0;
+      qp.again = function () { self.qStart(); };
+      qp.change = function () { self.qOpen(); };
+      qp.exit = function () { self.qEnd(); };
+      return qp;
+    }
+    var c = q.cur;
+    if (!c) return qp;
+    var ans = c.answered, right = c.id, rSide = qSideOf(c.id, c.side);
+    qp.title = q.n ? 'Case ' + q.idx + ' of ' + q.n : 'Case ' + q.idx;
+    qp.score = q.hist.length ? q.score + ' / ' + q.hist.length + ' correct' : '';
+    qp.hasProg = !!q.n; qp.prog = q.n ? Math.round(100 * q.hist.length / q.n) + '%' : '0%';
+    qp.prompt = c.mod === 'mot'
+      ? 'Examine the eye movements, then choose the diagnosis. Try the H test, nine positions, cover test, head tilt, near target and the prism bar.'
+      : 'Examine the pupils, then choose the diagnosis. Try the penlight, room light, near target, drops and the red reflex view.';
+    qp.opts = c.opts.map(function (id) {
+      var on = c.pick === id, bg = '#FBFAF7', fg = '#1C2127', bd = '#E3DED4', mark = '';
+      if (!ans && on) { bg = '#1C2127'; fg = '#FFFFFF'; bd = '#1C2127'; }
+      if (ans) {
+        if (id === right) { bg = '#E6F2EA'; bd = '#2F7D4F'; mark = '✓'; }
+        else if (on) { bg = '#FBEAE7'; bd = '#B8321F'; mark = '✗'; }
+        else { fg = '#6B7280'; }
+      }
+      return { label: qLabel(id), on: on, bg: bg, fg: fg, bd: bd, mark: mark, pick: function () { if (!c.answered) { c.pick = id; self.setState({ f: S.time + 0.0001 }); } } };
+    });
+    qp.askSide = !!q.side;
+    qp.sides = [{ label: 'Right', v: 'R' }, { label: 'Left', v: 'L' }, { label: 'Both / neither', v: 'B' }].map(function (o) {
+      var on = c.pickSide === o.v, bg = '#FBFAF7', fg = '#1C2127', bd = '#E3DED4';
+      if (!ans && on) { bg = '#1C2127'; fg = '#FFFFFF'; bd = '#1C2127'; }
+      if (ans) { if (o.v === rSide) { bg = '#E6F2EA'; bd = '#2F7D4F'; } else if (on) { bg = '#FBEAE7'; bd = '#B8321F'; } else fg = '#6B7280'; }
+      return { label: o.label, on: on, bg: bg, fg: fg, bd: bd, pick: function () { if (!c.answered) { c.pickSide = o.v; self.setState({ f: S.time + 0.0001 }); } } };
+    });
+    var ready = !!c.pick && (!q.side || !!c.pickSide);
+    qp.answered = ans;
+    if (!ans) {
+      qp.mainLabel = 'Check answer';
+      qp.mainBg = ready ? '#1C2127' : '#E3DED4'; qp.mainFg = ready ? '#FFFFFF' : '#6B6258';
+      qp.main = function () { self.qCheck(); };
+    } else {
+      var last = q.n && q.idx >= q.n;
+      qp.mainLabel = last ? 'See results' : 'Next case';
+      qp.mainBg = '#1C2127'; qp.mainFg = '#FFFFFF';
+      qp.main = function () { self.qNext(); };
+      var h = q.hist[q.hist.length - 1], ok = h.ok;
+      qp.fbTitle = ok ? 'Correct' : 'Not quite';
+      qp.fbCol = ok ? '#2F7D4F' : '#B8321F'; qp.fbBg = ok ? '#EEF6F1' : '#FCF1EE'; qp.fbBd = ok ? '#B9DBC6' : '#EFC6BD';
+      qp.fbText = 'Diagnosis: ' + qLabel(right) + ' · ' + qSideName(right, c.side) + '.';
+      qp.fbText2 = (ok ? '' : 'You chose ' + qLabel(c.pick) + '. ') + (q.side ? (h.sideOk ? 'Side correct.' : 'Side incorrect.') : '');
+      qp.fbMore = 'The condition card on the right is now open' + (q.meas ? '.' : ', and the measurements are shown.');
+    }
+    qp.showFinish = !q.n && q.hist.length > 0;
+    qp.finish = function () { q.done = true; self.setState({ f: S.time + 0.0001 }); };
+    return qp;
+  }
+  quizSetup(S) {
+    var self = this;
+    function redraw() { self.setState({ f: S.time + 0.0001 }); }
+    function grp(groups, conds) {
+      return groups.map(function (gname) {
+        var ids = conds.filter(function (cc) { return cc.g === gname; }).map(function (cc) { return cc.id; });
+        return {
+          name: gname,
+          items: ids.map(function (id) {
+            var on = !!S.qsel[id];
+            return { label: qLabel(id), on: on, box: on ? '#1C2127' : '#FFFFFF', check: on ? '✓' : '', pick: function () { S.qsel[id] = !S.qsel[id]; S.qlevel = 'custom'; S.qerr = ''; redraw(); } };
+          }),
+          all: function () { ids.forEach(function (id) { S.qsel[id] = true; }); S.qlevel = 'custom'; S.qerr = ''; redraw(); },
+          none: function () { ids.forEach(function (id) { S.qsel[id] = false; }); S.qlevel = 'custom'; redraw(); }
+        };
+      });
+    }
+    var count = qAll().filter(function (id) { return S.qsel[id]; }).length;
+    var levels = [{ label: 'Undergraduate', v: 'ug' }, { label: 'Postgraduate', v: 'pg' }, { label: 'Custom', v: 'custom' }].map(function (o) {
+      var on = S.qlevel === o.v;
+      return {
+        label: o.label, on: on, bg: on ? '#1C2127' : 'transparent', fg: on ? '#FFFFFF' : '#1C2127',
+        pick: function () {
+          S.qlevel = o.v; S.qerr = '';
+          if (o.v === 'ug') { S.qsel = qPreset('ug'); S.qmeas = true; S.qside = false; }
+          if (o.v === 'pg') { S.qsel = qPreset('pg'); S.qmeas = false; S.qside = true; }
+          redraw();
+        }
+      };
+    });
+    var notes = {
+      ug: 'Common, high-yield conditions for medical students. Live measurements are shown to help you.',
+      pg: 'Every condition in the lab, for residents and orthoptists. Measurements are hidden, so you measure with the cover test and prism bar, and you also name the affected eye.',
+      custom: 'Your own selection. Tick the conditions you want to be tested on.'
+    };
+    return {
+      levels: levels, levelNote: notes[S.qlevel] || notes.custom,
+      mot: grp(GROUPS, CONDS), pup: grp(PGROUPS, PCONDS),
+      count: count + (count === 1 ? ' condition selected' : ' conditions selected'),
+      ns: [{ label: '5', v: 5 }, { label: '10', v: 10 }, { label: '20', v: 20 }, { label: 'Endless', v: 0 }].map(function (o) {
+        var on = S.qn === o.v;
+        return { label: o.label, on: on, bg: on ? '#1C2127' : 'transparent', fg: on ? '#FFFFFF' : '#1C2127', pick: function () { S.qn = o.v; redraw(); } };
+      }),
+      opts: [['qmeas', 'Show live measurements (deviation in Δ, Hirschberg, versions, pupil reaction table)'], ['qside', 'Also ask which eye is affected']].map(function (t) {
+        var on = !!S[t[0]];
+        return { label: t[1], on: on, box: on ? '#1C2127' : '#FFFFFF', check: on ? '✓' : '', pick: function () { S[t[0]] = !S[t[0]]; redraw(); } };
+      }),
+      err: S.qerr || '',
+      start: function () { self.qStart(); },
+      cancel: function () { S.qSetup = false; redraw(); }
+    };
+  }
+
   renderVals() {
     var S = this.S(), self = this, V = {};
     V.modules = this.seg([{ label: 'Eye movements', v: 'mot' }, { label: 'Pupils & red reflex', v: 'pup' }], S.module, 'module').map(function (it) {
       it.bg = it.on ? '#FFFFFF' : 'transparent'; it.fg = it.on ? '#1C2127' : '#D5DCE3'; return it;
     });
+    var qLock = S.quiz && S.quiz.cur && !S.quiz.done;
+    if (qLock) V.modules.forEach(function (it) { if (!it.on) { it.fg = '#6B7580'; it.pick = function () { }; } });
     V.isMot = S.module === 'mot'; V.isPup = S.module === 'pup';
+    V.inQuiz = !!S.quiz; V.notQuiz = !S.quiz; V.showList = S.mode !== 'solo' && !S.quiz;
+    V.quizLabel = S.quiz ? 'End quiz' : 'Quiz';
+    V.quizAct = function () { if (self.S().quiz) self.qEnd(); else self.qOpen(); };
+    V.qp = this.quizPanel(S);
+    V.qSetupOpen = !!S.qSetup;
+    V.qs = S.qSetup ? this.quizSetup(S) : {};
     V.playing = S.playing; V.paused = !S.playing; V.playLabel = S.playing ? 'Pause' : 'Play';
     V.togglePlay = function () { self.set('playing', !S.playing); };
     V.resetAll = function () { self.reset(); };

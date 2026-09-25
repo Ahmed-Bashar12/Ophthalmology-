@@ -4,7 +4,7 @@
 
 🔗 **Live demo:** https://ahmed-bashar12.github.io/Ophthalmology-/
 
-Concept and design by **Ahmed Bashar** · Version 1.1 · First published 25 September 2026
+Concept and design by **Ahmed Bashar** · Version 1.2 · First published 25 September 2026
 
 ---
 
@@ -20,6 +20,7 @@ Ocular Motility Lab lets you see how the extraocular muscles work, alone and tog
 - **Nine diagnostic gaze photos**: a clinical-style 3×3 montage for every condition
 - **Examination tools**: cover, uncover and alternate cover tests; choice of fixing eye (primary vs secondary deviation); distance and near targets; Bielschowsky head tilt; room light
 - **Live readouts**: deviation in degrees and prism dioptres, Hirschberg estimate, torsion, the patient's diplopia view, and versions grading (−4 to +4)
+- **Prism bar**: hold a prism before either eye, base in, out, up or down, in standard steps (1–50Δ horizontal, up to 25Δ vertical). Combine it with the alternate cover test to measure a deviation by neutralisation, or use it to see a prism correct the patient's diplopia
 
 ### Conditions
 - Comitant strabismus: infantile esotropia, accommodative esotropia, intermittent exotropia, convergence insufficiency
@@ -35,6 +36,12 @@ Ocular Motility Lab lets you see how the extraocular muscles work, alone and tog
 - Diagnostic drops: pilocarpine 0.1% and 1%, apraclonidine, cocaine, hydroxyamphetamine, and mydriatics
 - Live pupillogram and reaction table
 - Brückner red-reflex test: leukocoria (retinoblastoma), congenital cataract, strabismus, anisometropia, vitreous haemorrhage
+
+### Quiz mode
+- Choose the conditions to be tested on: an **Undergraduate** preset of common, high-yield conditions, a **Postgraduate** preset with every condition, or your own **Custom** selection
+- Each case is a random condition from your choice, in a random eye; examine the patient with the full set of tools, then pick the diagnosis (and, optionally, the affected eye)
+- The condition name, condition card and tell-tale labels stay hidden until you answer; live measurements can be shown or hidden
+- 5, 10, 20 or endless cases, with a score and a review list at the end; your quiz settings are remembered
 
 ## Intended use
 
